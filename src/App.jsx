@@ -1,47 +1,20 @@
-import { useState, useRef, useCallback } from 'react'
+import { useMemo, useRef, useState, useCallback } from 'react'
+import PropTypes from 'prop-types'
 import './App.css'
+import { parseEmbedConfig } from './config/embedConfig'
+import {
+  compressCanvas,
+  drawImageToCanvas,
+  formatBytes,
+  getSavingsPercent,
+  OUTPUT_FORMATS,
+} from './lib/compressorEngine'
 
-function formatBytes(bytes) {
-  if (bytes === 0) return '0 B'
-  const k = 1024
-  const sizes = ['B', 'KB', 'MB', 'GB']
-  const i = Math.floor(Math.log(bytes) / Math.log(k))
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
-}
-
-function getSavingsPercent(original, compressed) {
-  if (!original || !compressed) return 0
-  return Math.round((1 - compressed / original) * 100)
-}
-
-function canvasToBlob(canvas, format, q) {
-  return new Promise((resolve) => canvas.toBlob(resolve, format, q))
-}
-
-async function binarySearchQuality(canvas, format, targetBytes) {
-  // Check if even quality=1.0 is under target — no compression needed
-  const maxBlob = await canvasToBlob(canvas, format, 1.0)
-  if (maxBlob.size <= targetBytes) return maxBlob
-
-  // Check if quality=0.01 is still over target — can't reach target
-  const minBlob = await canvasToBlob(canvas, format, 0.01)
-  if (minBlob.size > targetBytes) return { blob: minBlob, unreachable: true }
-
-  let lo = 0.01
-  let hi = 1.0
-  let bestBlob = minBlob
-
-  for (let i = 0; i < 16; i++) {
-    const mid = (lo + hi) / 2
-    const blob = await canvasToBlob(canvas, format, mid)
-    if (blob.size <= targetBytes) {
-      bestBlob = blob
-      lo = mid
-    } else {
-      hi = mid
-    }
-  }
-  return { blob: bestBlob, unreachable: false }
+const AD_SLOTS = {
+  heroBanner: null,
+  controlsInline: null,
+  resultsFooter: null,
+  footerBanner: null,
 }
 
 const QUALITY_PRESETS = [
@@ -51,24 +24,64 @@ const QUALITY_PRESETS = [
   { label: 'Max', value: 1.0, description: 'No compression' },
 ]
 
+const FORMAT_OPTIONS = [
+  { mime: OUTPUT_FORMATS.jpeg, label: 'JPEG', note: 'Best compression' },
+  { mime: OUTPUT_FORMATS.png, label: 'PNG', note: 'Lossless' },
+  { mime: OUTPUT_FORMATS.webp, label: 'WebP', note: 'Modern' },
+]
+
+function AdPlaceholder({ slot, label, compact = false }) {
+  if (!slot) return null
+
+  return (
+    <section className={`ad-slot ${compact ? 'compact' : ''}`} aria-label="ad placeholder">
+      <div className="ad-slot-header">
+        <span className="ad-slot-badge">Ad space</span>
+        <span className="ad-slot-name">{label}</span>
+      </div>
+      <div className="ad-slot-box">
+        <span className="ad-slot-code">{`data-ad-slot=""`}</span>
+        <span className="ad-slot-help">Replace this placeholder with your AdSense unit later.</span>
+      </div>
+    </section>
+  )
+}
+
+AdPlaceholder.propTypes = {
+  slot: PropTypes.string,
+  label: PropTypes.string.isRequired,
+  compact: PropTypes.bool,
+}
+
+function getInitialConfig() {
+  if (typeof window === 'undefined') {
+    return parseEmbedConfig('')
+  }
+  return parseEmbedConfig(window.location.search)
+}
+
 export default function App() {
+  const initialConfig = useMemo(getInitialConfig, [])
+
   const [image, setImage] = useState(null)
   const [originalSize, setOriginalSize] = useState(0)
   const [compressed, setCompressed] = useState(null)
   const [compressedSize, setCompressedSize] = useState(0)
-  const [quality, setQuality] = useState(0.8)
-  const [customQuality, setCustomQuality] = useState(80)
-  const [width, setWidth] = useState('')
-  const [height, setHeight] = useState('')
-  const [keepAspect, setKeepAspect] = useState(true)
+  const [quality, setQuality] = useState(initialConfig.qualityPercent / 100)
+  const [customQuality, setCustomQuality] = useState(initialConfig.qualityPercent)
+  const [width, setWidth] = useState(initialConfig.width)
+  const [height, setHeight] = useState(initialConfig.height)
+  const [keepAspect, setKeepAspect] = useState(initialConfig.keepAspect)
   const [originalDims, setOriginalDims] = useState({ w: 0, h: 0 })
-  const [outputFormat, setOutputFormat] = useState('image/jpeg')
+  const [outputFormat, setOutputFormat] = useState(initialConfig.outputFormat)
   const [isDragging, setIsDragging] = useState(false)
   const [processing, setProcessing] = useState(false)
-  const [activePreset, setActivePreset] = useState(2)
-  const [useTargetSize, setUseTargetSize] = useState(false)
-  const [targetSizeValue, setTargetSizeValue] = useState(200)
-  const [targetSizeUnit, setTargetSizeUnit] = useState('KB')
+  const [activePreset, setActivePreset] = useState(
+    QUALITY_PRESETS.findIndex((p) => Math.round(p.value * 100) === initialConfig.qualityPercent)
+  )
+  const [useTargetSize, setUseTargetSize] = useState(initialConfig.useTargetSize)
+  const [targetSizeValue, setTargetSizeValue] = useState(initialConfig.targetSizeValue)
+  const [targetSizeUnit, setTargetSizeUnit] = useState(initialConfig.targetSizeUnit)
   const [sizeWarning, setSizeWarning] = useState('')
   const fileInputRef = useRef()
 
@@ -76,46 +89,57 @@ export default function App() {
     if (!file || !file.type.startsWith('image/')) return
     const reader = new FileReader()
     reader.onload = (e) => {
+      const src = e.target?.result
+      if (!src) return
       const img = new Image()
       img.onload = () => {
-        setImage(e.target.result)
+        setImage(src)
         setOriginalSize(file.size)
         setOriginalDims({ w: img.naturalWidth, h: img.naturalHeight })
-        setWidth(img.naturalWidth)
-        setHeight(img.naturalHeight)
-        setCompressed(null)
+        setWidth((prev) => (prev ? prev : String(img.naturalWidth)))
+        setHeight((prev) => (prev ? prev : String(img.naturalHeight)))
+        setCompressed((prev) => {
+          if (prev) URL.revokeObjectURL(prev)
+          return null
+        })
         setCompressedSize(0)
         setSizeWarning('')
       }
-      img.src = e.target.result
+      img.src = src
     }
     reader.readAsDataURL(file)
   }, [])
 
-  const handleFile = (e) => processImage(e.target.files[0])
+  const handleFile = (e) => processImage(e.target.files?.[0])
 
   const handleDrop = (e) => {
     e.preventDefault()
     setIsDragging(false)
-    processImage(e.dataTransfer.files[0])
+    processImage(e.dataTransfer.files?.[0])
   }
 
   const handleWidthChange = (val) => {
     setWidth(val)
     if (keepAspect && originalDims.w) {
-      setHeight(Math.round(val * (originalDims.h / originalDims.w)))
+      const nextWidth = Number.parseInt(val, 10)
+      if (!Number.isNaN(nextWidth)) {
+        setHeight(String(Math.round(nextWidth * (originalDims.h / originalDims.w))))
+      }
     }
   }
 
   const handleHeightChange = (val) => {
     setHeight(val)
     if (keepAspect && originalDims.h) {
-      setWidth(Math.round(val * (originalDims.w / originalDims.h)))
+      const nextHeight = Number.parseInt(val, 10)
+      if (!Number.isNaN(nextHeight)) {
+        setWidth(String(Math.round(nextHeight * (originalDims.w / originalDims.h))))
+      }
     }
   }
 
   const handleQualitySlider = (val) => {
-    const q = parseInt(val)
+    const q = Number.parseInt(val, 10)
     setCustomQuality(q)
     setQuality(q / 100)
     setActivePreset(null)
@@ -128,63 +152,59 @@ export default function App() {
     setCustomQuality(Math.round(q * 100))
   }
 
-  const getCanvas = () => {
-    return new Promise((resolve) => {
-      const img = new Image()
-      img.onload = () => {
-        const canvas = document.createElement('canvas')
-        const targetW = parseInt(width) || originalDims.w
-        const targetH = parseInt(height) || originalDims.h
-        canvas.width = targetW
-        canvas.height = targetH
-        canvas.getContext('2d').drawImage(img, 0, 0, targetW, targetH)
-        resolve(canvas)
-      }
-      img.src = image
-    })
-  }
-
   const compress = async () => {
     if (!image) return
+
     setProcessing(true)
     setSizeWarning('')
 
-    const canvas = await getCanvas()
+    try {
+      const canvas = await drawImageToCanvas({
+        imageSrc: image,
+        width,
+        height,
+        fallbackWidth: originalDims.w,
+        fallbackHeight: originalDims.h,
+      })
 
-    let blob
-    if (useTargetSize) {
-      const multiplier = targetSizeUnit === 'MB' ? 1024 * 1024 : 1024
-      const targetBytes = parseFloat(targetSizeValue) * multiplier
-      if (!targetBytes || targetBytes <= 0) {
-        setSizeWarning('Please enter a valid target size.')
-        setProcessing(false)
-        return
-      }
-      const result = await binarySearchQuality(canvas, outputFormat, targetBytes)
-      // Handle both shapes: plain blob (quality=1 case) or { blob, unreachable }
-      if (result instanceof Blob) {
-        blob = result
-      } else {
-        blob = result.blob
-        if (result.unreachable) {
-          setSizeWarning(
-            `Could not reach ${targetSizeValue} ${targetSizeUnit} — minimum achievable is ${formatBytes(blob.size)}.`
-          )
+      let targetBytes = null
+      if (useTargetSize) {
+        const multiplier = targetSizeUnit === 'MB' ? 1024 * 1024 : 1024
+        const parsedTarget = Number.parseFloat(targetSizeValue)
+        targetBytes = parsedTarget * multiplier
+        if (!targetBytes || targetBytes <= 0) {
+          setSizeWarning('Please enter a valid target size.')
+          setProcessing(false)
+          return
         }
       }
-    } else {
-      blob = await canvasToBlob(canvas, outputFormat, quality)
-    }
 
-    const url = URL.createObjectURL(blob)
-    setCompressed(url)
-    setCompressedSize(blob.size)
-    setProcessing(false)
+      const { blob, unreachable } = await compressCanvas({
+        canvas,
+        outputFormat,
+        quality,
+        targetBytes,
+      })
+
+      if (unreachable) {
+        setSizeWarning(
+          `Could not reach ${targetSizeValue} ${targetSizeUnit} — minimum achievable is ${formatBytes(blob.size)}.`
+        )
+      }
+
+      setCompressed((prev) => {
+        if (prev) URL.revokeObjectURL(prev)
+        return URL.createObjectURL(blob)
+      })
+      setCompressedSize(blob.size)
+    } finally {
+      setProcessing(false)
+    }
   }
 
   const download = () => {
     if (!compressed) return
-    const ext = outputFormat === 'image/jpeg' ? 'jpg' : outputFormat === 'image/png' ? 'png' : 'webp'
+    const ext = outputFormat === OUTPUT_FORMATS.jpeg ? 'jpg' : outputFormat === OUTPUT_FORMATS.png ? 'png' : 'webp'
     const a = document.createElement('a')
     a.href = compressed
     a.download = `compressed.${ext}`
@@ -193,35 +213,71 @@ export default function App() {
 
   const reset = () => {
     setImage(null)
-    setCompressed(null)
+    setCompressed((prev) => {
+      if (prev) URL.revokeObjectURL(prev)
+      return null
+    })
     setOriginalSize(0)
     setCompressedSize(0)
     setOriginalDims({ w: 0, h: 0 })
-    setWidth('')
-    setHeight('')
+    setWidth(initialConfig.width)
+    setHeight(initialConfig.height)
+    setQuality(initialConfig.qualityPercent / 100)
+    setCustomQuality(initialConfig.qualityPercent)
+    setOutputFormat(initialConfig.outputFormat)
+    setKeepAspect(initialConfig.keepAspect)
+    setUseTargetSize(initialConfig.useTargetSize)
+    setTargetSizeValue(initialConfig.targetSizeValue)
+    setTargetSizeUnit(initialConfig.targetSizeUnit)
     setSizeWarning('')
     if (fileInputRef.current) fileInputRef.current.value = ''
   }
 
   const savings = getSavingsPercent(originalSize, compressedSize)
 
+  const modeClass = initialConfig.isEmbed ? 'app embed-mode' : 'app'
+
   return (
-    <div className="app">
-      <header className="header">
-        <div className="header-inner">
-          <div className="logo-wrap">
-            <span className="logo-icon">⚡</span>
-            <span className="logo-text">ImageSqueeze</span>
+    <div className={modeClass}>
+      {!initialConfig.isEmbed && (
+        <header className="header">
+          <div className="header-inner">
+            <div className="logo-wrap">
+              <span className="logo-icon">⚡</span>
+              <span className="logo-text">ImageSqueeze</span>
+            </div>
+            <p className="tagline">Compress & resize images instantly — 100% in your browser</p>
           </div>
-          <p className="tagline">Compress & resize images instantly — 100% in your browser</p>
-        </div>
-      </header>
+        </header>
+      )}
 
       <main className="main">
+        {initialConfig.isEmbed && (
+          <section className="embed-intro-card">
+            <div className="embed-intro-top">
+              <span className="embed-badge">Embedded Tool</span>
+              {initialConfig.label && <span className="embed-label">{initialConfig.label}</span>}
+            </div>
+            <p className="embed-privacy">Private by design: all processing happens locally in your browser.</p>
+            <div className="trust-chips">
+              <span className="trust-chip">No Uploads</span>
+              <span className="trust-chip">No Sign-up</span>
+              <span className="trust-chip">Fast Local Processing</span>
+            </div>
+          </section>
+        )}
+
+        {AD_SLOTS.heroBanner && !initialConfig.isEmbed && (
+          <AdPlaceholder slot={AD_SLOTS.heroBanner} label="Top banner" compact />
+        )}
+
         {!image && (
           <div
             className={`dropzone ${isDragging ? 'dragging' : ''}`}
-            onDragOver={(e) => { e.preventDefault(); setIsDragging(true) }}
+            onDragOver={(e) => {
+              e.preventDefault()
+              setIsDragging(true)
+            }}
             onDragLeave={() => setIsDragging(false)}
             onDrop={handleDrop}
             onClick={() => fileInputRef.current?.click()}
@@ -235,7 +291,9 @@ export default function App() {
             />
             <div className="dropzone-icon">🖼️</div>
             <p className="dropzone-title">Drop your image here</p>
-            <p className="dropzone-sub">or <span className="link">click to browse</span></p>
+            <p className="dropzone-sub">
+              or <span className="link">click to browse</span>
+            </p>
             <p className="dropzone-hint">Supports JPG, PNG, WebP, GIF, BMP</p>
           </div>
         )}
@@ -245,10 +303,17 @@ export default function App() {
             <div className="panel controls-panel">
               <div className="panel-header">
                 <h2>Settings</h2>
-                <button className="btn-ghost" onClick={reset}>↩ Change image</button>
+                <button className="btn-ghost" onClick={reset}>
+                  ↩ Change image
+                </button>
               </div>
 
-              {/* Compression Section */}
+              {AD_SLOTS.controlsInline && !initialConfig.isEmbed && (
+                <div className="panel-ad-wrap">
+                  <AdPlaceholder slot={AD_SLOTS.controlsInline} label="Inline settings ad" compact />
+                </div>
+              )}
+
               <section className="control-section">
                 <h3 className="section-title">
                   <span>🎯</span> Compression Quality
@@ -257,9 +322,11 @@ export default function App() {
                 <div className={`quality-presets ${useTargetSize ? 'disabled' : ''}`}>
                   {QUALITY_PRESETS.map((p, i) => (
                     <button
-                      key={i}
+                      key={p.label}
                       className={`preset-btn ${activePreset === i ? 'active' : ''}`}
-                      onClick={() => { if (!useTargetSize) applyPreset(i) }}
+                      onClick={() => {
+                        if (!useTargetSize) applyPreset(i)
+                      }}
                       disabled={useTargetSize}
                     >
                       <span className="preset-label">{p.label}</span>
@@ -286,10 +353,15 @@ export default function App() {
                   />
                 </div>
 
-                {/* Target Size Row */}
                 <div className="target-row">
                   <label className="target-toggle-label">
-                    <div className={`toggle-switch ${useTargetSize ? 'on' : ''}`} onClick={() => { setUseTargetSize(v => !v); setSizeWarning('') }}>
+                    <div
+                      className={`toggle-switch ${useTargetSize ? 'on' : ''}`}
+                      onClick={() => {
+                        setUseTargetSize((v) => !v)
+                        setSizeWarning('')
+                      }}
+                    >
                       <div className="toggle-knob" />
                     </div>
                     <span>Target file size</span>
@@ -310,24 +382,29 @@ export default function App() {
                         className={`unit-btn ${targetSizeUnit === 'KB' ? 'active' : ''}`}
                         onClick={() => useTargetSize && setTargetSizeUnit('KB')}
                         disabled={!useTargetSize}
-                      >KB</button>
+                      >
+                        KB
+                      </button>
                       <button
                         className={`unit-btn ${targetSizeUnit === 'MB' ? 'active' : ''}`}
                         onClick={() => useTargetSize && setTargetSizeUnit('MB')}
                         disabled={!useTargetSize}
-                      >MB</button>
+                      >
+                        MB
+                      </button>
                     </div>
                   </div>
                 </div>
                 {sizeWarning && <div className="size-warning">{sizeWarning}</div>}
               </section>
 
-              {/* Resize Section */}
               <section className="control-section">
                 <h3 className="section-title">
                   <span>📐</span> Resize Dimensions
                 </h3>
-                <p className="original-dims">Original: {originalDims.w} × {originalDims.h} px</p>
+                <p className="original-dims">
+                  Original: {originalDims.w} × {originalDims.h} px
+                </p>
                 <div className="dims-row">
                   <div className="dim-field">
                     <label>Width</label>
@@ -365,17 +442,12 @@ export default function App() {
                 </div>
               </section>
 
-              {/* Format Section */}
               <section className="control-section">
                 <h3 className="section-title">
                   <span>📄</span> Output Format
                 </h3>
                 <div className="format-btns">
-                  {[
-                    { mime: 'image/jpeg', label: 'JPEG', note: 'Best compression' },
-                    { mime: 'image/png', label: 'PNG', note: 'Lossless' },
-                    { mime: 'image/webp', label: 'WebP', note: 'Modern' },
-                  ].map((f) => (
+                  {FORMAT_OPTIONS.map((f) => (
                     <button
                       key={f.mime}
                       className={`format-btn ${outputFormat === f.mime ? 'active' : ''}`}
@@ -388,20 +460,17 @@ export default function App() {
                 </div>
               </section>
 
-              <button
-                className="btn-compress"
-                onClick={compress}
-                disabled={processing}
-              >
+              <button className="btn-compress" onClick={compress} disabled={processing}>
                 {processing ? (
-                  <><span className="spinner" /> Processing…</>
+                  <>
+                    <span className="spinner" /> Processing…
+                  </>
                 ) : (
                   <>⚡ Compress & Resize</>
                 )}
               </button>
             </div>
 
-            {/* Preview Panel */}
             <div className="panel preview-panel">
               <div className="previews">
                 <div className="preview-card">
@@ -412,7 +481,9 @@ export default function App() {
                   <div className="preview-img-wrap">
                     <img src={image} alt="original" />
                   </div>
-                  <div className="preview-dims">{originalDims.w} × {originalDims.h} px</div>
+                  <div className="preview-dims">
+                    {originalDims.w} × {originalDims.h} px
+                  </div>
                 </div>
 
                 <div className="arrow-col">
@@ -427,9 +498,7 @@ export default function App() {
                 <div className="preview-card">
                   <div className="preview-label">
                     <span className="preview-title">Compressed</span>
-                    {compressedSize > 0 && (
-                      <span className="size-badge green">{formatBytes(compressedSize)}</span>
-                    )}
+                    {compressedSize > 0 && <span className="size-badge green">{formatBytes(compressedSize)}</span>}
                   </div>
                   <div className="preview-img-wrap">
                     {compressed ? (
@@ -441,7 +510,9 @@ export default function App() {
                     )}
                   </div>
                   {compressedSize > 0 && (
-                    <div className="preview-dims">{width} × {height} px</div>
+                    <div className="preview-dims">
+                      {width} × {height} px
+                    </div>
                   )}
                 </div>
               </div>
@@ -479,14 +550,23 @@ export default function App() {
                   ⬇ Download Compressed Image
                 </button>
               )}
+
+              {AD_SLOTS.resultsFooter && !initialConfig.isEmbed && (
+                <div className="panel-ad-wrap panel-ad-wrap-bottom">
+                  <AdPlaceholder slot={AD_SLOTS.resultsFooter} label="Results footer ad" compact />
+                </div>
+              )}
             </div>
           </div>
         )}
       </main>
 
-      <footer className="footer">
-        All processing happens locally in your browser — no uploads, no servers.
-      </footer>
+      {!initialConfig.isEmbed && (
+        <footer className="footer">
+          {AD_SLOTS.footerBanner && <AdPlaceholder slot={AD_SLOTS.footerBanner} label="Footer banner" compact />}
+          All processing happens locally in your browser — no uploads, no servers.
+        </footer>
+      )}
     </div>
   )
 }
