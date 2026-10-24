@@ -1,10 +1,46 @@
-# Aeroniqx direct-upload release
+# Aeroniqx deployment
 
 The complete previous production artifact was recovered from Cloudflare deployment
 `312c5019-ce54-4b5d-a127-ce84018f3a5a` (104 files). It is retained unchanged in
 `legacy-site/`, with SHA-256 checksums in `deployment/production-baseline.json`.
 The older React files in this checkout are incomplete and are not the production
-build source. No GitHub connection or GitHub push is needed for deployment.
+build source. GitHub Actions deploys this complete artifact to the existing
+Cloudflare Pages project. Direct uploads remain available for recovery.
+
+## GitHub deployment
+
+Repository: `Techazzer/image-squeezer`. Workflow:
+`.github/workflows/cloudflare-pages.yml`.
+
+- Pull requests to `main` run tests, build the site, and verify preserved routes,
+  assets, metadata, and hosting rules. They do not receive Cloudflare credentials.
+- Pushes to `main` deploy production only after all checks pass.
+- Actions → Aeroniqx checks and deployment → Run workflow, on `main`, offers
+  `preview` (default) or `production`. Preview uses the `github-preview` branch
+  in Cloudflare and does not clear the live domain's cache.
+- Production deploys refresh the aeroniqx.in cache and verify the homepage,
+  calculator, and exact release assets. The run summary contains the deployed URL.
+- The CLI is pinned in `deployment/cli/`; the build itself needs no packages.
+  GitHub actions are pinned to upstream commit hashes. The workflow token has
+  only `contents: read` permission.
+
+Required repository configuration under Settings → Secrets and variables → Actions:
+
+| Type | Name | Purpose |
+| --- | --- | --- |
+| Secret | `CLOUDFLARE_API_TOKEN` | Account Cloudflare Pages Edit for the deployment account, plus Zone Cache Purge restricted to aeroniqx.in. |
+| Variable | `CLOUDFLARE_ZONE_ID` | The aeroniqx.in zone ID used to refresh its cache. |
+
+The Cloudflare account ID and Pages project name are fixed in
+`scripts/deploy-cloudflare.mjs`. Cloudflare's Pages token permission applies to
+the account's Pages projects; the workflow targets only `image-resizer`.
+Store the token only as a GitHub encrypted Actions secret. Do not commit it or
+copy Wrangler's personal OAuth credentials into GitHub. Renew or revoke the CI
+token in Cloudflare when needed and replace the repository secret.
+
+Cloudflare direct-upload projects cannot be converted to native Git integration;
+this uses the supported [GitHub Actions workflow](https://developers.cloudflare.com/pages/how-to/use-direct-upload-with-continuous-integration/)
+while retaining the existing project, domain, and rollback history.
 
 ## Source and build
 

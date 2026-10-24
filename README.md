@@ -1,11 +1,20 @@
-# ImageSqueeze
+# Aeroniqx
 
-Browser-only image compressor and resizer built with React + Vite.
+Free browser-based image, PDF, finance, and productivity tools at [aeroniqx.in](https://aeroniqx.in/).
+
+The complete deployed site is preserved in `legacy-site/`; new calculator source
+is in `tools/`. The older React sources are incomplete and are retained for
+reference. See [deployment documentation](DEPLOYMENT.md) before changing builds.
+
+Pull requests run tests and validate the complete build. Merging into `main`
+deploys to the existing Cloudflare Pages project through GitHub Actions after
+the deployment credential is configured. A manual run from `main` can deploy a
+preview without changing the production domain.
 
 ## Run locally
 
 ```bash
-npm install
+npm run build
 npm run dev
 ```
 
@@ -42,6 +51,6 @@ Invalid or missing values safely fall back to defaults.
 
 ```bash
 npm test
-npm run lint
 npm run build
+node scripts/check-build.mjs
 ```

@@ -1,0 +1,12 @@
+{
+  "name": "aeroniqx-cloudflare-cli",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Pinned CLI dependencies used only by the deployment workflow",
+  "devDependencies": {
+    "wrangler": "4.152.0"
+  },
+  "overrides": {
+    "undici": "7.30.1"
+  }
+}

@@ -4,3 +4,4 @@ tools/** text eol=lf
 scripts/** text eol=lf
 deployment/** text eol=lf
 src/test/timesheet.test.js text eol=lf
+.github/** text eol=lf
