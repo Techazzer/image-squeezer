@@ -1,0 +1,29 @@
+# Aero Tools — llms.txt
+# https://aeroniqx.in
+
+## About
+Aero Tools is a free, privacy-first image compression and resizing tool for the Indian market.
+All processing happens in the user's browser using the Canvas API — no images are uploaded to any server.
+
+## Key pages
+- Homepage: https://aeroniqx.in/
+- Image Compressor: https://aeroniqx.in/image-compressor/
+- Compress to 100KB: https://aeroniqx.in/compress-image-to-100kb/
+- Compress to 50KB: https://aeroniqx.in/compress-image-to-50kb/
+- UPSC Photo Tool: https://aeroniqx.in/compress-photo-for-upsc/
+- SSC Photo Tool: https://aeroniqx.in/compress-photo-for-ssc/
+- NEET Photo Tool: https://aeroniqx.in/compress-photo-for-neet/
+- IBPS / SBI Photo Tool: https://aeroniqx.in/compress-photo-for-ibps/
+- Railway RRB Photo Tool: https://aeroniqx.in/compress-photo-for-railway-rrb/
+- Passport Seva Photo: https://aeroniqx.in/compress-image-for-passport-seva/
+- Signature Compressor: https://aeroniqx.in/compress-signature-for-government-form/
+- TinyPNG Alternative: https://aeroniqx.in/tinypng-alternative/
+- Compress WebP Online: https://aeroniqx.in/compress-webp-online/
+- Compress PNG Online: https://aeroniqx.in/compress-png-online/
+- Compress JPEG Online: https://aeroniqx.in/compress-jpg-online/
+
+## Sitemap
+https://aeroniqx.in/sitemap.xml
+
+## Contact
+techazzer@gmail.com

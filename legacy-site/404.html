@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page Not Found — AeroTools</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #ffffff; --surface: #f8f9fa; --border: #dadce0;
+      --primary: #1a73e8; --primary-dark: #1557b0; --primary-light: #e8f0fe;
+      --text: #202124; --muted: #5f6368;
+      --shadow-1: 0 1px 2px rgba(60,64,67,.3),0 1px 3px rgba(60,64,67,.15);
+      --font: -apple-system, BlinkMacSystemFont, 'Google Sans', 'Segoe UI', Roboto, sans-serif;
+    }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: var(--font); min-height: 100vh;
+      display: flex; flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--primary); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* Header */
+    header {
+      background: var(--bg); border-bottom: 1px solid var(--border);
+      padding: 0 20px; height: 64px;
+      display: flex; align-items: center; gap: 10px;
+      box-shadow: var(--shadow-1);
+    }
+    .logo { font-size: 1.05rem; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 8px; }
+
+    /* 404 block */
+    main {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 48px 20px; text-align: center;
+    }
+    .code {
+      font-size: clamp(5rem, 20vw, 9rem); font-weight: 900;
+      line-height: 1; letter-spacing: -.04em;
+      background: linear-gradient(135deg, #1a73e8 0%, #1557b0 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .label {
+      font-size: clamp(1.1rem, 3vw, 1.5rem); font-weight: 700;
+      margin: 12px 0 10px; color: var(--text);
+    }
+    .sub {
+      color: var(--muted); font-size: 0.95rem; max-width: 440px;
+      margin: 0 auto 32px; line-height: 1.6;
+    }
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--primary); color: #fff;
+      padding: 11px 24px; border-radius: 999px;
+      font-size: 0.95rem; font-weight: 600;
+      transition: background 0.15s; margin-bottom: 40px;
+    }
+    .back-btn:hover { background: var(--primary-dark); text-decoration: none; }
+
+    /* Tool links */
+    .tools-label {
+      font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--muted); margin-bottom: 14px;
+    }
+    .tools-grid {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      justify-content: center; max-width: 700px;
+    }
+    .tools-grid a {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 999px; padding: 6px 16px;
+      font-size: 0.83rem; color: var(--muted); font-weight: 500;
+      transition: all 0.15s;
+    }
+    .tools-grid a:hover {
+      border-color: var(--primary); color: var(--primary);
+      background: var(--primary-light); text-decoration: none;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--surface); border-top: 1px solid var(--border);
+      text-align: center; padding: 20px;
+      color: var(--muted); font-size: 0.82rem;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="/" class="logo">
+    <svg width="26" height="26" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+      <rect width="28" height="28" rx="6" fill="#1a73e8"/>
+      <path d="M7 14a7 7 0 0 1 14 0" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+      <circle cx="14" cy="14" r="3" fill="#fff"/>
+      <path d="M14 17v4M11 19h6" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/>
+    </svg>
+    AeroTools
+  </a>
+</header>
+
+<main>
+  <p class="code">404</p>
+  <p class="label">Page not found</p>
+  <p class="sub">The page you're looking for doesn't exist or may have moved. Try one of the tools below.</p>
+  <a href="/" class="back-btn">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+    Back to AeroTools
+  </a>
+
+  <p class="tools-label">Popular tools</p>
+  <div class="tools-grid">
+    <a href="/compress-image-to-50kb/">Compress to 50KB</a>
+    <a href="/compress-image-to-100kb/">Compress to 100KB</a>
+    <a href="/compress-image-to-200kb/">Compress to 200KB</a>
+    <a href="/compress-jpg-online/">Compress JPEG</a>
+    <a href="/compress-png-online/">Compress PNG</a>
+    <a href="/convert-webp-to-jpg/">WebP to JPG</a>
+    <a href="/compress-photo-for-upsc/">UPSC Photo</a>
+    <a href="/compress-photo-for-ssc/">SSC Photo</a>
+    <a href="/resize-image-for-instagram/">Instagram Resize</a>
+    <a href="/resize-image-for-youtube-thumbnail/">YouTube Thumbnail</a>
+    <a href="/reduce-image-size-from-mb-to-kb/">MB to KB</a>
+    <a href="/tinypng-alternative/">TinyPNG Alternative</a>
+  </div>
+</main>
+
+<footer>
+  © <script>document.write(new Date().getFullYear())</script> AeroTools on aeroniqx.in — Free image tools, 100% in your browser.
+</footer>
+
+</body>
+</html>

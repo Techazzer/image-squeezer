@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+    (function () {
+      var host = window.location.hostname;
+      if (host === 'localhost' || host === '127.0.0.1') {
+        document.documentElement.setAttribute('data-env', 'local');
+      }
+    })();
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Compress Image for Website — WordPress, Shopify, Wix | Faster PageSpeed</title>
+  <meta name="description" content="Compress blog images, hero banners, and product photos for website. 150KB target, 80% JPEG quality. Improve PageSpeed and Core Web Vitals. Free, no upload." />
+  <link rel="canonical" href="https://aeroniqx.in/compress-image-for-website/" />
+  <meta property="og:title" content="Compress Image for Website — WordPress, Shopify, Wix | Faster PageSpeed" />
+  <meta property="og:description" content="Compress blog images, hero banners, and product photos for website. 150KB target, 80% JPEG quality. Improve PageSpeed and Core Web Vitals. Free, no upload." />
+  <meta property="og:url" content="https://aeroniqx.in/compress-image-for-website/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://aeroniqx.in/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:site_name" content="Aero Tools" />
+  <meta property="og:locale" content="en_IN" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Compress Image for Website — WordPress, Shopify, Wix | Faster PageSpeed" />
+  <meta name="twitter:description" content="Compress blog images, hero banners, and product photos for website. 150KB target, 80% JPEG quality. Improve PageSpeed and Core Web Vitals. Free, no upload." />
+  <meta name="twitter:image" content="https://aeroniqx.in/og-image.png" />
+  <meta name="robots" content="index, follow" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1450536013584517" crossorigin="anonymous"></script>
+  <script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "Compress Image for Website",
+      "url": "https://aeroniqx.in/compress-image-for-website/",
+      "description": "Compress images for WordPress, Wix, Shopify and web pages. Target under 200KB per image for fast page load. Free, browser-based, no upload.",
+      "applicationCategory": "UtilityApplication",
+      "operatingSystem": "All",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "INR"
+      }
+    },
+    {
+      "@type": "HowTo",
+      "name": "How to compress image for website",
+      "step": [
+        {
+          "@type": "HowToStep",
+          "text": "Upload your website image (blog photo, banner, product image)."
+        },
+        {
+          "@type": "HowToStep",
+          "text": "Target is pre-set to 150KB with 80% JPEG quality — optimised for web."
+        },
+        {
+          "@type": "HowToStep",
+          "text": "Download and upload to your WordPress, Shopify, or Wix website."
+        }
+      ]
+    }
+  ]
+}</script>
+  <style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #ffffff; --surface: #f8f9fa; --surface2: #f1f3f4; --border: #dadce0;
+    --primary: #1a73e8; --primary-dark: #1557b0; --primary-light: #e8f0fe;
+    --text: #202124; --muted: #5f6368; --dim: #80868b;
+    --success: #34a853; --success-light: #e6f4ea;
+    --error: #ea4335; --error-light: #fce8e6;
+    --radius: 8px; --radius-lg: 12px; --radius-xl: 16px;
+    --shadow-1: 0 1px 2px rgba(60,64,67,.3),0 1px 3px rgba(60,64,67,.15);
+    --shadow-2: 0 1px 3px rgba(60,64,67,.3),0 4px 8px rgba(60,64,67,.15);
+    --shadow-3: 0 2px 6px rgba(60,64,67,.3),0 8px 24px rgba(60,64,67,.15);
+    --font: -apple-system, BlinkMacSystemFont, 'Google Sans', 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'Roboto Mono', 'SFMono-Regular', Consolas, monospace;
+    --max-w: 1160px;
+    --content-w: 860px;
+  }
+  body { background: var(--bg); color: var(--text); font-family: var(--font); line-height: 1.6; }
+  a { color: var(--primary); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .site-main { min-height: calc(100vh - 64px); }
+
+  /* Header */
+  header { background: rgba(255,255,255,.92); backdrop-filter: saturate(180%) blur(14px); border-bottom: 1px solid rgba(218,220,224,.9); padding: 0 24px; height: 64px; display: flex; align-items: center; justify-content: center; position: sticky; top: 0; z-index: 10; box-shadow: var(--shadow-1); }
+  .header-inner { max-width: var(--max-w); width: 100%; display: flex; align-items: center; gap: 24px; }
+  header .logo { font-size: 1.1rem; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 10px; }
+  header .logo svg { flex-shrink: 0; }
+  header nav { display: flex; gap: 6px; font-size: 0.92rem; align-items: center; }
+  header nav a { color: var(--muted); padding: 8px 12px; border-radius: 999px; transition: background 0.15s, color 0.15s; }
+  header nav a:hover { background: var(--surface); color: var(--text); text-decoration: none; }
+  .nav-cta { margin-left: auto; display: inline-flex; align-items: center; justify-content: center; background: var(--primary-light); border: 1px solid var(--primary-light); color: var(--primary); border-radius: 999px; padding: 8px 18px; font-size: .86rem; font-weight: 700; text-decoration: none; }
+  .nav-cta:hover { background: #d2e3fc; border-color: #d2e3fc; text-decoration: none; }
+
+  /* Hero */
+  .hero { background: linear-gradient(135deg,#f0f4ff 0%,#e8f0fe 60%,#f8fbff 100%); border-bottom: 1px solid var(--border); padding: 56px 24px 48px; }
+  .hero-inner { max-width: var(--max-w); margin: 0 auto; }
+  .hero > h1, .hero > p, .hero > .badges, .hero > div:not(.hero-inner) { max-width: var(--content-w); margin-left: auto; margin-right: auto; }
+  .hero h1 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 900; line-height: 1.08; margin-bottom: 14px; color: var(--text); letter-spacing: -.03em; }
+  .hero h1 span { color: var(--primary); }
+  .hero p { color: var(--muted); font-size: 1.03rem; max-width: 640px; margin-bottom: 18px; line-height: 1.7; }
+  .hero-tag { display: inline-block; font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--primary); background: var(--primary-light); border-radius: 999px; padding: 4px 14px; margin-bottom: 18px; }
+  .badges { display: flex; gap: 8px; flex-wrap: wrap; }
+  .badge { background: var(--bg); border: 1px solid #c5d9fd; border-radius: 999px; padding: 4px 14px; font-size: 0.78rem; font-weight: 700; color: var(--primary); }
+
+  /* Tool iframe */
+  .tool-wrap { max-width: var(--content-w); margin: 32px auto 0; padding: 0 20px; }
+  .tool-frame { width: 100%; height: 360px; min-height: 260px; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface); box-shadow: var(--shadow-2); transition: height 300ms ease; }
+
+  /* Ad slot */
+  .ad-slot { max-width: var(--content-w); margin: 24px auto; padding: 0 20px; text-align: center; min-height: 90px; }
+  html[data-env="local"] .ad-slot { display: none; }
+
+  /* Content */
+  .content { max-width: var(--content-w); margin: 40px auto; padding: 0 20px; }
+  .content h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: 14px; color: var(--text); }
+  .content p { color: var(--muted); margin-bottom: 14px; font-size: 0.95rem; line-height: 1.65; }
+
+  /* Table */
+  .table-wrap { overflow-x: auto; margin: 20px 0; border: 1px solid var(--border); border-radius: var(--radius-lg); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  thead th { background: var(--surface); color: var(--muted); text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--border); font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  tbody td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--muted); }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover td { background: var(--surface); color: var(--text); }
+  .ok { color: var(--success); font-weight: 600; }
+
+  /* Steps */
+  .steps { counter-reset: step; list-style: none; margin: 16px 0; }
+  .steps li { counter-increment: step; display: flex; gap: 14px; align-items: flex-start; margin-bottom: 16px; }
+  .steps li::before { content: counter(step); min-width: 28px; height: 28px; border-radius: 50%; background: var(--primary); color: #fff; font-size: 0.8rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .steps li p { color: var(--muted); font-size: 0.93rem; margin: 0; padding-top: 4px; line-height: 1.6; }
+
+  /* FAQ */
+  .faq { margin: 16px 0; }
+  details { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); margin-bottom: 8px; padding: 16px 20px; }
+  summary { font-weight: 600; cursor: pointer; list-style: none; color: var(--text); font-size: 0.93rem; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: '+'; float: right; color: var(--primary); font-size: 1.2rem; line-height: 1; }
+  details[open] summary::after { content: '−'; }
+  details p { margin-top: 12px; color: var(--muted); font-size: 0.91rem; line-height: 1.6; }
+
+  /* Related grid */
+  .related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(195px, 1fr)); gap: 10px; margin-top: 16px; }
+  .related-card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 14px 16px; transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s; }
+  .related-card:hover { border-color: var(--primary); box-shadow: var(--shadow-2); transform: translateY(-1px); }
+  .related-card a { color: var(--text); font-size: 0.88rem; font-weight: 700; }
+  .related-card p { color: var(--muted); font-size: 0.8rem; margin-top: 4px; line-height: 1.55; }
+
+  /* Backlink box */
+  .backlink-box { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-xl); box-shadow: var(--shadow-1); padding: 18px 20px; margin: 24px 0; }
+  .backlink-box h3 { font-size: 1rem; font-weight: 800; margin-bottom: 10px; color: var(--text); }
+  .backlink-links { display: flex; flex-wrap: wrap; gap: 8px; }
+  .backlink-links a { background: var(--surface); border: 1px solid var(--border); border-radius: 999px; padding: 7px 12px; font-size: 0.82rem; color: var(--muted); font-weight: 600; transition: all 0.15s; }
+  .backlink-links a:hover { border-color: #c5d9fd; color: var(--primary); text-decoration: none; background: var(--primary-light); }
+
+  /* Authority links */
+  .authority-links { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-xl); box-shadow: var(--shadow-1); padding: 18px 20px; margin: 24px 0; }
+  .authority-links h4 { font-size: 1rem; font-weight: 800; color: var(--text); margin-bottom: 10px; }
+  .authority-links ul { padding-left: 18px; }
+  .authority-links li { color: var(--muted); margin-bottom: 6px; }
+  .authority-links ul li a { color: var(--primary-dark); font-size: 0.86rem; }
+  .authority-links ul li a:hover { color: var(--primary); text-decoration: underline; }
+
+  /* Spec bar (Passport Seva, exam-specific pages) */
+  .spec-bar { max-width: var(--content-w); margin: 18px auto 0; background: rgba(255,255,255,.9); border: 1px solid var(--border); border-radius: var(--radius-xl); box-shadow: var(--shadow-1); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; overflow: hidden; }
+  .spec-item { padding: 16px 18px; text-align: left; border-right: 1px solid var(--border); }
+  .spec-item:last-child { border-right: none; }
+  .spec-val { font-size: 1rem; font-weight: 800; color: var(--primary); line-height: 1.1; }
+  .spec-label { font-size: .78rem; color: var(--muted); margin-top: 4px; font-weight: 500; letter-spacing: normal; text-transform: none; }
+
+  /* Alert box */
+  .alert-box { background: #fffdf5; border: 1px solid #f3e2a6; border-radius: var(--radius-xl); box-shadow: var(--shadow-1); padding: 18px 20px; margin: 24px 0; font-size: .9rem; color: #5a4000; line-height: 1.6; }
+  .alert-box strong { color: #4a3200; }
+
+  /* Embed widget */
+  .embed-widget { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-xl); box-shadow: var(--shadow-1); padding: 18px 20px; margin: 24px 0; }
+  .embed-widget h3 { font-size: 1rem; font-weight: 800; color: var(--text); margin-bottom: 10px; }
+  .embed-widget p { color: var(--muted); font-size: 0.86rem; margin-bottom: 14px; }
+  .embed-code { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; font-family: var(--font-mono); font-size: 0.76rem; color: #1557b0; overflow-x: auto; white-space: pre; line-height: 1.5; }
+  .copy-btn { margin-top: 10px; background: var(--primary); color: #fff; border: none; border-radius: 999px; padding: 10px 18px; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: background 0.15s; }
+  .copy-btn:hover { background: var(--primary-dark); }
+
+  /* Footer */
+  footer { background: var(--surface); border-top: 1px solid var(--border); text-align: center; padding: 28px 20px; color: var(--muted); font-size: 0.83rem; margin-top: 60px; }
+  footer a { color: var(--muted); margin: 0 8px; transition: color 0.15s; }
+  footer a:hover { color: var(--primary); text-decoration: none; }
+  footer .footer-links { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; }
+
+  @media (max-width: 600px) {
+    .tool-frame { height: 480px; min-height: 360px; }
+    header nav { display: none; }
+    .nav-cta { display: none; }
+    .hero { padding: 36px 16px 30px; }
+    .content, .tool-wrap, .ad-slot { padding: 0 16px; }
+    .spec-bar, .trust-bar { grid-template-columns: 1fr 1fr; margin-left: 16px; margin-right: 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="site-main">
+
+
+<header>
+  <div class="header-inner">
+    <a href="/" class="logo">
+      <svg width="26" height="26" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+        <rect width="28" height="28" rx="6" fill="#1a73e8"/>
+        <path d="M7 14a7 7 0 0 1 14 0" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+        <circle cx="14" cy="14" r="3" fill="#fff"/>
+        <path d="M14 17v4M11 19h6" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+      Aero Tools
+    </a>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/image-compressor/">Image Compressor</a>
+      <a href="/compress-photo-for-upsc/">UPSC Photo</a>
+      <a href="/compress-image-to-50kb/">50KB Tool</a>
+    </nav>
+    <a href="/image-compressor/" class="nav-cta">Compress Now</a>
+  </div>
+</header>
+<main>
+  <div class="hero">
+    <h1>Compress Image for <span>Website</span> — Faster Pages, Better SEO</h1>
+    <p>Unoptimised images are the #1 cause of slow websites. Google PageSpeed, Core Web Vitals, and user bounce rates all depend on fast-loading images. Compress before you upload to WordPress, Wix, Shopify, or any CMS.</p>
+    <div class="badges">
+      <span class="badge">✓ Pre-set for web (150KB target)</span>
+      <span class="badge">✓ Improves PageSpeed score</span>
+      <span class="badge">✓ WordPress / Shopify ready</span>
+      <span class="badge">✓ No upload to server</span>
+    </div>
+  </div>
+
+  <div class="tool-wrap">
+    <iframe class="tool-frame"
+      src="/image-compressor/?embed=1&target=150&unit=KB&format=jpeg&quality=80&label=Compress+Image+for+Website+(150KB)"
+      title="Compress image for website" loading="eager" frameborder="0"></iframe>
+  </div>
+
+  
+<div class="ad-slot">
+  <script>
+    (function () {
+      var host = window.location.hostname;
+      var isLocal = host === 'localhost' || host === '127.0.0.1';
+      var slot = document.currentScript.parentElement;
+
+      if (isLocal) {
+        slot.style.display = 'none';
+        return;
+      }
+
+      slot.innerHTML = '<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1450536013584517" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>';
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+    })();
+  </script>
+</div>
+
+  <div class="content">
+    <h2>Target image sizes for web performance</h2>
+    <p>Google's Core Web Vitals measure Largest Contentful Paint (LCP) — how fast the main image on your page loads. A 2MB hero image is the most common reason sites fail LCP. Compressing it to under 200KB can cut load time by 60–80% with no visible quality difference on screen.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Image Type</th><th>Target Size</th><th>Recommended Quality</th><th>Format</th><th>Pre-configure</th></tr></thead>
+        <tbody>
+          <tr><td>Hero / banner image</td><td>Under 200KB</td><td>80%</td><td>JPEG or WebP</td><td class="ok"><a href="/?embed=1&target=200&unit=KB&format=jpeg&quality=80&label=Hero+Banner+200KB" target="_blank">Open ↗</a></td></tr>
+          <tr><td>Blog post images</td><td>Under 150KB</td><td>80%</td><td>JPEG</td><td class="ok"><a href="/?embed=1&target=150&unit=KB&format=jpeg&quality=80&label=Blog+Image+150KB" target="_blank">Open ↗</a></td></tr>
+          <tr><td>Product images (Shopify)</td><td>Under 100KB</td><td>85%</td><td>JPEG</td><td class="ok"><a href="/compress-image-to-100kb/">100KB Tool ↗</a></td></tr>
+          <tr><td>Logo / icon (with transparency)</td><td>Under 50KB</td><td>—</td><td>PNG</td><td class="ok"><a href="/compress-png-online/">PNG Tool ↗</a></td></tr>
+          <tr><td>Background textures</td><td>Under 100KB</td><td>75%</td><td>JPEG or WebP</td><td class="ok"><a href="/?embed=1&target=100&unit=KB&format=jpeg&quality=75&label=Background+Texture+100KB" target="_blank">Open ↗</a></td></tr>
+          <tr><td>Thumbnail / card images</td><td>Under 50KB</td><td>80%</td><td>JPEG</td><td class="ok"><a href="/compress-image-to-50kb/">50KB Tool ↗</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    
+<div class="authority-links">
+  <h4>Official sources &amp; references</h4>
+  <ul>
+    <li><a href="https://pagespeed.web.dev/" target="_blank" rel="noopener noreferrer">Google PageSpeed Insights — pagespeed.web.dev ↗</a></li>
+    <li><a href="https://web.dev/vitals/" target="_blank" rel="noopener noreferrer">Core Web Vitals — web.dev ↗</a></li>
+    <li><a href="https://developers.google.com/search/docs/appearance/google-images" target="_blank" rel="noopener noreferrer">Image best practices — Google Search Central ↗</a></li>
+    <li><a href="https://wordpress.org/documentation/article/use-image-and-media-files/" target="_blank" rel="noopener noreferrer">WordPress image optimization guide — wordpress.org ↗</a></li>
+  </ul>
+</div>
+
+    <h2>How slow images hurt your Google rankings</h2>
+    <p>Since May 2021, Google includes Core Web Vitals (CWV) as a direct ranking factor. The key metric for images is <strong>Largest Contentful Paint (LCP)</strong> — how long it takes for the main image on a page to load. Google's threshold: good = under 2.5 seconds, poor = over 4 seconds. A 2MB hero image on a mobile connection can take 6–10 seconds — automatic "poor" rating and a ranking penalty.</p>
+    <p>Every 100KB you remove from your images is roughly 0.2–0.4 seconds off LCP on a mobile connection. Compressing a 2MB banner to 200KB can move a "poor" LCP score to "good" — directly improving your search ranking without any other changes.</p>
+
+    
+<div class="backlink-box">
+  <h3>🔗 Related Tools on Aero Tools</h3>
+  <div class="backlink-links">
+    <a href="/image-compressor-without-losing-quality/">Compress Without Quality Loss</a>
+    <a href="/tinypng-alternative/">TinyPNG Alternative</a>
+    <a href="/compress-image-to-100kb/">Compress to 100KB</a>
+    <a href="/compress-image-to-50kb/">Compress to 50KB</a>
+    <a href="/compress-png-online/">Compress PNG Online</a>
+    <a href="/compress-jpg-online/">Compress JPEG Online</a>
+    <a href="/convert-webp-to-jpg/">Convert WebP to JPG</a>
+    <a href="/compress-image-under-1mb/">Compress Under 1MB</a>
+    <a href="/bulk-image-compressor/">Bulk Image Compressor</a>
+    <a href="/free-image-compressor-no-signup/">Free No Signup</a>
+  </div>
+</div>
+
+    <h2>Step-by-step: compress images for WordPress (3 steps)</h2>
+    <ol class="steps">
+      <li><p>Upload your image here. The tool is pre-set to <strong>150KB at 80% JPEG quality</strong> — the web optimisation sweet spot. Adjust target to 200KB for hero images or 50KB for thumbnails.</p></li>
+      <li><p>Click <strong>Compress</strong> and review the before/after preview. At 80%, photos look identical on screen. If you see visible quality loss, nudge quality up to 85%.</p></li>
+      <li><p>Download and upload to WordPress/Shopify/Wix. In WordPress, always add descriptive <strong>alt text</strong> after uploading — this is a separate but equally important SEO step that Google uses for image ranking.</p></li>
+    </ol>
+
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq">
+      <details>
+        <summary>Should I use JPEG or WebP for my website images?</summary>
+        <p>WebP is 25–35% smaller than JPEG at the same quality and is now supported by all modern browsers (Chrome, Firefox, Safari, Edge). If your CMS supports WebP (WordPress 5.8+, Shopify, and most modern builders do), use WebP. If you need maximum compatibility with older browsers or email, use JPEG. This tool outputs both — just select your format before compressing.</p>
+      </details>
+      <details>
+        <summary>Do I still need an image optimisation plugin if I use this tool?</summary>
+        <p>This tool handles manual compression before upload. WordPress plugins like Imagify or Smush re-compress images that are already on your server. If you pre-compress properly with this tool, you need less aggressive plugin compression — which means better quality. Many developers pre-compress with a tool like this and use a plugin only for automated resize on upload (different srcset sizes for responsive images).</p>
+      </details>
+      <details>
+        <summary>What's the maximum image size I can upload to WordPress?</summary>
+        <p>WordPress's default max upload size is set by your hosting's php.ini — typically 2MB to 64MB. But the real question is what size you <em>should</em> upload: under 200KB for any image that appears on a page. Larger images are fine as downloads, but images that load on a webpage should be compressed first.</p>
+      </details>
+    </div>
+
+    <h2>Related tools for web performance</h2>
+    
+<div class="related-grid">
+  
+  <div class="related-card">
+    <a href="/image-compressor-without-losing-quality/">No Quality Loss</a>
+    <p>85% JPEG — best web quality balance</p>
+  </div>
+  <div class="related-card">
+    <a href="/tinypng-alternative/">TinyPNG Alternative</a>
+    <p>Privacy-first, no server upload</p>
+  </div>
+  <div class="related-card">
+    <a href="/compress-png-online/">Compress PNG Online</a>
+    <p>Reduce PNG size, keep transparency</p>
+  </div>
+  <div class="related-card">
+    <a href="/compress-image-to-100kb/">Compress to 100KB</a>
+    <p>Product images, thumbnails</p>
+  </div>
+  <div class="related-card">
+    <a href="/convert-webp-to-jpg/">Convert WebP → JPG</a>
+    <p>Convert browser-saved WebP files</p>
+  </div>
+  <div class="related-card">
+    <a href="/free-image-compressor-no-signup/">Free No Signup</a>
+    <p>No gates, no watermarks</p>
+  </div>
+</div>
+
+    
+<div class="embed-widget">
+  <h3>📎 Embed this tool on your website — free</h3>
+  <p>Bloggers, educators, and developers: copy the snippet below to add this tool to your site. It's free forever and links back automatically.</p>
+  <div class="embed-code" id="embed-code">&lt;iframe
+  src="https://aeroniqx.in/?embed=1&target=150&unit=KB&format=jpeg&quality=80&label=Compress+Image+for+Website"
+  width="100%" height="620"
+  frameborder="0"
+  style="border-radius:12px;border:1px solid #2a2a3a;"
+  title="Website image compressor — 150KB target"
+&gt;&lt;/iframe&gt;
+&lt;p style="font-size:0.8rem;text-align:center;margin-top:6px;"&gt;
+  Powered by &lt;a href="https://aeroniqx.in/compress-image-for-website/"&gt;Aero Tools&lt;/a&gt; — free image compressor
+&lt;/p&gt;</div>
+  <button class="copy-btn" onclick="(function(){const el=document.getElementById('embed-code');navigator.clipboard.writeText(el.innerText).then(()=>{const b=document.querySelector('.copy-btn');b.textContent='✓ Copied!';setTimeout(()=>b.textContent='Copy embed code',2000)})})()">Copy embed code</button>
+</div>
+  </div>
+</main>
+
+<footer>
+  <p>© 2026 <a href="/">Aero Tools on aeroniqx.in</a> — Free image tools, 100% in your browser. No uploads. No sign-up.</p>
+  <div class="footer-links">
+    <a href="/">Home</a>
+    <a href="/compress-image-to-50kb/">50KB</a>
+    <a href="/compress-image-to-100kb/">100KB</a>
+    <a href="/compress-image-to-200kb/">200KB</a>
+    <a href="/compress-jpg-online/">JPEG</a>
+    <a href="/compress-png-online/">PNG</a>
+    <a href="/compress-webp-online/">WebP</a>
+    <a href="/compress-image-for-passport-seva/">Passport Seva</a>
+    <a href="/compress-photo-for-upsc/">UPSC</a>
+    <a href="/compress-photo-for-ssc/">SSC</a>
+    <a href="/resize-image-for-instagram/">Instagram</a>
+    <a href="/resize-image-for-youtube-thumbnail/">YouTube</a>
+    <a href="/reduce-image-size-from-mb-to-kb/">MB to KB</a>
+    <a href="/tinypng-alternative/">TinyPNG Alt</a>
+  </div>
+</footer>
+</div>
+<script>
+  (function () {
+    function resizeToolFrame(event) {
+      if (!event || !event.data || event.data.type !== 'aerotools:embed-height') return;
+      var frames = Array.prototype.slice.call(document.querySelectorAll('.tool-frame'));
+      var activeFrame = frames.find(function (frame) {
+        return frame.contentWindow === event.source;
+      });
+
+      if (!activeFrame) return;
+
+      var nextHeight = Math.max(300, Number(event.data.height) || 0);
+      activeFrame.style.height = nextHeight + 'px';
+    }
+
+    window.addEventListener('message', resizeToolFrame);
+  })();
+</script>
+</body>
+</html>

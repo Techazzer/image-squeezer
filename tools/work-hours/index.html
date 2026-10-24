@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Work Hours & Timesheet Calculator — Free, No Login | Aero Tools</title>
+  <meta name="description" content="Calculate daily and weekly work hours, breaks, overnight shifts, overtime and estimated pay. Download a free CSV or print your timesheet. No ads, no login, all calculations in your browser.">
+  <link rel="canonical" href="https://aeroniqx.in/work-hours-calculator/">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <meta property="og:title" content="Free Work Hours & Timesheet Calculator | Aero Tools">
+  <meta property="og:description" content="Your hours, breaks, overtime and pay — clearly calculated. Free CSV export and printable timesheets. No ads or login.">
+  <meta property="og:url" content="https://aeroniqx.in/work-hours-calculator/">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://aeroniqx.in/og-image.png">
+  <link rel="stylesheet" href="/assets/index-DB-gONZg.css">
+  <link rel="stylesheet" href="./timesheet.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Work Hours & Timesheet Calculator","url":"https://aeroniqx.in/work-hours-calculator/","applicationCategory":"BusinessApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","offers":{"@type":"Offer","price":"0","priceCurrency":"INR"}}</script>
+  <script type="module" src="./timesheet.js"></script>
+</head>
+<body class="wh-body">
+  <a href="#calculator" class="wh-skip">Skip to calculator</a>
+  <!--SITE_HEADER-->
+  <main class="wh-page" id="calculator">
+    <nav class="wh-breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><a href="/#tools">Calculators</a><span aria-hidden="true">/</span><span>Work hours</span></nav>
+    <section class="wh-hero">
+      <span class="calc-tag">Work & productivity</span>
+      <h1>Work Hours &amp; <span>Timesheet Calculator</span></h1>
+      <p>Add your shifts and breaks. Get clear weekly totals, overtime and estimated pay — ready to download or print.</p>
+      <div class="wh-trust"><span><b aria-hidden="true">✓</b> Free, always</span><span><b aria-hidden="true">✓</b> No ads or login</span><span><b aria-hidden="true">✓</b> Calculated on your device</span></div>
+    </section>
+    <noscript><p class="wh-alert">Enable JavaScript to use this calculator. Your timesheet is processed on your device.</p></noscript>
+    <div class="wh-layout" id="calculator-ui" hidden>
+      <div class="wh-editor">
+        <section class="wh-card" aria-labelledby="week-heading">
+          <div class="wh-card-head"><div><h2 id="week-heading">Your weekly timesheet</h2><p>One shift per day. Blank days are days off.</p></div><div class="wh-inline-actions"><button type="button" id="sample-week" class="wh-text-button">Use sample week</button><button type="button" id="clear-sheet" class="wh-text-button wh-clear">Clear</button></div></div>
+          <div class="wh-details">
+            <label class="wh-field">Week starting<input id="week-start" name="weekStart" type="date" min="1900-01-01" max="9999-12-25" required aria-describedby="week-start-error"><span class="wh-field-error" id="week-start-error"></span></label>
+            <label class="wh-field">Name <span class="wh-optional">(optional)</span><input id="person-name" name="name" type="text" maxlength="120" autocomplete="off" placeholder="Your name"></label>
+            <label class="wh-field">Project <span class="wh-optional">(optional)</span><input id="project-name" name="project" type="text" maxlength="120" autocomplete="off" placeholder="Client or project"></label>
+          </div>
+          <div class="wh-column-head" aria-hidden="true"><span>Day</span><span>Start</span><span>End</span><span>Unpaid break</span><span>Paid hours</span></div>
+          <div id="shift-rows" class="wh-shift-rows"></div>
+          <p class="wh-table-note"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5"/><path d="M10 9v5M10 6v.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>End time earlier than start? We automatically count it as an overnight shift.</p>
+        </section>
+
+        <section class="wh-card wh-pay-settings" aria-labelledby="pay-heading">
+          <div class="wh-card-head"><div><h2 id="pay-heading">Pay &amp; overtime <span class="wh-optional">(optional)</span></h2><p>Use your own rate and overtime agreement.</p></div><span class="wh-small-tag">Your rules</span></div>
+          <div class="wh-pay-fields">
+            <label class="wh-field">Currency<select id="currency" name="currency"><option value="INR">INR · ₹</option><option value="USD">USD · $</option><option value="GBP">GBP · £</option><option value="EUR">EUR · €</option><option value="CAD">CAD · $</option><option value="AUD">AUD · $</option><option value="AED">AED · د.إ</option><option value="SGD">SGD · $</option></select></label>
+            <label class="wh-field">Hourly rate<input id="hourly-rate" name="hourlyRate" type="number" min="0" max="100000000" step="0.01" inputmode="decimal" placeholder="e.g. 250" aria-describedby="hourly-rate-error"><span class="wh-field-error" id="hourly-rate-error"></span></label>
+            <label class="wh-field">Overtime rule<select id="overtime-mode" name="overtimeMode"><option value="none">No overtime</option><option value="weekly">After weekly hours</option><option value="daily">After daily hours</option></select></label>
+          </div>
+          <div id="overtime-settings" class="wh-overtime-fields" hidden>
+            <label class="wh-field"><span id="threshold-label">Weekly threshold (hours)</span><input id="threshold" name="threshold" type="number" min="0.016666667" max="168" step="any" inputmode="decimal" aria-describedby="threshold-error"><span class="wh-field-error" id="threshold-error"></span></label>
+            <label class="wh-field">Overtime pay multiplier<input id="multiplier" name="multiplier" type="number" min="1" max="10" step="0.1" inputmode="decimal" aria-describedby="multiplier-error"><span class="wh-field-error" id="multiplier-error"></span></label>
+            <p class="wh-rule-note">Overtime starts after your threshold, excluding unpaid breaks. A 1.5× multiplier pays one-and-a-half times your hourly rate.</p>
+          </div>
+          <p class="wh-muted-note">Gross estimates only; taxes and deductions are excluded. Shifts belong to their start date. This uses clock time and does not adjust for daylight-saving changes.</p>
+        </section>
+
+        <section class="wh-card wh-storage" aria-labelledby="storage-heading">
+          <h2 id="storage-heading">Keep a copy</h2>
+          <label class="wh-save-option"><input id="remember-sheet" type="checkbox"><span>Remember this timesheet on this device</span></label>
+          <p class="wh-muted-note">Optional local storage, with no account or upload. Clearing your browser data removes it. Download a backup to keep your editable timesheet.</p>
+          <div class="wh-storage-actions"><button id="download-backup" class="wh-secondary" type="button">Download backup</button><button id="restore-backup" class="wh-secondary" type="button">Restore backup</button><input type="file" id="backup-file" accept=".json,application/json" hidden></div>
+          <p id="save-status" class="wh-status" role="status" aria-live="polite">Not saved on this device.</p>
+        </section>
+      </div>
+
+      <aside class="wh-summary" aria-labelledby="summary-heading">
+        <div class="wh-total-card">
+          <div class="wh-total-top"><h2 id="summary-heading">Weekly summary</h2><span id="days-count">0 days</span></div>
+          <p class="wh-total-label">Total paid hours</p><p class="wh-total-number" id="total-hours">0h 00m</p><p id="decimal-hours" class="wh-decimal">0.00 decimal hours</p>
+          <dl class="wh-totals"><div><dt>Regular hours</dt><dd id="regular-hours">0h 00m</dd></div><div><dt>Overtime hours</dt><dd id="overtime-hours">0h 00m</dd></div><div><dt>Unpaid breaks</dt><dd id="break-hours">0h 00m</dd></div></dl>
+        </div>
+        <div class="wh-summary-bottom">
+          <div class="wh-pay-result"><span>Estimated gross pay</span><strong id="total-pay">—</strong><p id="pay-explanation">Add an hourly rate to estimate your pay.</p></div>
+          <p id="validation-status" class="wh-validation" role="status" aria-live="polite">Add your first shift to get started.</p>
+          <button type="button" id="download-csv" class="wh-primary" disabled><svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 2v10m-4-4 4 4 4-4M3 13v4h14v-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>Download CSV</button>
+          <button type="button" id="print-sheet" class="wh-secondary" disabled>Print timesheet</button>
+          <p class="wh-export-note">Free exports. No watermark.<br>Print also lets you save as PDF.</p>
+        </div>
+        <a class="wh-related" href="/salary-calculator/"><span>Looking at a monthly salary?<strong>Try the Salary Calculator <span aria-hidden="true">→</span></strong></span></a>
+      </aside>
+    </div>
+
+    <section class="wh-help" aria-labelledby="how-heading"><h2 id="how-heading">From shifts to a clear total</h2><div class="wh-help-grid"><div><span>1</span><h3>Enter your week</h3><p>Add start and end times, then subtract any unpaid breaks in minutes.</p></div><div><span>2</span><h3>Choose your pay rules</h3><p>Add a rate and a daily or weekly overtime threshold if you need a pay estimate.</p></div><div><span>3</span><h3>Take your timesheet with you</h3><p>Download a spreadsheet-ready CSV or print a clean, dated summary.</p></div></div></section>
+    <section class="wh-faq" aria-labelledby="faq-heading"><h2 id="faq-heading">A few useful answers</h2>
+      <details><summary>How are overnight shifts calculated?</summary><p>If your end time is earlier than your start, we add a day automatically. For example, 22:00–06:00 with a 30-minute unpaid break is 7h 30m, or 7.50 decimal hours. Check “Next day” explicitly for a 24-hour shift. Shifts longer than 24 hours are not supported.</p></details>
+      <details><summary>What is the difference between 7h 30m and 7.50 hours?</summary><p>They are the same duration. Decimal hours express minutes as a fraction of an hour: 30 ÷ 60 = 0.50. We calculate with whole minutes and round only displayed decimal hours and pay.</p></details>
+      <details><summary>How does overtime work?</summary><p>Choose either daily or weekly overtime. Only paid minutes above your chosen threshold earn the multiplier. The two rules are not combined. For a weekly rule, all seven dates shown form one workweek; overnight shifts count against their start date. Enter the rule that matches your agreement.</p></details>
+      <details><summary>Can I save my timesheet without signing up?</summary><p>Yes. Turn on “Remember this timesheet on this device” to save locally, or download an editable JSON backup and restore it later. Local saving is specific to this browser and device. CSV is for spreadsheet use; use the backup file to restore this calculator.</p></details>
+      <details><summary>Can I enter split shifts or daylight-saving changes?</summary><p>This version supports one shift per date and uses the clock times you enter. It does not account for time zones, daylight-saving changes or payroll-specific rounding. Check those cases against your actual paid hours.</p></details>
+    </section>
+  </main>
+  <section id="print-view" class="wh-print-view" aria-label="Printable timesheet"></section>
+  <!--SITE_FOOTER-->
+</body>
+</html>
