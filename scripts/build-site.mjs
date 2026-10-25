@@ -51,6 +51,10 @@ const updatesCss = `.ad-slot{display:none!important}
 .btn-primary--pdf,.btn-header-cta--pdf{background:#c5221f}
 .btn-primary--pdf:hover,.btn-header-cta--pdf:hover{background:#a50e0e}
 .cta-section .btn-primary--pdf{color:#c5221f}
+.hero-float--result,.mockup-file-size--after{color:#137333}
+.hero-float--pdf{color:#c5221f}
+.hero-float-formats b,.mockup-arrow{color:var(--primary-dark)}
+.mockup-btn--pdf{background:#c5221f}
 .mobile-drawer[aria-hidden="true"]{visibility:hidden}
 .mobile-drawer[aria-hidden="false"]{visibility:visible}
 .home-mobile-tools{display:none}
