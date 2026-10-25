@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict'
-import { readFile, stat } from 'node:fs/promises'
+import { readFile, stat, readdir } from 'node:fs/promises'
 import { createHash } from 'node:crypto'
 import { spawnSync } from 'node:child_process'
 
@@ -28,4 +28,30 @@ assert.match(tool, /canonical" href="https:\/\/aeroniqx.in\/work-hours-calculato
 assert.match(await readFile('dist/sitemap.xml','utf8'), /https:\/\/aeroniqx.in\/work-hours-calculator\//)
 assert.equal(await readFile('dist/_headers','utf8'), await readFile('deployment/_headers','utf8'))
 assert.equal(await readFile('dist/_redirects','utf8'), await readFile('deployment/_redirects','utf8'))
+const sitemap = await readFile('dist/sitemap.xml', 'utf8')
+const listed = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1])
+assert.equal(new Set(listed).size, listed.length, 'No duplicate sitemap URLs')
+const titles = new Set()
+let indexable = 0
+for (const file of (await readdir('dist', { recursive: true })).filter(f => f.endsWith('.html') && f !== '404.html')) {
+  const html = await readFile(`dist/${file}`, 'utf8')
+  if (/name="robots"[^>]*content="[^"]*noindex/.test(html)) continue
+  indexable++
+  const url = 'https://aeroniqx.in/' + file.replaceAll('\\', '/').replace(/index\.html$/, '')
+  const title = html.match(/<title>([^<]+)<\/title>/)?.[1]
+  assert.ok(title && !titles.has(title), `Unique title: ${file}`)
+  titles.add(title)
+  assert.equal([...html.matchAll(/<h1\b/g)].length, 1, `One initial-HTML H1: ${file}`)
+  assert.ok(listed.includes(url), `Indexable page in sitemap: ${file}`)
+  assert.ok(html.includes(`href="${url}"`), `Self canonical: ${file}`)
+  assert.doesNotMatch(html, /privacy-policy-generator|We earn from non-intrusive ads/)
+  for (const [, json] of html.matchAll(/<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)) JSON.parse(json)
+  for (const [, href] of html.matchAll(/href="(\/[^"#?]*)[^"]*"/g)) {
+    if (href.startsWith('//') || href.startsWith('/cdn-cgi/')) continue
+    const target = href.endsWith('/') ? `${href}index.html` : href
+    assert.ok((await stat(`dist${target}`)).isFile(), `Internal link target exists: ${file} -> ${href}`)
+  }
+}
+assert.equal(listed.length, indexable, 'Sitemap includes exactly the indexable pages')
+console.log(`SEO checks passed: ${indexable} pages with initial headings, unique titles, valid schema, sitemap coverage and internal links.`)
 console.log(`Build checks passed: ${baseline.files.length} original paths, original assets, linked assets, JavaScript syntax, no ad loaders, SEO and hosting rules.`)
