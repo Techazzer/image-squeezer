@@ -44,7 +44,18 @@ const pdfChunk = (await readFile(path.join(baseline, pdfChunkOriginal), 'utf8'))
 bundle = bundle.replaceAll(path.basename(pdfChunkOriginal), path.basename(pdfChunkName))
 await writeFile(path.join(dist, pdfChunkName), pdfChunk)
 await writeFile(path.join(dist, bundleName), bundle)
-const updatesCss = '.ad-slot{display:none!important}\n:root{--dim:#5f6368}.mobile-drawer[aria-hidden="true"]{visibility:hidden}.mobile-drawer[aria-hidden="false"]{visibility:visible}.home-mobile-tools{display:none}@media(max-width:900px){.home-mobile-tools{display:inline-flex;color:var(--primary-dark);font-size:.8rem;font-weight:600;padding:8px;text-decoration:none}}\n'
+const updatesCss = `.ad-slot{display:none!important}
+:root{--dim:#5f6368}
+.hero-tag,.calc-tag{color:var(--primary-dark)}
+.tool-card-badge{color:#137333}
+.btn-primary--pdf,.btn-header-cta--pdf{background:#c5221f}
+.btn-primary--pdf:hover,.btn-header-cta--pdf:hover{background:#a50e0e}
+.cta-section .btn-primary--pdf{color:#c5221f}
+.mobile-drawer[aria-hidden="true"]{visibility:hidden}
+.mobile-drawer[aria-hidden="false"]{visibility:visible}
+.home-mobile-tools{display:none}
+@media(max-width:900px){.home-mobile-tools{display:inline-flex;color:var(--primary-dark);font-size:.8rem;font-weight:600;padding:8px;text-decoration:none}}
+`
 await writeFile(path.join(dist, 'assets/aeroniqx-updates.css'), updatesCss)
 
 for (const item of manifest.files.filter(item => item.file.endsWith('.html'))) {
