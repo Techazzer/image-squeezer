@@ -1,5 +1,6 @@
 import { readFile, writeFile, readdir } from 'node:fs/promises'
 import path from 'node:path'
+import { compactHelpHtml } from './compact-tools.mjs'
 
 export const contentReplacements = [
   ['Aero Tools', 'Aeroniqx'],
@@ -60,7 +61,7 @@ export async function addSearchContent(root, dist) {
     if (!title) throw new Error(`Missing search title: ${slug}`)
     const description = slug === 'home' ? homeDescription : snapshot.description
     const url = slug === 'home' ? `${origin}/` : `${origin}/${slug}/`
-    let content = updateCopy(snapshot.html)
+    let content = compactHelpHtml(updateCopy(snapshot.html))
       .replace(/ data-discover="true"/g, '')
       .replace(/<div class="ad-slot[^>]*>[\s\S]*?<\/ins><\/div>/g, '')
     // The decorative download mockup must not be a keyboard-focusable control.

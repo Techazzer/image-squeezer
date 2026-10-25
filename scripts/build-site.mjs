@@ -9,6 +9,7 @@ import { renderShiftRows } from '../tools/work-hours/timesheet-view.js'
 import { parseAppTarget } from '../tools/app-shell/search.js'
 import { categories, coreTools } from './tool-content.mjs'
 import { buildBillSplitter } from './build-bill-splitter.mjs'
+import { compactHelpBundle } from './compact-tools.mjs'
 
 const root = fileURLToPath(new URL('../', import.meta.url))
 const baseline = path.join(root, 'legacy-site')
@@ -45,6 +46,12 @@ bundle=replaceOnce(bundle,oldMenu,`const xL=${JSON.stringify(toolMenu)};function
 bundle = replaceOnce(bundle, 'p.jsx("a",{href:"/compress-image-to-50kb/",className:"nav-link",children:"50KB Tool"})', 'p.jsx("a",{href:"/work-hours-calculator/",className:"nav-link",children:"Work Hours"})', 'header shortcut')
 bundle = await updateClientTitles(root, bundle)
 bundle = updateCopy(bundle)
+bundle = compactHelpBundle(bundle)
+// Share explicit size metrics only; preserve the original file download actions.
+const pdfDownload = 'p.jsx("button",{className:"pdf-btn pdf-btn-primary",onClick:()=>{os("download",{tool:"pdf-compress",file_type:"pdf",file_size_kb:Math.round(C.compressedSize/1024)});const X=document.createElement("a");X.href=C.url,X.download=C.name,X.click()},children:"⬇ Download"})'
+bundle = replaceOnce(bundle, pdfDownload, pdfDownload + ',p.jsx("button",{className:"aero-result-share",type:"button",onClick:()=>window.dispatchEvent(new CustomEvent("aero:share-result",{detail:{kind:"compression",tool:"pdf",before:C.originalSize,after:C.compressedSize,unchanged:C.enlarged,targetMissed:!C.hitTarget&&!C.enlarged}})),children:"Share result"})', 'PDF result sharing')
+const imageDownload = 'l&&p.jsx("button",{className:"btn-download",onClick:Ke,children:"⬇ Download Compressed Image"})'
+bundle = replaceOnce(bundle, imageDownload, imageDownload + ',l&&p.jsx("button",{className:"aero-result-share",type:"button",onClick:()=>window.dispatchEvent(new CustomEvent("aero:share-result",{detail:{kind:"compression",tool:"image",before:a,after:u}})),children:"Share result"})', 'image result sharing')
 const bundleName = `assets/index-${hash(bundle).slice(0,12)}.js`
 // The PDF export chunk imports shared utilities from the entry bundle. Point its
 // copy back to this release so loading it cannot execute the old app a second time.

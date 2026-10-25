@@ -6,6 +6,7 @@ const STORAGE_KEY = 'aeroniqx.work-hours.v1'
 let sheet = emptySheet()
 let remember = false
 let saveError = ''
+let selectedDay = 0
 try {
   const stored = localStorage.getItem(STORAGE_KEY)
   if (stored) { sheet = parseBackup(stored); remember = true }
@@ -59,6 +60,7 @@ function render() {
     $(`error-${i}`).textContent = calculated.error || ''
     $(`error-${i}`).hidden = !calculated.error
     $(`shift-${i}`).classList.toggle('is-invalid', Boolean(calculated.error))
+    $(`shift-${i}`).classList.toggle('is-selected', i === selectedDay)
     $(`paid-${i}`).textContent = calculated.error ? 'Check row' : calculated.empty ? '—' : durationLabel(calculated.minutes)
     $(`ot-${i}`).textContent = result.valid && calculated.overtime ? `${durationLabel(calculated.overtime)} OT` : ''
     const autoNextDay = !row.nextDay && calculated.overnight
@@ -82,7 +84,8 @@ function render() {
   const count = Object.keys(result.errors).length
   $('validation-status').textContent = count ? `Check ${count} highlighted ${count === 1 ? 'entry' : 'entries'} before exporting. Totals are paused until all entries are valid.` : result.days ? `Your ${result.days === 1 ? 'shift is' : 'shifts are'} ready to export.` : 'Add your first shift to get started.'
   $('validation-status').classList.toggle('is-error', !result.valid)
-  $('download-csv').disabled = $('print-sheet').disabled = !result.valid || !result.days
+  $('download-csv').disabled = $('print-sheet').disabled = $('share-timesheet').disabled = !result.valid || !result.days
+  $('day-picker').innerHTML = result.rows.map((row,i)=>`<button type="button" data-day="${i}" aria-pressed="${i===selectedDay}" aria-controls="shift-${i}" aria-label="${escapeHtml(dayName(row.date))} ${escapeHtml(shortDate(row.date))}: ${row.error ? 'check inputs' : row.empty ? 'no shift' : durationLabel(row.minutes)}"><span>${escapeHtml(dayName(row.date))}</span><small>${row.error ? 'Check !' : row.empty ? '—' : durationLabel(row.minutes)}</small></button>`).join('')
   buildPrintView(result)
 }
 
@@ -146,6 +149,16 @@ $('remember-sheet').addEventListener('change', () => {
 })
 $('download-csv').addEventListener('click', () => download(exportCsv(sheet), 'text/csv;charset=utf-8', `aeroniqx-timesheet-${sheet.weekStart}.csv`))
 $('print-sheet').addEventListener('click', () => { buildPrintView(calculateSheet(sheet)); window.print() })
+$('share-timesheet').addEventListener('click', () => {
+  const result = calculateSheet(sheet)
+  if (result.valid && result.days) window.dispatchEvent(new CustomEvent('aero:share-result', { detail: { kind: 'hours', result, sheet } }))
+})
+$('day-picker').addEventListener('click', event => {
+  const button = event.target.closest('[data-day]')
+  if (!button) return
+  selectedDay = Number(button.dataset.day); render()
+  $('day-picker').querySelector(`[data-day="${selectedDay}"]`).focus({ preventScroll: true })
+})
 window.addEventListener('beforeprint', () => buildPrintView(calculateSheet(sheet)))
 $('download-backup').addEventListener('click', () => download(JSON.stringify(sheet,null,2), 'application/json', `aeroniqx-timesheet-${sheet.weekStart || 'draft'}.json`))
 $('restore-backup').addEventListener('click', () => $('backup-file').click())

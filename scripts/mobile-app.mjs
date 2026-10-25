@@ -20,6 +20,7 @@ const glyphs = {
   file:'<path d="M14 3H5v18h14V8zM14 3v6h5M8 13h8M8 17h5"/>',
   clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 2"/>',
   calculator:'<rect x="5" y="2" width="14" height="20" rx="3"/><path d="M8 6h8M8 11h1m6 0h1M8 15h1m6 0h1M8 19h1m6 0h1"/>',
+  split:'<path d="M12 3v5m0 0L5 15v6m7-13 7 7v6M2 18l3 3 3-3m8 0 3 3 3-3"/>',
   pen:'<path d="m15 4 5 5M4 20l5-1L21 7l-4-4L5 15zM3 22h18"/>',
   folder:'<path d="M3 7V5a1 1 0 0 1 1-1h5l3 3h8a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/>'
 }
@@ -38,12 +39,14 @@ function shell(current, name) {
 <div id="aero-offline" class="aero-offline-note" role="status">You’re offline. Work Hours and Bill Splitter are available once their app files are saved.</div>`
 }
 
-function controls(isHome) {
+function controls(current) {
+  const isHome = current === '/'
   return `<nav class="aero-app-nav" aria-label="App navigation">
 <a href="/" id="aero-nav-home"${isHome?' aria-current="page"':''}>${icon('home')}<span>Home</span></a>
 <a href="/tools/" data-aero-tools>${icon('grid')}<span>Tools</span></a>
 <button type="button" id="aero-nav-saved" disabled>${icon('bookmark')}<span>Saved</span></button>
 <button type="button" id="aero-nav-install" disabled>${icon('download')}<span>Get app</span></button>
+<a href="/bill-splitter/" id="aero-nav-splitter" hidden${current==='/bill-splitter/'?' aria-current="page"':''}>${icon('split')}<span>Bill Splitter</span></a>
 </nav>
 <dialog id="aero-library" class="aero-dialog" aria-labelledby="aero-library-title">
  <div class="aero-dialog-head"><h2 id="aero-library-title">Find your tool</h2><button type="button" class="aero-icon-button" data-close aria-label="Close tool library" autofocus>${icon('close')}</button></div>
@@ -57,9 +60,9 @@ function controls(isHome) {
  <div class="aero-dialog-head"><h2 id="aero-install-title">Your toolkit. One tap away.</h2><button type="button" class="aero-icon-button" data-close aria-label="Close installation help" autofocus>${icon('close')}</button></div>
  <div class="aero-install-body"><img class="aero-install-brand" src="/assets/app-icons/icon-192.png" alt="" width="64" height="64"><p>Add Aeroniqx to your home screen and open your tools in their own app window. Free, with no account or app store download.</p>
  <button type="button" class="aero-install-button" id="aero-install-now" hidden>Install Aeroniqx</button>
- <p id="aero-installed" hidden>Aeroniqx is already running as an app on this device.</p>
+ <p id="aero-installed" hidden>Aeroniqx is installed. Open it from your home screen.</p>
  <div id="aero-install-guidance"><h3>On iPhone or iPad</h3><ol><li>Open Aeroniqx in Safari and tap <strong>Share</strong>.</li><li>Choose <strong>Add to Home Screen</strong>, then <strong>Add</strong>.</li></ol><h3>On Android</h3><p>Open your browser menu (⋮), then choose <strong>Install app</strong> or <strong>Add to Home screen</strong>. The option depends on your browser.</p></div>
- <p class="aero-local-note">Saved tools stay on this device. Work Hours can open offline after a connected visit; other tools may need an internet connection. Your files and timesheet entries are never stored by the app’s offline cache.</p></div>
+ <p class="aero-local-note">Saved tools stay on this device. Work Hours and Bill Splitter can open offline once their app files are saved during a connected visit. Other tools may need a connection. The app’s offline cache does not store your files, timesheet entries or expense records.</p></div>
 </dialog>
 <div id="aero-toast" class="aero-toast" role="status" aria-live="polite" hidden></div>`
 }
@@ -80,9 +83,13 @@ export async function addMobileApp(root, dist, { calculatorAssets, billSplitterA
   const { catalog, resources }=buildToolCatalog(toolPages)
   const catalogText=JSON.stringify(catalog),catalogFile=`assets/app-catalog-${hash(catalogText)}.json`
   await writeFile(path.join(dist,catalogFile),catalogText)
-  const css=(await readFile(path.join(source,'app.css'),'utf8'))+'\n'+await readFile(path.join(source,'platform.css'),'utf8'),cssFile=`assets/mobile-app-${hash(css)}.css`
+  const shareSource=path.join(root,'tools/result-share')
+  const shareJs=(await readFile(path.join(shareSource,'share.js'),'utf8')).replace('/* SHARE_MODEL */',(await readFile(path.join(shareSource,'model.js'),'utf8')).replace(/^export /gm,''))
+  const shareFile=`assets/result-share-${hash(shareJs)}.js`
+  await writeFile(path.join(dist,shareFile),shareJs)
+  const css=(await Promise.all([path.join(source,'app.css'),path.join(source,'platform.css'),path.join(source,'compact.css'),path.join(shareSource,'share.css')].map(file=>readFile(file,'utf8')))).join('\n'),cssFile=`assets/mobile-app-${hash(css)}.css`
   const searchHelpers=(await readFile(path.join(source,'search.js'),'utf8')).replace(/^export /gm,'')
-  const js=(await readFile(path.join(source,'app.js'),'utf8')).replace('/* SEARCH_HELPERS */',searchHelpers).replace('__CATALOG_URL__','/'+catalogFile),jsFile=`assets/mobile-app-${hash(js)}.js`
+  const js=(await readFile(path.join(source,'app.js'),'utf8')).replace('/* SEARCH_HELPERS */',searchHelpers).replace('__CATALOG_URL__','/'+catalogFile).replace('__RESULT_SHARE_URL__','/'+shareFile),jsFile=`assets/mobile-app-${hash(js)}.js`
   await writeFile(path.join(dist,cssFile),css);await writeFile(path.join(dist,jsFile),js)
   const manifest={id:'/',name:'Aeroniqx — Everyday Tools',short_name:'Aeroniqx',description:'Useful tools for work, money, documents and creative tasks. Free to use, with no ads or Aeroniqx account.',start_url:'/',scope:'/',display:'standalone',background_color:'#ffffff',theme_color:'#ffffff',lang:'en',icons:[{src:'/assets/app-icons/icon-192.png',sizes:'192x192',type:'image/png'},{src:'/assets/app-icons/icon-512.png',sizes:'512x512',type:'image/png'},{src:'/assets/app-icons/maskable-512.png',sizes:'512x512',type:'image/png',purpose:'maskable'}],shortcuts:[{name:'All tools',url:'/tools/'},{name:'Work Hours & Timesheet',short_name:'Work Hours',url:'/work-hours-calculator/'},{name:'Handwriting Font',url:'/handwriting-font/'}]}
   await writeFile(path.join(dist,'manifest.webmanifest'),JSON.stringify(manifest,null,2)+'\n')
@@ -96,12 +103,12 @@ export async function addMobileApp(root, dist, { calculatorAssets, billSplitterA
       .replace(/(<meta[^>]*name="viewport"[^>]*content=")([^"]*)"/,(_,prefix,value)=>`${prefix}${value.replace(/,?\s*viewport-fit=[^,]+/,'')}, viewport-fit=cover, interactive-widget=resizes-content"`)
       .replace('</head>',`<meta name="theme-color" content="#ffffff"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Aeroniqx"><link rel="manifest" href="/manifest.webmanifest"><link rel="apple-touch-icon" href="/assets/app-icons/apple-touch-icon.png"><link rel="stylesheet" href="/${cssFile}"><script src="/${jsFile}" defer></script>\n</head>`)
       .replace(/<body([^>]*)>/,(_,attrs)=>`<body${attrs}>${shell(url,title)}`)
-      .replace('</body>',controls(url==='/')+'\n</body>')
+      .replace('</body>',controls(url)+'\n</body>')
     await writeFile(path.join(dist,file),html)
   }
   await mkdir(path.join(dist,'offline'),{recursive:true})
   await writeFile(path.join(dist,'offline/index.html'),`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta name="theme-color" content="#ffffff"><title>You’re offline | Aeroniqx</title><style>body{font:16px/1.7 system-ui;background:#f5f7fb;color:#17304e;margin:0;min-height:100vh;display:grid;place-items:center}main{padding:32px;max-width:420px}img{border-radius:20px}h1{font-size:2rem;letter-spacing:-.04em}a{display:block;padding:13px 18px;border-radius:14px;background:#1557b0;color:white;text-align:center;text-decoration:none;margin:12px 0}p{color:#536175}</style></head><body><main><img src="/assets/app-icons/icon-192.png" alt="" width="72" height="72"><h1>You’re offline.</h1><p>This tool needs a connection to open. You can still use Work Hours and Bill Splitter if their app files finished saving during a connected visit.</p><a href="/bill-splitter/">Open Bill Splitter</a><a href="/work-hours-calculator/">Open Work Hours</a><a href="/">Back to your tools</a></main></body></html>`)
-  const assets=[cssFile,jsFile,catalogFile,'manifest.webmanifest',...['icon-192.png','icon-512.png','maskable-512.png','apple-touch-icon.png'].map(f=>'assets/app-icons/'+f)]
+  const assets=[cssFile,jsFile,shareFile,catalogFile,'manifest.webmanifest',...['icon-192.png','icon-512.png','maskable-512.png','apple-touch-icon.png'].map(f=>'assets/app-icons/'+f)]
   const precache=['/','/work-hours-calculator/','/bill-splitter/','/offline/',...assets.map(f=>'/'+f),'/assets/index-DB-gONZg.css','/'+updatesCss,...calculatorAssets.map(f=>'/'+f),...billSplitterAssets.map(f=>'/'+f)]
   const workerTemplate=await readFile(path.join(source,'service-worker.js'),'utf8')
   const version=hash(workerTemplate+(await Promise.all(precache.map(url=>readFile(path.join(dist,url.endsWith('/')?url.slice(1)+'index.html':url.slice(1)))))).map(b=>hash(b)).join(''))
