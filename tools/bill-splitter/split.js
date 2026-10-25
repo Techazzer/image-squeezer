@@ -238,12 +238,9 @@ async function copySummary() {
   catch { manualCopy(text) }
 }
 $('copy-summary').addEventListener('click', copySummary)
-$('share-summary').addEventListener('click', async () => {
+$('share-summary').addEventListener('click', () => {
   if (!result) return
-  const text = currentSummary()
-  if (!navigator.share) { await copySummary(); return }
-  try { await navigator.share({ title: state.title || 'Bill split · Aeroniqx', text }); status('Summary shared.') }
-  catch (error) { if (error.name !== 'AbortError') manualCopy(text) }
+  window.dispatchEvent(new CustomEvent('aero:share-result', { detail: { kind: 'bill', result, currency: state.currency, title: state.title || (state.mode === 'quick' ? state.quick.description || 'Bill split' : 'Shared expenses') } }))
 })
 $('remember-group').addEventListener('change', event => {
   remember = event.target.checked

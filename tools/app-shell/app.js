@@ -1,5 +1,10 @@
 (() => {
   /* SEARCH_HELPERS */
+  // Embeds can share a result too, even though they have no app navigation.
+  window.addEventListener('aero:share-result',async event=>{
+    try { const {openResultShare}=await import('__RESULT_SHARE_URL__'); await openResultShare(event.detail) }
+    catch { window.alert('Sharing could not open. Please try again when connected.') }
+  })
   if (new URLSearchParams(location.search).get('embed') === '1') {
     document.documentElement.dataset.aeroEmbed = 'true'
     return

@@ -40,6 +40,7 @@
             <label class="wh-field">Project <span class="wh-optional">(optional)</span><input id="project-name" name="project" type="text" maxlength="120" autocomplete="off" placeholder="Client or project"></label>
           </div>
           <div class="wh-column-head" aria-hidden="true"><span>Day</span><span>Start</span><span>End</span><span>Unpaid break</span><span>Paid hours</span></div>
+          <div id="day-picker" class="wh-day-picker" role="group" aria-label="Choose a day to edit"></div>
           <div id="shift-rows" class="wh-shift-rows"><!--SHIFT_ROWS--></div>
           <p class="wh-table-note"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5"/><path d="M10 9v5M10 6v.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>End time earlier than start? We automatically count it as an overnight shift.</p>
         </section>
@@ -79,6 +80,7 @@
           <p id="validation-status" class="wh-validation" role="status" aria-live="polite">Add your first shift to get started.</p>
           <button type="button" id="download-csv" class="wh-primary" disabled><svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 2v10m-4-4 4 4 4-4M3 13v4h14v-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>Download CSV</button>
           <button type="button" id="print-sheet" class="wh-secondary" disabled>Print timesheet</button>
+          <button type="button" id="share-timesheet" class="wh-secondary" disabled>Share result</button>
           <p class="wh-export-note">Free exports. No watermark.<br>Print also lets you save as PDF.</p>
         </div>
         <a class="wh-related" href="/salary-calculator/"><span>Looking at a monthly salary?<strong>Try the Salary Calculator <span aria-hidden="true">→</span></strong></span></a>

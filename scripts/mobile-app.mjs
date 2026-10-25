@@ -83,9 +83,13 @@ export async function addMobileApp(root, dist, { calculatorAssets, billSplitterA
   const { catalog, resources }=buildToolCatalog(toolPages)
   const catalogText=JSON.stringify(catalog),catalogFile=`assets/app-catalog-${hash(catalogText)}.json`
   await writeFile(path.join(dist,catalogFile),catalogText)
-  const css=(await readFile(path.join(source,'app.css'),'utf8'))+'\n'+await readFile(path.join(source,'platform.css'),'utf8'),cssFile=`assets/mobile-app-${hash(css)}.css`
+  const shareSource=path.join(root,'tools/result-share')
+  const shareJs=(await readFile(path.join(shareSource,'share.js'),'utf8')).replace('/* SHARE_MODEL */',(await readFile(path.join(shareSource,'model.js'),'utf8')).replace(/^export /gm,''))
+  const shareFile=`assets/result-share-${hash(shareJs)}.js`
+  await writeFile(path.join(dist,shareFile),shareJs)
+  const css=(await Promise.all([path.join(source,'app.css'),path.join(source,'platform.css'),path.join(source,'compact.css'),path.join(shareSource,'share.css')].map(file=>readFile(file,'utf8')))).join('\n'),cssFile=`assets/mobile-app-${hash(css)}.css`
   const searchHelpers=(await readFile(path.join(source,'search.js'),'utf8')).replace(/^export /gm,'')
-  const js=(await readFile(path.join(source,'app.js'),'utf8')).replace('/* SEARCH_HELPERS */',searchHelpers).replace('__CATALOG_URL__','/'+catalogFile),jsFile=`assets/mobile-app-${hash(js)}.js`
+  const js=(await readFile(path.join(source,'app.js'),'utf8')).replace('/* SEARCH_HELPERS */',searchHelpers).replace('__CATALOG_URL__','/'+catalogFile).replace('__RESULT_SHARE_URL__','/'+shareFile),jsFile=`assets/mobile-app-${hash(js)}.js`
   await writeFile(path.join(dist,cssFile),css);await writeFile(path.join(dist,jsFile),js)
   const manifest={id:'/',name:'Aeroniqx — Everyday Tools',short_name:'Aeroniqx',description:'Useful tools for work, money, documents and creative tasks. Free to use, with no ads or Aeroniqx account.',start_url:'/',scope:'/',display:'standalone',background_color:'#ffffff',theme_color:'#ffffff',lang:'en',icons:[{src:'/assets/app-icons/icon-192.png',sizes:'192x192',type:'image/png'},{src:'/assets/app-icons/icon-512.png',sizes:'512x512',type:'image/png'},{src:'/assets/app-icons/maskable-512.png',sizes:'512x512',type:'image/png',purpose:'maskable'}],shortcuts:[{name:'All tools',url:'/tools/'},{name:'Work Hours & Timesheet',short_name:'Work Hours',url:'/work-hours-calculator/'},{name:'Handwriting Font',url:'/handwriting-font/'}]}
   await writeFile(path.join(dist,'manifest.webmanifest'),JSON.stringify(manifest,null,2)+'\n')
@@ -104,7 +108,7 @@ export async function addMobileApp(root, dist, { calculatorAssets, billSplitterA
   }
   await mkdir(path.join(dist,'offline'),{recursive:true})
   await writeFile(path.join(dist,'offline/index.html'),`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta name="theme-color" content="#ffffff"><title>You’re offline | Aeroniqx</title><style>body{font:16px/1.7 system-ui;background:#f5f7fb;color:#17304e;margin:0;min-height:100vh;display:grid;place-items:center}main{padding:32px;max-width:420px}img{border-radius:20px}h1{font-size:2rem;letter-spacing:-.04em}a{display:block;padding:13px 18px;border-radius:14px;background:#1557b0;color:white;text-align:center;text-decoration:none;margin:12px 0}p{color:#536175}</style></head><body><main><img src="/assets/app-icons/icon-192.png" alt="" width="72" height="72"><h1>You’re offline.</h1><p>This tool needs a connection to open. You can still use Work Hours and Bill Splitter if their app files finished saving during a connected visit.</p><a href="/bill-splitter/">Open Bill Splitter</a><a href="/work-hours-calculator/">Open Work Hours</a><a href="/">Back to your tools</a></main></body></html>`)
-  const assets=[cssFile,jsFile,catalogFile,'manifest.webmanifest',...['icon-192.png','icon-512.png','maskable-512.png','apple-touch-icon.png'].map(f=>'assets/app-icons/'+f)]
+  const assets=[cssFile,jsFile,shareFile,catalogFile,'manifest.webmanifest',...['icon-192.png','icon-512.png','maskable-512.png','apple-touch-icon.png'].map(f=>'assets/app-icons/'+f)]
   const precache=['/','/work-hours-calculator/','/bill-splitter/','/offline/',...assets.map(f=>'/'+f),'/assets/index-DB-gONZg.css','/'+updatesCss,...calculatorAssets.map(f=>'/'+f),...billSplitterAssets.map(f=>'/'+f)]
   const workerTemplate=await readFile(path.join(source,'service-worker.js'),'utf8')
   const version=hash(workerTemplate+(await Promise.all(precache.map(url=>readFile(path.join(dist,url.endsWith('/')?url.slice(1)+'index.html':url.slice(1)))))).map(b=>hash(b)).join(''))

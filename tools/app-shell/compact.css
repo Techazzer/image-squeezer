@@ -1,0 +1,129 @@
+/* Mobile density: reduce spacing, not legibility or touch targets. Desktop
+   tools and crawlable help content retain their existing structure. */
+.wh-day-picker{display:none}
+.aero-tool-help>summary{font-size:15px;font-weight:600;color:#405064;cursor:pointer;min-height:44px;padding:10px 0}
+.aero-tool-help[open]>summary{margin-bottom:16px}
+@media(max-width:720px){
+ .aero-app-header{min-height:58px;padding:calc(5px + env(safe-area-inset-top)) 12px 5px;gap:8px}
+ .aero-app-nav{padding-top:4px;padding-bottom:calc(4px + env(safe-area-inset-bottom))}
+ .aero-app-nav a,.aero-app-nav button{min-height:48px;gap:3px}
+ body{padding-bottom:calc(66px + env(safe-area-inset-bottom))}
+ .platform-main{padding-left:16px;padding-right:16px}
+ .platform-hero{padding-top:18px;padding-bottom:20px}
+ .platform-hero h1{font-size:30px;line-height:1.15}
+ .platform-hero .platform-eyebrow{margin-bottom:10px}
+ .platform-section{margin-top:22px}
+ .platform-featured{gap:10px}
+ .platform-featured .platform-tool{padding:14px;min-height:116px}
+ .platform-footer{padding:24px 16px}
+ /* The 14 tools share these six layout families. */
+ .pdf-page,.calc-page{padding:16px 16px 28px}
+ .pdf-hero,.calc-hero{margin-bottom:18px}
+ .pdf-title,.calc-title{font-size:26px;line-height:1.2;margin:0 0 8px;letter-spacing:-.7px}
+ .pdf-sub,.calc-sub{font-size:14px;line-height:1.5}
+ .pdf-tag,.calc-tag,.tool-hero-breadcrumb,.bs-hero .platform-eyebrow,.hf-hero .hero-tag,.dc-hero .hero-tag{display:none}
+ .pdf-dropzone,.dropzone{padding:22px 14px;border-radius:16px;margin:12px 0}
+ .pdf-drop-icon,.dropzone-icon{font-size:28px;margin-bottom:8px}
+ .pdf-drop-text,.dropzone-title{font-size:16px}
+ .pdf-drop-hint,.dropzone-sub,.dropzone-hint{font-size:13px}
+ .pdf-drop-btn,.pdf-btn,.pdf-page button,.calc-toggle-btn,.btn-primary,.btn-ghost{min-height:44px}
+ .pdf-options{gap:8px;margin:12px 0}
+ .pdf-result{flex-wrap:wrap;padding:14px;gap:10px}
+ .pdf-result-info{min-width:calc(100% - 50px)}
+ .pdf-result button{flex:1}
+ .pdf-result-meta,.pdf-file-name{overflow-wrap:anywhere;min-width:0}
+ .pdf-page input:not([type=file]):not([type=checkbox]):not([type=range]),.pdf-page select,.calc-input-row input,.calc-input-row select,.dc-input{font-size:16px;min-height:44px}
+ .calc-grid{gap:14px}
+ .calc-card{padding:16px;border-radius:16px}
+ .calc-card-title{margin-bottom:14px}
+ .calc-field{margin-bottom:16px}
+ .calc-result-row{padding:11px 0;gap:10px}
+ .calc-result-val{overflow-wrap:anywhere;min-width:0}
+ .calc-info,.pdf-info,.ic-info,.hf-info,.dc-info{margin-top:24px;padding-top:20px}
+ .tool-hero{padding:16px}
+ .tool-hero h1{font-size:25px;line-height:1.2}
+ .tool-hero-sub{font-size:14px;line-height:1.5;margin-bottom:10px}
+ .tool-badges{gap:6px}
+ .tool-badge{font-size:11px;padding:4px 8px}
+ .app>.main{padding:12px 16px 24px}
+ .panel-header{padding:12px 14px}
+ .previews{padding:14px;gap:10px;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+ .previews>.arrow-col{display:none}
+ .stats-bar{padding:12px 14px;gap:12px}
+ .hf-hero,.dc-hero{padding:16px}
+ .hf-hero h1,.dc-hero h1{font-size:26px;line-height:1.2;margin:0 0 8px}
+ .hf-hero p,.dc-hero p{font-size:14px;line-height:1.5;margin-bottom:10px}
+ .hf-hero-badges,.dc-badges{gap:6px}
+ .hf-hero-badges span,.dc-badges span{font-size:11px;padding:4px 8px}
+ .hf-content,.dc-body{padding:16px 16px 28px}
+ .hf-tabs{padding-top:12px}
+ .hf-tab,.hf-mode-btn{min-height:44px;padding:10px 8px;font-size:12px}
+ .hf-step-header{gap:10px;margin-bottom:16px}
+ .hf-step-header h2{font-size:18px}
+ .hf-step-header p{font-size:13px}
+ .hf-step-num{width:32px;height:32px;font-size:15px}
+ .dc-card{padding:14px;margin-bottom:12px}
+ .dc-card-header{gap:10px;margin-bottom:12px}
+ .bs-main{padding:16px 16px 12px}
+ .bs-hero{margin-bottom:16px}
+ .bs-hero h1{font-size:25px;line-height:1.2;letter-spacing:-.7px}
+ .bs-hero h1 span{display:inline}
+ .bs-hero>p:not(.platform-eyebrow){margin-top:8px;font-size:13px}
+ .bs-promise{margin-top:8px;gap:4px 10px;flex-direction:row;font-size:10px}
+ .bs-mode-help{min-height:0;margin:8px 0 12px!important;font-size:12px}
+ .bs-layout,.bs-editor{gap:12px}
+ .bs-card,.bs-summary-top,.bs-summary-body{padding:14px;border-radius:16px}
+ .bs-card-head{margin-bottom:10px;gap:8px}
+ .bs-card-head h2{font-size:16px}
+ .bs-settings{margin-bottom:12px;grid-template-columns:100px minmax(0,1fr);gap:8px}
+ .bs-people{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:8px}
+ .bs-page input:not([type=checkbox]),.bs-page select{min-height:44px;padding:9px 10px}
+ .bs-person input{padding:9px 6px!important}
+ .bs-remove{width:28px}
+ .bs-amount-field input,.bs-amount-row select{min-height:50px!important}
+ .bs-amount-field input{font-size:24px!important}
+ .bs-description{margin-top:12px}
+ .bs-split-head{margin-top:14px;gap:10px}
+ .bs-participants{margin-top:10px}
+ .bs-participant{min-height:48px;padding:2px 0}
+ .bs-form-actions{margin-top:12px}
+ .bs-primary,.bs-secondary{min-height:44px;padding:10px 12px;font-size:13px}
+ .bs-summary{border-radius:16px}
+ .bs-summary-top{border-radius:0}
+ .bs-summary-top strong{font-size:30px}
+ .bs-summary-top h2{font-size:16px;margin:6px 0!important}
+ .bs-summary-body h3{margin-bottom:10px!important}
+ .bs-transfer{padding:10px 12px;margin-bottom:8px}
+ .bs-summary-body details{margin:12px 0}
+ .bs-summary-body summary{min-height:44px;padding:12px 0}
+ .bs-share-actions{grid-template-columns:1fr 1fr;gap:8px}
+ .bs-storage{margin-top:12px}
+ .wh-page{padding:16px 16px 24px!important}
+ .wh-hero{margin-bottom:16px}
+ .wh-hero h1{font-size:25px;margin-bottom:8px}
+ .wh-hero>p{font-size:13px;line-height:1.5;margin-bottom:8px}
+ .wh-trust{font-size:10px;gap:6px 10px}
+ .wh-layout,.wh-editor{gap:12px}
+ .wh-card,.wh-summary{border-radius:16px}
+ .wh-card-head{padding:14px 14px 10px;gap:6px}
+ .wh-card-head .wh-inline-actions{margin-top:0;gap:14px}
+ .wh-details{padding:0 14px 12px;gap:10px;grid-template-columns:1fr 1fr}
+ .wh-body input:not([type=checkbox]),.wh-body select{min-height:44px!important}
+ .wh-day-picker{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;padding:0 14px 12px}
+ .wh-day-picker button{min-height:48px;border:1px solid #dce4ef;border-radius:10px;background:#fff;color:#405064;cursor:pointer;padding:6px 4px;font:600 13px/1.3 system-ui}
+ .wh-day-picker small{display:block;font:400 11px/1.4 system-ui;margin-top:2px}
+ .wh-day-picker [aria-pressed=true]{background:#eaf2ff;color:#1557b0;border-color:#1557b0}
+ .wh-shift:not(.is-selected){display:none}
+ .wh-shift{margin:0 14px 12px;padding:12px!important;gap:8px!important}
+ .wh-pay-fields{padding:0 14px 10px;gap:10px}
+ .wh-overtime-fields{padding:0 14px 10px;gap:10px}
+ .wh-pay-settings>.wh-muted-note{padding:0 14px 14px}
+ .wh-table-note{padding:10px 14px;font-size:12px}
+ .wh-storage{padding:14px}
+ .wh-total-card,.wh-summary-bottom{padding:16px}
+ .wh-total-number{font-size:34px}
+ .wh-decimal{margin-bottom:14px}
+ .wh-totals{gap:8px;padding-top:12px}
+ .wh-primary,.wh-secondary{min-height:44px}
+ .wh-validation{margin:12px 0}
+}
