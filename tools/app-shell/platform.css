@@ -1,0 +1,102 @@
+.platform-page{--font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;--ink:#202124;--muted:#5f6368;--blue:#1557b0;margin:0;color:var(--ink);background:#fff;font:16px/1.6 var(--font);-webkit-font-smoothing:antialiased}
+.platform-page *,.platform-page *::before,.platform-page *::after{box-sizing:border-box}
+.platform-page a{color:var(--blue);text-decoration:none}
+.platform-page button,.platform-page input{font-family:inherit}
+.platform-page h1,.platform-page h2,.platform-page h3,.platform-page p{margin:0}
+.platform-page a:focus-visible,.platform-page button:focus-visible,.platform-page summary:focus-visible{outline:2px solid var(--blue);outline-offset:4px}
+.platform-skip{position:fixed;top:-70px;left:16px;z-index:300;background:#fff;border:1px solid #1557b0;border-radius:8px;padding:10px 16px}
+.platform-skip:focus{top:8px}
+.platform-header{height:76px;padding:0 32px;border-bottom:1px solid #eef0f3}
+.platform-header>div{max-width:1080px;height:100%;margin:auto;display:flex;align-items:center;justify-content:space-between}
+.platform-page .platform-brand{display:inline-flex;align-items:center;gap:10px;color:var(--ink);font-weight:650;font-size:20px;letter-spacing:-.6px}
+.platform-brand img{display:block;border-radius:9px}
+.platform-header nav{display:flex;align-items:center;gap:30px;font-size:14px}
+.platform-header nav>a{color:#4b5563}
+.platform-header button{display:flex;align-items:center;gap:8px;color:var(--blue);background:#f0f5fd;border:0;border-radius:24px;padding:10px 18px;font-size:14px;min-height:44px;cursor:pointer}
+.platform-header .aero-icon{width:18px;height:18px}
+.platform-main{max-width:1000px;margin:auto;padding:0 28px}
+.platform-hero{text-align:center;padding:58px 0 44px;max-width:650px;margin:auto}
+.platform-eyebrow{color:#5f6368;font-size:11px;font-weight:650;letter-spacing:1.5px;margin-bottom:16px!important}
+.platform-hero h1{font-size:clamp(38px,4.5vw,58px);font-weight:650;letter-spacing:-2.5px;line-height:1.1}
+.platform-hero h1 span{color:var(--blue)}
+.platform-intro{color:var(--muted);font-size:16px;margin-top:18px!important}
+.platform-search{display:flex;align-items:center;gap:14px;width:100%;min-height:62px;margin:26px auto 0;padding:14px 20px;border:1px solid #d5dbe4;border-radius:20px;background:#fff;box-shadow:0 3px 12px #17304e07;color:#4b5563;text-align:left;font-size:16px;cursor:text}
+.platform-search:hover{border-color:#b4c5df;box-shadow:0 3px 16px #17304e0c}
+.platform-search-arrow{margin-left:auto;color:#8a94a3;font-size:22px}
+.platform-promise{color:#5f6368;font-size:12px;margin-top:14px!important}
+.platform-promise span{padding:0 8px;color:#738092}
+.platform-section{margin:0 0 38px;scroll-margin-top:88px}
+.platform-section h2{font-size:20px;font-weight:650;letter-spacing:-.5px}
+.platform-section-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:18px}
+.platform-section-head p{color:#5f6368;font-size:13px;margin-top:4px}
+.platform-section-head>a{font-size:13px;font-weight:600;white-space:nowrap;min-height:44px;display:flex;align-items:center;gap:6px}
+.platform-featured{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.platform-page .platform-tool{position:relative;color:var(--ink);display:flex;flex-direction:column;align-items:flex-start;gap:16px;min-width:0;padding:22px;border:1px solid #e5e9ef;border-radius:20px;background:#fff;transition:border-color .15s,background .15s}
+.platform-tool:hover{background:#fafcff;border-color:#bdcce3}
+.platform-tool h3{font-size:15px;line-height:1.4;font-weight:650;letter-spacing:-.15px}
+.platform-tool p{color:#5f6368;font-size:13px;line-height:1.5;margin-top:6px}
+.platform-tool-arrow{position:absolute;right:19px;top:20px;color:#8290a3;font-size:20px}
+.platform-categories{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin-top:16px}
+.platform-page .platform-category{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:18px 8px;color:#3f4c5d;background:#f7f9fc;border-radius:16px;font-size:12px;font-weight:550;min-height:88px}
+.platform-category:hover{background:#eef3fc}
+.platform-about-summary{border-top:1px solid #edf0f4;font-size:13px;color:#5f6368;margin:0 0 30px}
+.platform-about-summary>summary{cursor:pointer;padding:18px 0;min-height:44px}
+.platform-about-summary>div{max-width:720px;line-height:1.8}
+.platform-about-summary h2,.platform-about-summary h3{color:#303a48;font-size:15px;margin:16px 0 6px}
+.platform-about-summary p{margin:6px 0 12px}
+.platform-footer{max-width:1080px;padding:28px 32px 36px;margin:0 auto;display:flex;align-items:flex-start;justify-content:space-between;gap:24px;border-top:1px solid #edf0f4}
+.platform-footer .platform-brand{font-size:16px}
+.platform-footer p{font-size:12px;color:#5f6368;margin-top:5px}
+.platform-footer nav{display:flex;gap:22px;flex-wrap:wrap;font-size:12px}
+.platform-footer nav a{min-height:44px;display:flex;align-items:center;color:#5f6368}
+.platform-page-intro{padding:50px 0 32px;max-width:700px}
+.platform-page-intro h1,.platform-prose h1{font-size:40px;line-height:1.15;letter-spacing:-1.5px;font-weight:650}
+.platform-page-intro>p:not(.platform-eyebrow){color:#5f6368;margin-top:12px}
+.platform-category-jumps{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.platform-category-jumps a{font-size:13px;background:#f0f5fd;border-radius:24px;padding:10px 16px;min-height:44px}
+.platform-directory>p{color:#5f6368;font-size:14px;margin:4px 0 18px}
+.platform-presets{margin-top:18px;border:1px solid #e5e9ef;border-radius:14px;font-size:14px}
+.platform-presets summary{padding:14px 18px;cursor:pointer}
+.platform-presets ul{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 20px;list-style:none;margin:0;padding:0 18px 18px}
+.platform-presets li a{display:flex;align-items:center;min-height:44px;padding:7px 0;line-height:1.5}
+.platform-prose{max-width:700px;margin:0 auto;padding:54px 0 60px}
+.platform-prose .platform-lead{font-size:18px;color:#4b5563;margin-top:24px}
+.platform-prose h2{font-size:20px;margin:32px 0 10px;letter-spacing:-.3px;font-weight:650}
+.platform-prose p{color:#5f6368;margin:12px 0;line-height:1.8}
+@media(max-width:720px){
+ .platform-page{background:#fff}
+ .platform-main{padding:0 20px}
+ .platform-hero{text-align:left;padding:26px 0 28px}
+ .platform-hero .platform-eyebrow{display:none}
+ .platform-hero h1{font-size:36px;line-height:1.12;letter-spacing:-1.6px}
+ .platform-intro{font-size:14px;line-height:1.6;margin-top:13px!important;max-width:290px}
+ .platform-search{margin-top:22px;min-height:56px;border-radius:17px;padding:12px 16px;font-size:16px;gap:10px}
+ .platform-promise{font-size:10.5px;margin-top:12px!important;white-space:nowrap}
+ .platform-promise span{padding:0 5px}
+ .platform-section{margin-bottom:28px}
+ .platform-section h2{font-size:18px}
+ .platform-section-head{margin-bottom:12px}
+ .platform-section-head p{font-size:12px}
+ .platform-featured{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ .platform-page .platform-tool{padding:15px 13px;gap:12px;border-radius:17px}
+ .platform-tool .aero-tool-symbol{width:38px;height:38px;border-radius:12px}
+ .platform-tool h3{font-size:13px;line-height:1.4}
+ .platform-tool p{font-size:11.5px;line-height:1.5;margin-top:5px}
+ .platform-tool-arrow{top:15px;right:13px;font-size:17px}
+ .platform-categories{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}
+ .platform-page .platform-category{font-size:11px;min-height:76px;padding:12px 5px;gap:7px}
+ .platform-about-summary{font-size:12px;margin-bottom:10px}
+ .platform-footer{padding:20px;display:block}
+ .platform-footer>div{display:none}
+ .platform-footer nav{gap:0;justify-content:space-between;font-size:11px}
+ .platform-page-intro{padding:28px 0}
+ .platform-page-intro h1,.platform-prose h1{font-size:32px;letter-spacing:-1.2px}
+ .platform-page-intro>p:not(.platform-eyebrow){font-size:14px}
+ .platform-directory{scroll-margin-top:80px}
+ .platform-presets ul{grid-template-columns:1fr}
+ .platform-prose{padding:28px 0 36px}
+ .platform-prose .platform-lead{font-size:16px}
+ .platform-prose h2{font-size:18px}
+ .platform-prose p{font-size:14px}
+}
+@media(prefers-reduced-motion:reduce){.platform-tool{transition:none}}

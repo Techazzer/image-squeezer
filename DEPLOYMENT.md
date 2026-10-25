@@ -93,8 +93,8 @@ on the page.
 ## Mobile web app
 
 `tools/app-shell/` contains the mobile layout, tool library, install guidance,
-icons and service worker. `scripts/mobile-app.mjs` adds this shell to all 90
-indexable pages, generates the tool catalog from the built pages, and writes a
+icons and service worker. `scripts/mobile-app.mjs` adds this shell to all 91
+indexable pages including the tool directory, generates the catalog, and writes a
 standalone web app manifest. Desktop layouts remain in place; the app header and
 bottom navigation appear at widths up to 720px. Use `Get app` on a phone for
 Android installation or iPhone/iPad home-screen instructions. Installation is
@@ -115,6 +115,29 @@ of these assets on both the immutable Pages URL and aeroniqx.in.
 
 The local-only `/__mobile-preview/` route displays the homepage and calculator
 in 390px frames for layout QA. It is not included in the deployed site.
+
+`scripts/platform-pages.mjs` owns the maintained homepage, `/tools/` directory,
+About, Privacy and `llms.txt`. `scripts/tool-content.mjs` holds shared tool
+descriptions, task-search synonyms, categories and six editorial featured picks.
+These are not popularity rankings. The full catalog remains linked in static
+HTML in the directory; the homepage does not repeat every preset. Do not restore
+the old image-compressor-to-home rewrite: the image tool has its own directory.
+
+Search opens from the homepage within the original tap event and focuses the
+input before any network work, allowing mobile browsers to raise the keyboard.
+The library has a fixed viewport-sized mobile layout and a scrollable results
+region. VisualViewport resize/scroll events update its height and top offset;
+supported browsers also receive `interactive-widget=resizes-content`. The
+result count never controls dialog size. Work/Creative/etc. category buttons
+browse without raising the keyboard until the visitor chooses the input.
+
+For future content, start with a recurring task and a working tool. Each tool
+page should explain its purpose, inputs, steps, a useful example, assumptions
+and limits, related tools, and sources when factual guidance needs them. Use
+titles and structured data that match visible content. Validate usability and
+accuracy before publishing; measure search discovery and completed tasks when
+appropriate measurement is available. Never fabricate expertise, usage rankings
+or reviews. `llms.txt` is a descriptive index, not a ranking guarantee.
 
 ## Recovery and future additions
 

@@ -2,7 +2,7 @@ import { readFile, writeFile, mkdir, cp, rm } from 'node:fs/promises'
 import { createHash } from 'node:crypto'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
-import { addSearchContent, updateCopy, updateClientTitles } from './seo.mjs'
+import { addSearchContent, updateCopy, updateClientTitles, writeSitemap } from './seo.mjs'
 import { optimizeHomepage } from './performance.mjs'
 import { addMobileApp } from './mobile-app.mjs'
 import { renderShiftRows } from '../tools/work-hours/timesheet-view.js'
@@ -33,8 +33,8 @@ let bundle = await readFile(path.join(dist, originalBundle), 'utf8')
 bundle = replaceOnce(bundle, '},{id:"finance",', '},{id:"work",label:"⏱️ Work & Productivity",desc:"Everyday tools for your workday. Free, private, and ready to use — no account needed.",tools:[{icon:"⏱️",title:"Work Hours & Timesheet",desc:"Track shifts, breaks, overtime and estimated pay. Export a CSV or print your weekly timesheet.",href:"/work-hours-calculator/",badge:"New",isExternal:!0}]},{id:"finance",', 'homepage category')
 bundle = replaceOnce(bundle, '{heading:"Finance Calculators",tools:[', '{heading:"Work & Productivity",tools:[{label:"Work Hours & Timesheet",href:"/work-hours-calculator/",icon:"HRS",color:"#1a73e8"}]},{heading:"Finance Calculators",tools:[', 'All Tools menu')
 bundle = replaceOnce(bundle, 'p.jsx("a",{href:"/compress-image-to-50kb/",className:"nav-link",children:"50KB Tool"})', 'p.jsx("a",{href:"/work-hours-calculator/",className:"nav-link",children:"Work Hours"})', 'header shortcut')
-bundle = updateCopy(bundle)
 bundle = await updateClientTitles(root, bundle)
+bundle = updateCopy(bundle)
 const bundleName = `assets/index-${hash(bundle).slice(0,12)}.js`
 // The PDF export chunk imports shared utilities from the entry bundle. Point its
 // copy back to this release so loading it cannot execute the old app a second time.
@@ -100,8 +100,7 @@ const seo = await addSearchContent(root, dist)
 await optimizeHomepage(dist)
 const calculatorAssets = [...calculatorNames.values()].map(file => `work-hours-calculator/${file}`)
 const mobileApp = await addMobileApp(root, dist, { calculatorAssets, updatesCss: updatesCssName })
-const llms = await readFile(path.join(dist, 'llms.txt'), 'utf8')
-await writeFile(path.join(dist, 'llms.txt'), `${llms}\n## Work & Productivity\n- [Work Hours & Timesheet Calculator](https://aeroniqx.in/work-hours-calculator/): Calculate shifts, unpaid breaks, overnight work, daily or weekly overtime and estimated pay. Free CSV, print, and local backup; no ads or login.\n`)
+seo.sitemapPages = await writeSitemap(dist)
 for (const file of ['_headers', '_redirects']) await cp(path.join(root, 'deployment', file), path.join(dist, file))
 await mkdir(path.join(root, 'deployment'), { recursive: true })
 await writeFile(path.join(root, 'deployment/build.json'), JSON.stringify({ baselineDeployment: manifest.deploymentId, baselineFiles: manifest.files.length, entryBundle: bundleName, pdfChunk: pdfChunkName, updatesCss: updatesCssName, calculatorAssets, mobileApp, calculator: '/work-hours-calculator/' }, null, 2) + '\n')

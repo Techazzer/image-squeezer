@@ -1,1 +1,1 @@
-/image-compressor /index.html 200
+# Tool directories resolve to their own index.html; do not rewrite them to home.
