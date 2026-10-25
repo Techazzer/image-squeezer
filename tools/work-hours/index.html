@@ -29,7 +29,7 @@
       <div class="wh-trust"><span><b aria-hidden="true">✓</b> Free, always</span><span><b aria-hidden="true">✓</b> No ads or login</span><span><b aria-hidden="true">✓</b> Calculated on your device</span></div>
     </section>
     <noscript><p class="wh-alert">Enable JavaScript to use this calculator. Your timesheet is processed on your device.</p></noscript>
-    <div class="wh-layout" id="calculator-ui" hidden>
+    <div class="wh-layout" id="calculator-ui" aria-busy="true" inert>
       <div class="wh-editor">
         <section class="wh-card" aria-labelledby="week-heading">
           <div class="wh-card-head"><div><h2 id="week-heading">Your weekly timesheet</h2><p>One shift per day. Blank days are days off.</p></div><div class="wh-inline-actions"><button type="button" id="sample-week" class="wh-text-button">Use sample week</button><button type="button" id="clear-sheet" class="wh-text-button wh-clear">Clear</button></div></div>
@@ -39,7 +39,7 @@
             <label class="wh-field">Project <span class="wh-optional">(optional)</span><input id="project-name" name="project" type="text" maxlength="120" autocomplete="off" placeholder="Client or project"></label>
           </div>
           <div class="wh-column-head" aria-hidden="true"><span>Day</span><span>Start</span><span>End</span><span>Unpaid break</span><span>Paid hours</span></div>
-          <div id="shift-rows" class="wh-shift-rows"></div>
+          <div id="shift-rows" class="wh-shift-rows"><!--SHIFT_ROWS--></div>
           <p class="wh-table-note"><svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5"/><path d="M10 9v5M10 6v.1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>End time earlier than start? We automatically count it as an overnight shift.</p>
         </section>
 

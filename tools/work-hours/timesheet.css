@@ -1,4 +1,5 @@
 .wh-body{background:#f8f9fa;color:var(--text);font-family:var(--font)}
+.wh-body{--dim:#5f6368}.wh-body .wh-total-card{background:#1557b0}.wh-body .wh-total-label,.wh-body .wh-decimal{opacity:1}.wh-body input::placeholder{color:#5f6368!important}
 .wh-sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}.wh-end-field{min-width:0}
 @media(max-width:979px){.wh-shift>.wh-end-field{grid-row:2}}
 @media(max-width:900px){.wh-mobile-tools{display:inline-flex!important;color:var(--primary);font-size:.78rem;font-weight:600;padding:8px;text-decoration:none}}

@@ -3,6 +3,8 @@ import { createHash } from 'node:crypto'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 import { addSearchContent, updateCopy, updateClientTitles } from './seo.mjs'
+import { optimizeHomepage } from './performance.mjs'
+import { renderShiftRows } from '../tools/work-hours/timesheet-view.js'
 
 const root = fileURLToPath(new URL('../', import.meta.url))
 const baseline = path.join(root, 'legacy-site')
@@ -42,7 +44,7 @@ const pdfChunk = (await readFile(path.join(baseline, pdfChunkOriginal), 'utf8'))
 bundle = bundle.replaceAll(path.basename(pdfChunkOriginal), path.basename(pdfChunkName))
 await writeFile(path.join(dist, pdfChunkName), pdfChunk)
 await writeFile(path.join(dist, bundleName), bundle)
-const updatesCss = '.ad-slot{display:none!important}\n'
+const updatesCss = '.ad-slot{display:none!important}\n:root{--dim:#5f6368}.mobile-drawer[aria-hidden="true"]{visibility:hidden}.mobile-drawer[aria-hidden="false"]{visibility:visible}.home-mobile-tools{display:none}@media(max-width:900px){.home-mobile-tools{display:inline-flex;color:var(--primary-dark);font-size:.8rem;font-weight:600;padding:8px;text-decoration:none}}\n'
 await writeFile(path.join(dist, 'assets/aeroniqx-updates.css'), updatesCss)
 
 for (const item of manifest.files.filter(item => item.file.endsWith('.html'))) {
@@ -62,10 +64,11 @@ let header = shell.header
   .replace(/<button class="hamburger [^"]*"[^>]*>.*?<\/button>/, '<a href="/#tools" class="wh-mobile-tools">All tools</a>')
   .replaceAll(' data-discover="true"', '')
 const footer = shell.footer.replaceAll('/privacy-policy-generator/', '/privacy/').replace('Free online image &amp; PDF tools', 'Free online image, PDF &amp; productivity tools')
-const html = (await readFile(path.join(toolDir, 'index.html'), 'utf8')).replace('<!--SITE_HEADER-->', header).replace('<!--SITE_FOOTER-->', footer)
+const html = (await readFile(path.join(toolDir, 'index.html'), 'utf8')).replace('<!--SITE_HEADER-->', header).replace('<!--SITE_FOOTER-->', footer).replace('<!--SHIFT_ROWS-->', renderShiftRows())
 await writeFile(path.join(toolDir, 'index.html'), html)
 
 const seo = await addSearchContent(root, dist)
+await optimizeHomepage(dist)
 const llms = await readFile(path.join(dist, 'llms.txt'), 'utf8')
 await writeFile(path.join(dist, 'llms.txt'), `${llms}\n## Work & Productivity\n- [Work Hours & Timesheet Calculator](https://aeroniqx.in/work-hours-calculator/): Calculate shifts, unpaid breaks, overnight work, daily or weekly overtime and estimated pay. Free CSV, print, and local backup; no ads or login.\n`)
 for (const file of ['_headers', '_redirects']) await cp(path.join(root, 'deployment', file), path.join(dist, file))

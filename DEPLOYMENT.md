@@ -92,6 +92,17 @@ on the page.
 
 ## Recovery and future additions
 
+The SEO build adds initial HTML for 13 core pages and generates the sitemap
+from all indexable output pages. See `tools/prerender/README.md` for snapshot
+maintenance. The homepage uses static links and native FAQ controls without
+loading the tool application. Its search metadata is defined in
+`scripts/seo.mjs`. The build verifies every indexable page has a unique title,
+an initial H1, valid JSON-LD, a sitemap entry and working local link targets.
+
+The work-hours page renders empty rows at build time. Keep the shared
+`timesheet-view.js` renderer aligned with its browser controller to preserve
+layout space before JavaScript initializes dates and saved user data.
+
 Keep the recovered artifact and checksum manifest intact. For future tools,
 add maintainable source beside `tools/work-hours/` and extend the guarded build.
 If the original complete project becomes available, migrate the catalog changes
