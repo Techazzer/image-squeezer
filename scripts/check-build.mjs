@@ -26,6 +26,15 @@ const tool = await readFile('dist/work-hours-calculator/index.html', 'utf8')
 assert.doesNotMatch(tool, /<!--SHIFT_ROWS-->|id="calculator-ui" hidden/)
 assert.equal([...tool.matchAll(/class="wh-shift"/g)].length, 7, 'All seven rows have initial layout space')
 const home = await readFile('dist/index.html', 'utf8')
+assert.ok(home.includes(build.updatesCss) && tool.includes(build.updatesCss), 'Both pages use the current stylesheet version')
+for (const file of build.calculatorAssets) {
+  const source = await readFile(`dist/${file}`, 'utf8')
+  if (file.endsWith('.js')) {
+    assert.equal(spawnSync(process.execPath, ['--check', `dist/${file}`], { encoding: 'utf8' }).status, 0, `Versioned script parses: ${file}`)
+    for (const [, dependency] of source.matchAll(/from ['"]\.\/([^'"]+)['"]/g)) assert.ok((await stat(`dist/work-hours-calculator/${dependency}`)).isFile(), `Versioned module dependency exists: ${dependency}`)
+  }
+}
+assert.doesNotMatch(tool, /(?:href|src)="\.\/timesheet\.(?:js|css)"/, 'Calculator entry assets are versioned')
 assert.doesNotMatch(home, /<script[^>]*src=|mobile-drawer/, 'Homepage does not require the tool application')
 assert.match(home, /<details class="faq-item">/, 'FAQ works without JavaScript')
 assert.doesNotMatch(tool, /<!--SITE_(?:HEADER|FOOTER)-->/)

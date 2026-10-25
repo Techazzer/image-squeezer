@@ -61,13 +61,15 @@ const updatesCss = `.ad-slot{display:none!important}
 @media(max-width:900px){.home-mobile-tools{display:inline-flex;color:var(--primary-dark);font-size:.8rem;font-weight:600;padding:8px;text-decoration:none}}
 `
 await writeFile(path.join(dist, 'assets/aeroniqx-updates.css'), updatesCss)
+const updatesCssName = `assets/aeroniqx-updates-${hash(updatesCss).slice(0,12)}.css`
+await writeFile(path.join(dist, updatesCssName), updatesCss)
 
 for (const item of manifest.files.filter(item => item.file.endsWith('.html'))) {
   let html = await readFile(path.join(dist, item.file), 'utf8')
   html = html.replaceAll(originalBundle, bundleName)
     .replace(/<script\b[^>]*src=["']https:\/\/pagead2\.googlesyndication\.com\/[^"']*["'][^>]*>\s*<\/script>/gi, '')
     .replace(/<script\b[^>]*src=["']https:\/\/static\.cloudflareinsights\.com\/[^"']*["'][^>]*>\s*<\/script>/gi, '')
-    .replace('</head>', '  <link rel="stylesheet" href="/assets/aeroniqx-updates.css">\n</head>')
+    .replace('</head>', `  <link rel="stylesheet" href="/${updatesCssName}">\n</head>`)
   await writeFile(path.join(dist, item.file), html)
 }
 
@@ -79,7 +81,18 @@ let header = shell.header
   .replace(/<button class="hamburger [^"]*"[^>]*>.*?<\/button>/, '<a href="/#tools" class="wh-mobile-tools">All tools</a>')
   .replaceAll(' data-discover="true"', '')
 const footer = shell.footer.replaceAll('/privacy-policy-generator/', '/privacy/').replace('Free online image &amp; PDF tools', 'Free online image, PDF &amp; productivity tools')
-const html = (await readFile(path.join(toolDir, 'index.html'), 'utf8')).replace('<!--SITE_HEADER-->', header).replace('<!--SITE_FOOTER-->', footer).replace('<!--SHIFT_ROWS-->', renderShiftRows())
+// Version the whole module graph together so a returning browser cannot mix
+// old controller code or styles with a new page or dependency.
+const calculatorFiles = ['timesheet.js', 'timesheet-core.js', 'timesheet-view.js', 'timesheet.css']
+const calculatorSources = new Map(await Promise.all(calculatorFiles.map(async file => [file, await readFile(path.join(toolDir, file), 'utf8')])))
+const calculatorVersion = hash([...calculatorSources.values()].join('\n')).slice(0,12)
+const calculatorNames = new Map(calculatorFiles.map(file => [file, file.replace(/\.(js|css)$/, `-${calculatorVersion}.$1`)]))
+const versionCalculator = source => {
+  for (const [file, name] of calculatorNames) source = source.replaceAll(`./${file}`, `./${name}`)
+  return source
+}
+for (const [file, source] of calculatorSources) await writeFile(path.join(toolDir, calculatorNames.get(file)), versionCalculator(source))
+const html = versionCalculator((await readFile(path.join(toolDir, 'index.html'), 'utf8')).replace('<!--SITE_HEADER-->', header).replace('<!--SITE_FOOTER-->', footer).replace('<!--SHIFT_ROWS-->', renderShiftRows()).replace('assets/aeroniqx-updates.css', updatesCssName))
 await writeFile(path.join(toolDir, 'index.html'), html)
 
 const seo = await addSearchContent(root, dist)
@@ -88,5 +101,5 @@ const llms = await readFile(path.join(dist, 'llms.txt'), 'utf8')
 await writeFile(path.join(dist, 'llms.txt'), `${llms}\n## Work & Productivity\n- [Work Hours & Timesheet Calculator](https://aeroniqx.in/work-hours-calculator/): Calculate shifts, unpaid breaks, overnight work, daily or weekly overtime and estimated pay. Free CSV, print, and local backup; no ads or login.\n`)
 for (const file of ['_headers', '_redirects']) await cp(path.join(root, 'deployment', file), path.join(dist, file))
 await mkdir(path.join(root, 'deployment'), { recursive: true })
-await writeFile(path.join(root, 'deployment/build.json'), JSON.stringify({ baselineDeployment: manifest.deploymentId, baselineFiles: manifest.files.length, entryBundle: bundleName, pdfChunk: pdfChunkName, calculator: '/work-hours-calculator/' }, null, 2) + '\n')
+await writeFile(path.join(root, 'deployment/build.json'), JSON.stringify({ baselineDeployment: manifest.deploymentId, baselineFiles: manifest.files.length, entryBundle: bundleName, pdfChunk: pdfChunkName, updatesCss: updatesCssName, calculatorAssets: [...calculatorNames.values()].map(file => `work-hours-calculator/${file}`), calculator: '/work-hours-calculator/' }, null, 2) + '\n')
 console.log(`Built ${manifest.files.length} preserved paths plus Work Hours & Timesheet Calculator. Entry: ${bundleName}. Prerendered ${seo.prerendered} pages; sitemap contains ${seo.sitemapPages} pages.`)
