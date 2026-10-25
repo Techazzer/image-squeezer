@@ -84,7 +84,10 @@ function render() {
   const count = Object.keys(result.errors).length
   $('validation-status').textContent = count ? `Check ${count} highlighted ${count === 1 ? 'entry' : 'entries'} before exporting. Totals are paused until all entries are valid.` : result.days ? `Your ${result.days === 1 ? 'shift is' : 'shifts are'} ready to export.` : 'Add your first shift to get started.'
   $('validation-status').classList.toggle('is-error', !result.valid)
-  $('download-csv').disabled = $('print-sheet').disabled = $('share-timesheet').disabled = !result.valid || !result.days
+  $('download-csv').disabled = $('print-sheet').disabled = !result.valid || !result.days
+  $('share-timesheet').disabled = true
+  if (result.valid && result.days) $('share-timesheet').dataset.aeroShare = JSON.stringify({ kind: 'hours', result, sheet })
+  else delete $('share-timesheet').dataset.aeroShare
   $('day-picker').innerHTML = result.rows.map((row,i)=>`<button type="button" data-day="${i}" aria-pressed="${i===selectedDay}" aria-controls="shift-${i}" aria-label="${escapeHtml(dayName(row.date))} ${escapeHtml(shortDate(row.date))}: ${row.error ? 'check inputs' : row.empty ? 'no shift' : durationLabel(row.minutes)}"><span>${escapeHtml(dayName(row.date))}</span><small>${row.error ? 'Check !' : row.empty ? '—' : durationLabel(row.minutes)}</small></button>`).join('')
   buildPrintView(result)
 }
@@ -149,10 +152,6 @@ $('remember-sheet').addEventListener('change', () => {
 })
 $('download-csv').addEventListener('click', () => download(exportCsv(sheet), 'text/csv;charset=utf-8', `aeroniqx-timesheet-${sheet.weekStart}.csv`))
 $('print-sheet').addEventListener('click', () => { buildPrintView(calculateSheet(sheet)); window.print() })
-$('share-timesheet').addEventListener('click', () => {
-  const result = calculateSheet(sheet)
-  if (result.valid && result.days) window.dispatchEvent(new CustomEvent('aero:share-result', { detail: { kind: 'hours', result, sheet } }))
-})
 $('day-picker').addEventListener('click', event => {
   const button = event.target.closest('[data-day]')
   if (!button) return

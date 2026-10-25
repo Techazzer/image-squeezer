@@ -22,6 +22,10 @@ test('large groups keep every transfer and person in cards while text stays shor
   assert.ok(model.rows.some(r => r.label === 'Person 49'))
   assert.ok(model.text.includes('45 more transfers'))
   assert.ok(model.text.length < 800)
+  assert.equal(model.fullText.match(/ pays Person 0:/g).length,49)
+  assert.ok(model.fullText.includes('Person 49: Paid'))
+  assert.ok(model.fullText.includes('https://aeroniqx.in/bill-splitter/'))
+  assert.ok(!model.fullText.includes('attached cards'))
 })
 test('compression shares metrics without file content, names, or false reduction claims', () => {
   const model = shareModel({ kind: 'compression', tool: 'pdf', before: 204800, after: 102400, filename: 'private.pdf', url: 'blob:secret' })

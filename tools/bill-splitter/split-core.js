@@ -93,6 +93,22 @@ export function calculate(people, expenses) {
   return { total, people: rows, transfers, count: expenses.length }
 }
 
+// Changing the count must never rewrite an already recorded expense.
+export function resizePeople(state, draft, count, editing, makeId) {
+  if (!Number.isInteger(count) || count < 2 || count > MAX_PEOPLE) throw Error('Choose between 2 and 50 people.')
+  const removed = new Set(state.people.slice(count).map(p => p.id))
+  if (state.expenses.some(e => removed.has(e.payer) || e.participants.some(id => removed.has(id)))) throw Error('The people at the end of this list are used in saved expenses. Edit or delete those expenses before reducing the count.')
+  const people = state.people.slice(0, count).map(p => ({ ...p })), added = []
+  while (people.length < count) {
+    let number = people.length + 1
+    while (people.some(p => p.name.trim().toLowerCase() === `person ${number}`)) number++
+    const person = { id: makeId(), name: `Person ${number}` }
+    people.push(person); added.push(person.id)
+  }
+  const update = (bill, includeNew) => ({ ...bill, payer: removed.has(bill.payer) ? people[0].id : bill.payer, participants: [...bill.participants.filter(id => !removed.has(id)), ...(includeNew ? added : [])], values: Object.fromEntries(Object.entries(bill.values).filter(([id]) => !removed.has(id))) })
+  return { people, quick: update(state.quick, true), draft: update(draft, !editing) }
+}
+
 export function summaryText(result, currency, title) {
   const names = new Map(result.people.map(p => [p.id, p.name.trim()]))
   return [title.trim() || 'Shared expenses', `Total: ${formatMoney(result.total, currency)} · ${result.count} expense${result.count === 1 ? '' : 's'}`, '', 'Suggested settlement', ...result.transfers.map(t => `${names.get(t.from)} pays ${names.get(t.to)} ${formatMoney(t.amount, currency)}`), ...(result.transfers.length ? [] : ['Everyone is settled.']), '', 'Paid / Share', ...result.people.map(p => `${p.name.trim()}: ${formatMoney(p.paid, currency)} paid · ${formatMoney(p.share, currency)} share`), '', 'Calculated with Aeroniqx', 'https://aeroniqx.in/bill-splitter/'].join('\n')
