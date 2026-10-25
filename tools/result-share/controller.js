@@ -1,5 +1,5 @@
-// Prepare images before the tap so native sharing retains user activation.
-export function createDirectShare({ load, navigator, openWhatsApp }) {
+// Prepare attachments before the tap so native sharing retains user activation.
+export function createDirectShare({ load, navigator, openWhatsApp, downloadFile }) {
   let version = 0, prepared = null, busy = false
   return {
     async prepare(data) {
@@ -13,19 +13,29 @@ export function createDirectShare({ load, navigator, openWhatsApp }) {
       return true
     },
     get ready() { return !!prepared && !busy },
-    get hasImage() { return !!prepared?.payload },
+    get hasAttachment() { return !!prepared?.payload },
+    get readyNote() {
+      if (prepared?.payload) return 'Choose WhatsApp from your phone’s share menu.'
+      return prepared?.download ? 'File sharing is unavailable here. Tap to download, then attach the file in WhatsApp.' : 'This browser shares the full summary on WhatsApp as text.'
+    },
     send(report) {
       if (!prepared || busy) return Promise.resolve()
       const current = prepared
-      if (!current.payload) { openWhatsApp(current.model.fullText); return Promise.resolve() }
+      if (!current.payload) {
+        if (current.download) {
+          try { downloadFile(current.download); report('Download started. Attach this file in WhatsApp.') }
+          catch { report('Download could not start. Use the tool’s Download button to save your file.') }
+        } else openWhatsApp(current.model.fullText)
+        return Promise.resolve()
+      }
       busy = true
       let operation
       try { operation = navigator.share(current.payload) }
       catch (error) { operation = Promise.reject(error) }
       return Promise.resolve(operation).then(() => report(''), error => {
-        if (error.name === 'AbortError') return
-        if (prepared === current) current.payload = null
-        report('Image sharing is unavailable. Tap again to send the full summary on WhatsApp.')
+        if (error?.name === 'AbortError' || prepared !== current) return
+        current.payload = null
+        report(current.download ? 'File sharing is unavailable. Tap again to download the file, then attach it in WhatsApp.' : 'Image sharing is unavailable. Tap again to send the full summary on WhatsApp.')
       }).finally(() => { busy = false })
     }
   }
@@ -33,6 +43,12 @@ export function createDirectShare({ load, navigator, openWhatsApp }) {
 
 export function installResultSharing(load) {
   const entries = new WeakMap()
+  const downloadFile = file => {
+    const url = URL.createObjectURL(file), link = document.createElement('a')
+    link.href = url; link.download = file.name
+    document.body.append(link); link.click(); link.remove()
+    setTimeout(() => URL.revokeObjectURL(url),10000)
+  }
   const setNote = (button, text) => {
     let note = button.parentElement.querySelector('.aero-share-note')
     if (!note && !text) return
@@ -44,7 +60,7 @@ export function installResultSharing(load) {
     const key = button.dataset.aeroShare || ''
     let entry = entries.get(button)
     if (!entry) {
-      entry = { key: null, timer: null, controller: createDirectShare({ load, navigator, openWhatsApp: text => window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank', 'noopener,noreferrer') }) }
+      entry = { key: null, timer: null, controller: createDirectShare({ load, navigator, downloadFile, openWhatsApp: text => window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank', 'noopener,noreferrer') }) }
       entries.set(button,entry)
       button.addEventListener('click', () => {
         if (entry.key !== button.dataset.aeroShare || !entry.controller.ready) return
@@ -64,9 +80,9 @@ export function installResultSharing(load) {
         const ready = await entry.controller.prepare(JSON.parse(key))
         if (!ready || entry.key !== key || !button.isConnected) return
         button.disabled = !entry.controller.ready
-        setNote(button,entry.controller.hasImage ? 'Choose WhatsApp from your phone’s share menu.' : 'This browser shares the full summary on WhatsApp as text.')
+        setNote(button,entry.controller.readyNote)
       } catch {
-        if (entry.key === key) setNote(button,'Sharing could not load. Reconnect and change a result to try again.')
+        if (entry.key === key) setNote(button,'Sharing is unavailable. Create the result again or use the tool’s Download button.')
       }
     },150)
   }

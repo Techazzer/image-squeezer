@@ -1,10 +1,9 @@
 const ORIGIN = 'https://aeroniqx.in'
 const currencyAmount = (amount, currency) => new Intl.NumberFormat('en-IN', { style: 'currency', currency, minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(amount)
 const hours = minutes => `${Math.floor(minutes / 60)}h ${String(minutes % 60).padStart(2, '0')}m`
-const bytes = size => size < 1024 ? `${size} B` : size < 1048576 ? `${(size / 1024).toFixed(1)} KB` : `${(size / 1048576).toFixed(2)} MB`
 
-// Only explicit result fields enter the share card. Files, filenames, backups,
-// document contents and browser storage are never read by the sharing module.
+// Calculator cards use explicit result fields; file tools share their output
+// through output-file.js instead of generating a statistics card.
 export function shareModel(data) {
   let model
   if (data.kind === 'bill') {
@@ -22,14 +21,6 @@ export function shareModel(data) {
     model = { title: sheet.project.trim() || 'Weekly timesheet', tool: 'Work Hours', path: '/work-hours-calculator/', value: hours(result.worked), label: 'Total paid hours', meta: `Week of ${sheet.weekStart}${sheet.name.trim() ? ` · ${sheet.name.trim()}` : ''}`,
       rows: [{ label: 'Regular hours', value: hours(result.regular) }, { label: 'Overtime', value: hours(result.overtime) }, { label: 'Unpaid breaks', value: hours(result.breaks) }, ...(result.totalPay === null ? [] : [{ label: 'Estimated gross pay', value: currencyAmount(result.totalPay, sheet.currency) }]), { heading: 'Daily paid hours' }, ...result.rows.filter(row => !row.empty).map(row => ({ label: row.date, value: hours(row.minutes) }))],
       note: 'Clock-time estimate. Pay is before taxes and deductions.', summary: `${result.days} working day${result.days === 1 ? '' : 's'} · ${hours(result.overtime)} overtime${result.totalPay === null ? '' : `\nEstimated gross pay: ${currencyAmount(result.totalPay, sheet.currency)}`}` }
-  } else if (data.kind === 'compression') {
-    if (![data.before, data.after].every(n => Number.isFinite(n) && n > 0)) throw Error('Complete a compression first.')
-    const pdf = data.tool === 'pdf', change = (1 - data.after / data.before) * 100
-    const outcome = data.after === data.before ? 'Size unchanged' : `${Math.abs(change).toFixed(1)}% ${change > 0 ? 'smaller' : 'larger'}`
-    model = { title: pdf ? 'PDF compression result' : 'Image compression result', tool: pdf ? 'PDF Compressor' : 'Image Compressor', path: pdf ? '/pdf-compress/' : '/image-compressor/', value: bytes(data.after), label: 'Output size', meta: outcome,
-      rows: [{ label: 'Original size', value: bytes(data.before) }, { label: 'Output size', value: bytes(data.after) }, { label: 'Size change', value: outcome }],
-      note: data.unchanged ? 'Original returned; compression did not reduce its size.' : data.targetMissed ? 'The requested target size was not reached.' : 'Size summary only. The file and its contents are not included.',
-      summary: `${bytes(data.before)} → ${bytes(data.after)} · ${outcome}${data.targetMissed ? '\nRequested target size was not reached.' : ''}` }
   } else throw Error('This result cannot be shared yet.')
   model.url = ORIGIN + model.path
   model.text = `${model.title}\n${model.label}: ${model.value}\n${model.meta}\n\n${model.summary}\n\nMade with Aeroniqx · Free tools, no ads\n${model.url}`
@@ -67,7 +58,7 @@ export function paginateRows(rows, maxHeight) {
   return pages
 }
 
-export function imageSharePayload(navigator, files, model) {
+export function fileSharePayload(navigator, files, model) {
   const payload = { files, title: model.title, text: model.text }
   try { return files.length && navigator.share && navigator.canShare?.({ files }) && navigator.canShare(payload) ? payload : null }
   catch { return null }

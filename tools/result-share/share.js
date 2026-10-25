@@ -1,4 +1,5 @@
 /* SHARE_MODEL */
+/* OUTPUT_FILE */
 
 
 async function createCards(model) {
@@ -51,10 +52,11 @@ async function createCards(model) {
 }
 
 export async function prepareResultShare(data) {
+  if (data.kind === 'file') return prepareOutputShare(data)
   const model = shareModel(data)
   try {
     if (!navigator.share || !navigator.canShare?.({ files: [new File(['probe'], 'result.png', { type: 'image/png' })] })) return { model, payload: null }
     const files = await createCards(model)
-    return { model, payload: imageSharePayload(navigator, files, model) }
+    return { model, payload: fileSharePayload(navigator, files, model) }
   } catch { return { model, payload: null } }
 }
