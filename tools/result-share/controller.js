@@ -1,5 +1,5 @@
 // Prepare attachments before the tap so native sharing retains user activation.
-export function createDirectShare({ load, navigator, openWhatsApp, downloadFile }) {
+export function createDirectShare({ load, navigator, openWhatsApp, downloadFile, onEvent = () => {} }) {
   let version = 0, prepared = null, busy = false
   return {
     async prepare(data) {
@@ -21,19 +21,22 @@ export function createDirectShare({ load, navigator, openWhatsApp, downloadFile 
     send(report) {
       if (!prepared || busy) return Promise.resolve()
       const current = prepared
+      onEvent('share_open')
       if (!current.payload) {
         if (current.download) {
-          try { downloadFile(current.download); report('Download started. Attach this file in WhatsApp.') }
+          try { downloadFile(current.download); onEvent('share_fallback',{action:'file'}); report('Download started. Attach this file in WhatsApp.') }
           catch { report('Download could not start. Use the tool’s Download button to save your file.') }
-        } else openWhatsApp(current.model.fullText)
+        } else {openWhatsApp(current.model.fullText);onEvent('share_fallback',{action:'whatsapp'})}
         return Promise.resolve()
       }
       busy = true
       let operation
       try { operation = navigator.share(current.payload) }
       catch (error) { operation = Promise.reject(error) }
-      return Promise.resolve(operation).then(() => report(''), error => {
-        if (error?.name === 'AbortError' || prepared !== current) return
+      return Promise.resolve(operation).then(() => {onEvent('share_complete',{action:'native'});report('')}, error => {
+        if(error?.name==='AbortError'){onEvent('share_cancel');return}
+        if(prepared!==current)return
+        onEvent('tool_error',{error_code:'share_unavailable'})
         current.payload = null
         report(current.download ? 'File sharing is unavailable. Tap again to download the file, then attach it in WhatsApp.' : 'Image sharing is unavailable. Tap again to send the full summary on WhatsApp.')
       }).finally(() => { busy = false })
@@ -60,7 +63,7 @@ export function installResultSharing(load) {
     const key = button.dataset.aeroShare || ''
     let entry = entries.get(button)
     if (!entry) {
-      entry = { key: null, timer: null, controller: createDirectShare({ load, navigator, downloadFile, openWhatsApp: text => window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank', 'noopener,noreferrer') }) }
+      entry = { key: null, timer: null, controller: createDirectShare({ load, navigator, downloadFile, onEvent:(event,data)=>window.aeroTrack?.(event,data), openWhatsApp: text => window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank', 'noopener,noreferrer') }) }
       entries.set(button,entry)
       button.addEventListener('click', () => {
         if (entry.key !== button.dataset.aeroShare || !entry.controller.ready) return

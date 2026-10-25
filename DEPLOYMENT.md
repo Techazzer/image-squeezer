@@ -55,7 +55,7 @@ while retaining the existing project, domain, and rollback history.
 - `deployment/site-shell.json`: existing rendered header/footer used to match the
   new page to the site. The new page links to the homepage's All Tools section.
 
-Requires Node.js 18 or newer. This static build and calculator need no installed
+Requires Node.js 24 or newer (the collector tests use built-in SQLite). This static build and calculator need no installed
 packages or paid services. The existing package dependencies are only for older
 React sources; do not use those incomplete sources to replace the whole site.
 
@@ -100,8 +100,8 @@ bottom navigation appear at widths up to 720px. Use `Get app` on a phone for
 Android installation or iPhone/iPad home-screen instructions. Installation is
 always optional and explicitly initiated by the visitor.
 
-Bookmarks use local storage on that device. No account, server storage, ads,
-analytics or notification permission is added. The service worker precaches
+Bookmarks use local storage on that device. No account, ads or notification
+permission is added. Basic usage measurement is described below. The service worker precaches
 public homepage and Work Hours HTML, their code/styles, and the tool catalog.
 It never caches uploaded files or timesheet entries. Other tools show an offline
 fallback when a network connection is unavailable. First-time offline use is
@@ -161,3 +161,12 @@ measure, not a reconstruction of the missing React project.
 Cloudflare retains previous deployments. The baseline deployment above is the
 pre-calculator rollback target. Use the Cloudflare deployment rollback UI if a
 release must be reverted; do not delete previous deployments.
+
+## Usage measurement
+
+`tools/analytics/README.md` documents the event schema, privacy choices, delivery
+guarantees and operational limits. The existing `aero-analytics` Worker sends
+allowlisted events directly to the existing Google Sheet. No Apps Script is used.
+`tools/analytics/wrangler.jsonc` is the maintained collector configuration.
+The website is released by the GitHub workflow above. Worker releases currently
+use the authorized local CLI; the Pages/cache-purge CI token is not expanded.
