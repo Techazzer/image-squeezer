@@ -1,0 +1,116 @@
+.aero-app-header,.aero-app-nav,.aero-home-search{display:none}
+.aero-icon{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.aero-dialog{border:0;border-radius:24px;padding:0;width:min(560px,calc(100% - 32px));max-height:85dvh;color:#202124;background:#fff;box-shadow:0 24px 100px #12305c33;font-family:var(--font,system-ui)}
+.aero-dialog::backdrop{background:#14263e66;backdrop-filter:blur(3px)}
+.aero-dialog[open]{display:flex;flex-direction:column}
+.aero-dialog-head{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:22px 22px 14px;flex-shrink:0}
+.aero-dialog h2{font-size:1.3rem;letter-spacing:-.025em;margin:0;font-weight:750}
+.aero-dialog h3{font-size:1rem;margin:0 0 8px}
+.aero-icon-button{width:44px;height:44px;border:0;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;background:#f0f4fa;color:#244367;cursor:pointer;flex-shrink:0}
+.aero-icon-button[aria-pressed=true]{background:#e8f0fe;color:#1557b0}
+.aero-icon-button[aria-pressed=true] .aero-icon{fill:#1557b0;stroke:#1557b0}
+.aero-dialog-controls{padding:0 22px 14px;flex-shrink:0}
+.aero-search{display:flex;align-items:center;gap:10px;border:1px solid #d9e2ed;border-radius:14px;background:#f5f7fb;padding:0 14px;min-height:50px;color:#5f6368}
+.aero-search input{min-width:0;flex:1;border:0;background:transparent;font:400 16px var(--font,system-ui);color:#202124;padding:12px 0;outline:none}
+.aero-search:focus-within{outline:2px solid #1557b0;outline-offset:2px}
+.aero-chips{display:flex;gap:8px;overflow-x:auto;padding:14px 0 2px;scrollbar-width:none}
+.aero-chip{border:1px solid #d9e2ed;background:#fff;color:#405064;border-radius:24px;font:600 .8rem var(--font,system-ui);padding:10px 15px;min-height:44px;white-space:nowrap;cursor:pointer}
+.aero-chip[aria-pressed=true]{background:#1557b0;border-color:#1557b0;color:#fff}
+.aero-library-list{overflow:auto;overscroll-behavior:contain;padding:0 14px 16px;min-height:120px;scroll-padding-bottom:20px}
+.aero-library-row{display:flex;gap:8px;align-items:center;border-top:1px solid #edf0f5;padding:8px}
+.aero-library-link{display:flex;align-items:center;gap:12px;flex:1;min-width:0;text-decoration:none;color:#202124;min-height:58px;border-radius:12px}
+.aero-tool-symbol{width:44px;height:44px;border-radius:13px;background:#eaf1fe;color:#1557b0;display:grid;place-items:center;flex-shrink:0}
+.aero-tool-symbol[data-kind=PDF]{background:#fff0ed;color:#b3261e}
+.aero-tool-symbol[data-kind=Finance]{background:#eaf6ef;color:#137333}
+.aero-tool-symbol[data-kind=Work]{background:#f0ecff;color:#5b3eaa}
+.aero-library-link strong{display:block;font-size:.9rem;line-height:1.4}
+.aero-library-link small{display:block;color:#5f6368;font-size:.75rem;margin-top:3px}
+.aero-results-note{margin:12px 0 0;font-size:.75rem;color:#5f6368;min-height:1em}
+.aero-empty{padding:28px 14px;line-height:1.7;color:#5f6368;text-align:center;font-size:.9rem}
+.aero-install-body{padding:0 24px 28px;overflow:auto;line-height:1.7;font-size:.9rem;color:#536175}
+.aero-install-brand{width:64px;height:64px;border-radius:18px;margin:2px 0 16px}
+.aero-install-body p{margin:0 0 16px}
+.aero-install-body ol{padding-left:22px;margin:8px 0 22px}
+.aero-install-button{width:100%;min-height:48px;background:#1557b0;border:0;border-radius:14px;color:#fff;font:600 .95rem var(--font,system-ui);cursor:pointer;margin:4px 0 18px}
+.aero-local-note{font-size:.76rem;color:#5f6368;border-top:1px solid #e6ebf2;padding-top:16px}
+.aero-toast{position:fixed;bottom:calc(86px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);max-width:calc(100% - 40px);width:max-content;padding:12px 18px;border-radius:14px;background:#17304e;color:#fff;box-shadow:0 6px 24px #17304e30;z-index:230;font:500 .84rem/1.5 var(--font,system-ui)}
+.aero-offline-note{display:none}
+.aero-dialog :focus-visible,.aero-app-header :focus-visible,.aero-app-nav :focus-visible{outline:2px solid #1557b0;outline-offset:3px}
+.aero-search input:focus-visible{outline:none}
+.aero-dialog [hidden],.aero-app-header [hidden],.aero-toast[hidden],.aero-install-body [hidden]{display:none!important}
+html[data-aero-embed=true] .aero-app-header,html[data-aero-embed=true] .aero-app-nav,html[data-aero-embed=true] .aero-home-search{display:none!important}
+@media(max-width:720px){
+ html{scroll-padding-top:90px;scroll-padding-bottom:100px}
+ body{background:#f5f7fb;padding-bottom:calc(78px + env(safe-area-inset-bottom));-webkit-tap-highlight-color:transparent}
+ .site-header{display:none!important}
+ .aero-app-header{display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:110;min-height:64px;padding:calc(8px + env(safe-area-inset-top)) 16px 8px;background:#ffffffed;backdrop-filter:blur(16px);border-bottom:1px solid #e7edf4}
+ .aero-app-brand{display:flex;align-items:center;gap:9px;text-decoration:none;color:#172b47;font-size:1.05rem;font-weight:750;letter-spacing:-.03em}
+ .aero-app-brand img{width:32px;height:32px;border-radius:9px}
+ .aero-app-page-name{flex:1;min-width:0;font-size:.92rem;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#172b47}
+ .aero-app-header .aero-home-label{margin-left:auto;color:#536175;font-size:.7rem;white-space:nowrap;background:#f0f4fa;border-radius:20px;padding:6px 10px}
+ .aero-app-nav{position:fixed;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));z-index:120;bottom:0;left:0;right:0;border-top:1px solid #e1e8f1;background:#fffffffa;backdrop-filter:blur(18px);padding:7px max(8px,env(safe-area-inset-right)) calc(7px + env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left));box-shadow:0 -4px 25px #17304e08}
+ .aero-app-nav a,.aero-app-nav button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:54px;text-decoration:none;color:#536175;background:none;border:0;cursor:pointer;font:600 .68rem var(--font,system-ui);padding:5px 0;border-radius:15px}
+ .aero-app-nav [aria-current=page]{color:#1557b0;background:#edf3ff}
+ .aero-app-nav .aero-icon{width:22px;height:22px}
+ .aero-app-nav button:disabled{opacity:.55;cursor:default}
+ .aero-offline-note[data-offline=true]{display:block;background:#fff5dc;color:#684c08;padding:8px 16px;font-size:.75rem;text-align:center}
+ .aero-home .home-hero{padding:26px 0 20px;background:linear-gradient(145deg,#f5f8ff,#eef4ff);border-bottom:0}
+ .aero-home .hero-inner{padding:0 20px}
+ .aero-home .hero-tag,.aero-home .hero-stats,.aero-home .hero-ctas,.aero-home .feature-strip{display:none}
+ .aero-home .hero-text{text-align:left}
+ .aero-home .hero-h1{font-size:2rem;line-height:1.15;letter-spacing:-.05em;margin:0 0 12px}
+ .aero-home .hero-sub{font-size:.86rem;line-height:1.6;margin:0;max-width:34em;color:#536175}
+ .aero-home-search{display:block;padding:16px 20px 4px;background:#f5f7fb}
+ .aero-home-search button{width:100%;display:flex;align-items:center;gap:10px;border:1px solid #d9e2ed;border-radius:15px;background:#fff;min-height:52px;padding:0 16px;color:#647287;font:400 .9rem var(--font,system-ui);box-shadow:0 2px 8px #23405d04;text-align:left;cursor:pointer}
+ .aero-home .tools-section{padding:25px 0 16px;background:#f5f7fb}
+ .aero-home .tools-container{padding:0 20px}
+ .aero-home .tools-header{margin-bottom:20px}
+ .aero-home .tools-title{font-size:1.1rem;letter-spacing:-.02em}
+ .aero-home .tools-sub,.aero-home .cat-desc{display:none}
+ .aero-home .cat-header{margin-bottom:12px}
+ .aero-home .cat-title{font-size:.88rem;letter-spacing:0;color:#405064}
+ .aero-home .cat-block{margin-bottom:25px}
+ .aero-home .tool-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+ .aero-home .tool-card{height:100%;min-height:132px;padding:15px 13px;flex-direction:column;align-items:flex-start;gap:11px;border:1px solid #e3e9f1;border-radius:19px;box-shadow:0 3px 10px #23405d04}
+ .aero-home .tool-card-icon{width:39px;height:39px;font-size:1.3rem;border-radius:12px}
+ .aero-home .tool-card-title-row{display:block;margin:0}
+ .aero-home .tool-card-title{font-size:.82rem;line-height:1.35;display:block}
+ .aero-home .tool-card-badge{display:inline-block;margin-top:7px;font-size:.55rem}
+ .aero-home .tool-card-arrow,.aero-home .tool-card-desc:empty{display:none}
+ .aero-home .how-section,.aero-home .faq-section,.aero-home .cta-section{padding-top:30px;padding-bottom:30px}
+ .aero-home .site-footer{margin-top:12px}
+ .aero-dialog{margin:auto 0 0;width:100%;max-width:none;max-height:calc(100dvh - env(safe-area-inset-top) - 18px);border-radius:24px 24px 0 0;padding-bottom:env(safe-area-inset-bottom)}
+ .aero-dialog-head{padding:18px 20px 12px}
+ .aero-dialog-controls{padding:0 20px 12px}
+ .aero-library-list{padding-bottom:24px}
+ .wh-page{padding-top:17px!important}
+ .wh-breadcrumb{display:none}
+ .wh-hero{margin-bottom:22px}
+ .wh-hero h1{font-size:1.65rem;line-height:1.2}
+ .wh-hero>p{font-size:.85rem}
+ .wh-card{border-radius:20px;border-color:#e2e8f0;box-shadow:0 3px 12px #23405d04}
+ .wh-shift{margin:0 12px 12px;padding:15px!important;border:1px solid #e3e9f1;border-radius:15px;background:#fafcff;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:12px!important}
+ .wh-day{grid-column:1!important;grid-row:1!important}
+ .wh-row-total{grid-column:2!important;grid-row:1!important;color:#1557b0}
+ .wh-shift>label{grid-row:auto!important;min-width:0}
+ .wh-shift>label:nth-of-type(1){grid-column:1;grid-row:2!important}
+ .wh-shift>.wh-end-field{grid-column:2;grid-row:2!important}
+ .wh-shift>label:nth-of-type(2){grid-column:1/-1;max-width:150px}
+ .wh-shift .wh-next-day{white-space:normal;font-size:.75rem;min-height:36px;padding-top:8px}
+ .wh-shift input[type=checkbox]{width:19px;height:19px}
+ .wh-body input:not([type=checkbox]),.wh-body select{min-height:46px!important;border-radius:10px}
+ .wh-text-button{min-height:44px;padding:8px 4px}
+ .wh-control-label{font-size:.75rem}
+ .wh-summary{border-radius:20px}
+ .wh-total-card{border-radius:20px 20px 0 0}
+ .wh-primary,.wh-secondary{min-height:48px;border-radius:13px}
+ .wh-inline-actions{gap:8px;flex-wrap:wrap}
+ .wh-storage-actions button{min-height:44px}
+ .wh-body .wh-help-grid{gap:14px}
+ .wh-body .wh-help-grid>div{background:#fff;border:1px solid #e3e9f1;border-radius:16px;padding:18px}
+ input,select,textarea{scroll-margin:90px 0 120px}
+ html[data-aero-embed=true] body{padding-bottom:0}
+ html[data-aero-embed=true] .site-header{display:none!important}
+}
+@media(prefers-reduced-motion:reduce){.aero-dialog,.aero-app-header,.aero-app-nav,.tool-card{scroll-behavior:auto;transition:none;animation:none}}
+@media print{.aero-app-header,.aero-app-nav,.aero-dialog,.aero-toast,.aero-offline-note,.aero-home-search{display:none!important}body{padding-bottom:0!important}}
