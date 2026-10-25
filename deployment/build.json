@@ -17,8 +17,8 @@
   ],
   "mobileApp": {
     "assets": [
-      "assets/mobile-app-102c5fdc0574.css",
-      "assets/mobile-app-5d9a5bc1fd21.js",
+      "assets/mobile-app-500187af06ef.css",
+      "assets/mobile-app-e264e139bc21.js",
       "assets/result-share-c231348e5f76.js",
       "assets/app-catalog-44d806c075f1.json",
       "manifest.webmanifest",
@@ -29,9 +29,9 @@
       "service-worker.js",
       "offline/index.html"
     ],
-    "script": "assets/mobile-app-5d9a5bc1fd21.js",
+    "script": "assets/mobile-app-e264e139bc21.js",
     "catalog": "assets/app-catalog-44d806c075f1.json",
-    "version": "b5ab288455f0",
+    "version": "78fb0b9d30ce",
     "tools": 14,
     "resources": 74
   },
