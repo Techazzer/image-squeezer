@@ -1,0 +1,528 @@
+{
+  "origin": "https://312c5019.image-resizer-66w.pages.dev",
+  "deploymentId": "312c5019-ce54-4b5d-a127-ce84018f3a5a",
+  "inventorySource": "Cloudflare dashboard: Assets uploaded (104 files)",
+  "recoveredAt": "2026-10-24T15:11:50.039Z",
+  "files": [
+    {
+      "file": ".well-known/security.txt",
+      "bytes": 150,
+      "sha256": "f0814961ce96c748a195c1cbc7edcdb13130fda2c21a14b137bb42d7a74e4b79"
+    },
+    {
+      "file": "404.html",
+      "bytes": 5209,
+      "sha256": "eb16cf531465eb0e7679bd3dbb2e325af9d8b3fa6b49b44796da9559b7b96485"
+    },
+    {
+      "file": "about/index.html",
+      "bytes": 9357,
+      "sha256": "ea69e434fd164c924d834f55d2d5ad6c5875a2d9230bddcfa7e1d88ed5c290db"
+    },
+    {
+      "file": "ads.txt",
+      "bytes": 59,
+      "sha256": "377826927d718467234d0c1e11e6488f1cab48b7a2a4b3a4d2dd185012f952b6"
+    },
+    {
+      "file": "assets/html2canvas.esm-CBrSDip1.js",
+      "bytes": 202301,
+      "sha256": "b4f3add809a6d59f46260e8fd56cab240f3153def977386b230a839e8cb0b281"
+    },
+    {
+      "file": "assets/index-DB-gONZg.css",
+      "bytes": 68325,
+      "sha256": "311ff164255565ff8f67c43b8de1bdaffaa352171e9d5cb9d10e566b94f007bb"
+    },
+    {
+      "file": "assets/index-Do-dAaN2.js",
+      "bytes": 1821992,
+      "sha256": "4c37ce1aa9e890ffe01b18e8d609c85f4b5b835b07d7cb2bcc08258e9c08fba1"
+    },
+    {
+      "file": "assets/index.es-BcQs88vO.js",
+      "bytes": 150731,
+      "sha256": "7d14feaf190a02813009896dc935d82760c4c06bc7cc48f34b202c11687a06c4"
+    },
+    {
+      "file": "assets/pdf.worker-xSiVJ7U_.mjs",
+      "bytes": 2186232,
+      "sha256": "08ee175af31a8537ee0ddee910717db78c6751e2016c4ddc3f033d5047ed5aa0"
+    },
+    {
+      "file": "assets/purify.es-BaNf_EpD.js",
+      "bytes": 24294,
+      "sha256": "e6a9da9087b71989d2e82292dc70225571e2aedf31ee118522b99900790aba51"
+    },
+    {
+      "file": "bulk-image-compressor/index.html",
+      "bytes": 17240,
+      "sha256": "024836ed6d5e37579ca8af53ffd987713c828e1513f0bc4cac3bce788efc2354"
+    },
+    {
+      "file": "compress-image-for-aadhaar-update/index.html",
+      "bytes": 16083,
+      "sha256": "92bfd5dbd40c8757f2b2dd3a34f43e68340ecac6dc6e235ee4492bec0758b21b"
+    },
+    {
+      "file": "compress-image-for-digilocker/index.html",
+      "bytes": 24662,
+      "sha256": "a0a5fdd11ecbfe35b6a70610ca054c71dd3823bc64add2e3e72ed27a14d63710"
+    },
+    {
+      "file": "compress-image-for-email/index.html",
+      "bytes": 15426,
+      "sha256": "cf2976664caaf9d9e1a03beef52c1713a4cdf2ab7fc309abdfa142e30c73ee22"
+    },
+    {
+      "file": "compress-image-for-pan-card/index.html",
+      "bytes": 26524,
+      "sha256": "88cf4cff8eb1dbcc986ee0f7b31b4a0fabd0b4454844f63de6adae0e31e4d3b2"
+    },
+    {
+      "file": "compress-image-for-passport-seva/index.html",
+      "bytes": 22744,
+      "sha256": "827873c22ae58011cad13c934f1b7fe1b2be2d26e631f34495d6cf91be008af8"
+    },
+    {
+      "file": "compress-image-for-sarkari-exam-form/index.html",
+      "bytes": 18523,
+      "sha256": "20c9a5c5dee82792369d49e3e32c22fa21beb2eede3d27d8d3757fa7c5a45944"
+    },
+    {
+      "file": "compress-image-for-shopify/index.html",
+      "bytes": 24688,
+      "sha256": "45c3812fa78b6d639f17c7f5f03d231429a230af83aeba3168bc1d3b81271ffc"
+    },
+    {
+      "file": "compress-image-for-website/index.html",
+      "bytes": 26390,
+      "sha256": "9b48f80053b472fa3992c858b7f658b7a2f562c64d58aa3ea7a6fc82f818dcce"
+    },
+    {
+      "file": "compress-image-for-wordpress/index.html",
+      "bytes": 15846,
+      "sha256": "68629ffadd2ff056d48919f97d81183792da6417d81861541c997274e6b21bde"
+    },
+    {
+      "file": "compress-image-to-100kb/index.html",
+      "bytes": 21668,
+      "sha256": "bc6e2f41b5b1136b44873de7f1214f882c39536ecc0a77232ecc6c59252d7c8b"
+    },
+    {
+      "file": "compress-image-to-200kb/index.html",
+      "bytes": 24303,
+      "sha256": "0cf77a275fcf04d97351feeda0035b5913a14b2bfc4d73f41e6a88b90f472f24"
+    },
+    {
+      "file": "compress-image-to-20kb/index.html",
+      "bytes": 23307,
+      "sha256": "d64d1de0997f9f7d6a2e09bd990fb27dec4c5b9e3e8f4981b6e5ad3a9bb7cccc"
+    },
+    {
+      "file": "compress-image-to-250kb/index.html",
+      "bytes": 15763,
+      "sha256": "3993cfba32be4f4a46de88afd01eb6b58484954458ba7ed8bb16fadcb5c638ad"
+    },
+    {
+      "file": "compress-image-to-30kb/index.html",
+      "bytes": 22544,
+      "sha256": "d79f36717d0b9f4f5414d880c71045e2641b98097c383870a3fe799f3c752477"
+    },
+    {
+      "file": "compress-image-to-40kb/index.html",
+      "bytes": 21699,
+      "sha256": "758320226120aad005657125e039a2fdf1c1586922594c4443c249dacbf4353c"
+    },
+    {
+      "file": "compress-image-to-500kb/index.html",
+      "bytes": 23212,
+      "sha256": "4c590ff2c7814dc723c02b3b3d9bdcbbb5d4a5a2c26d546b1944bc0c6d5094a0"
+    },
+    {
+      "file": "compress-image-to-50kb/index.html",
+      "bytes": 23773,
+      "sha256": "63a11716c9c5660452ad3ef43271cd9da0fe4649d08dc34db0a8e5ec26f5ca7f"
+    },
+    {
+      "file": "compress-image-to-80kb/index.html",
+      "bytes": 15552,
+      "sha256": "65d180078ee86167c3755ec69339e808841696e2cf7d693cd0c052ae13b7fc7a"
+    },
+    {
+      "file": "compress-image-under-1mb/index.html",
+      "bytes": 25751,
+      "sha256": "28a6b2fe1cb20d8fa27d977fa4cbb5a5abccd191afcb718e878bd023184cba31"
+    },
+    {
+      "file": "compress-image-under-2mb/index.html",
+      "bytes": 15393,
+      "sha256": "25585be08953b9c513552d77b3de9022a05d949bab912b21c6bad02ac283ce33"
+    },
+    {
+      "file": "compress-jpg-online/index.html",
+      "bytes": 23629,
+      "sha256": "985bfcf9c411913f4dd3b6853f1abe77da6f6449a2d2ad795dc628b38bafe751"
+    },
+    {
+      "file": "compress-pdf-for-digilocker/index.html",
+      "bytes": 21813,
+      "sha256": "d0df5d125b78a8fbe5d04d8e8ef6f083784f73bda0cd605ea085e750c10d3b6c"
+    },
+    {
+      "file": "compress-pdf-for-email/index.html",
+      "bytes": 22023,
+      "sha256": "60483207994a110ba01d3663a0ecda36861ed9a5dc65d01735f59d01c8ecc62b"
+    },
+    {
+      "file": "compress-pdf-for-linkedin/index.html",
+      "bytes": 21486,
+      "sha256": "77a604b7bf4696e4ce82df664593963321818c41e82dfde3f5906b718f2c15d7"
+    },
+    {
+      "file": "compress-pdf-for-passport-seva/index.html",
+      "bytes": 21679,
+      "sha256": "4c646c6ded17f3b2299c2159af420a1ebb1822939ddfc4c7bbffb5472779c789"
+    },
+    {
+      "file": "compress-pdf-for-whatsapp/index.html",
+      "bytes": 22093,
+      "sha256": "0d3f14c7f02d1234e3a9f55438eb5e3c791bf29922d4b7efdc792c85efc3644c"
+    },
+    {
+      "file": "compress-pdf-to-100kb/index.html",
+      "bytes": 22876,
+      "sha256": "9f83a211c357c88c5283197795a83f5e3a581e782f1f2fe7d001d11a27c4836e"
+    },
+    {
+      "file": "compress-pdf-to-1mb/index.html",
+      "bytes": 22890,
+      "sha256": "35e8ec768fc600d45c9fa79940dacb57f652de4d9911f0acb7234142e6e570c1"
+    },
+    {
+      "file": "compress-pdf-to-200kb/index.html",
+      "bytes": 22894,
+      "sha256": "a2d01ef44158d83f6d9fbb3a74ad53a7d8d60e19a951c5ca804e625cebbf06ce"
+    },
+    {
+      "file": "compress-pdf-to-250kb/index.html",
+      "bytes": 21756,
+      "sha256": "363acacdec0906da99a72db0a64fb92daa6a82e1376ee4cc5ace22b74f1a66ce"
+    },
+    {
+      "file": "compress-pdf-to-2mb/index.html",
+      "bytes": 22468,
+      "sha256": "7d5d5a0aa006f43acbf015b8e3efe90c10530c39d3d51508363e74851cfa7058"
+    },
+    {
+      "file": "compress-pdf-to-300kb/index.html",
+      "bytes": 22444,
+      "sha256": "95c5df2f735c416d69ea24647100dbae4dfd75620dc2a3e57d9affea6f04c056"
+    },
+    {
+      "file": "compress-pdf-to-500kb/index.html",
+      "bytes": 22787,
+      "sha256": "90f56dc16fd2349d26754417e2cd877e7ca0967f3280df705e38401170ed75ff"
+    },
+    {
+      "file": "compress-pdf-to-50kb/index.html",
+      "bytes": 23344,
+      "sha256": "1c8a007949e3ac8e252d63d8f8e9e3553114a252d5c89e664d462b22f1d0ee31"
+    },
+    {
+      "file": "compress-pdf-to-5mb/index.html",
+      "bytes": 21861,
+      "sha256": "624cec4c8220f470544d1268903fada8f171e2100bbd8e23b831ba2027e04e87"
+    },
+    {
+      "file": "compress-photo-for-cat/index.html",
+      "bytes": 23359,
+      "sha256": "cccd926b4cd7debc371a00a8ed5e0d55cff1819806c13a94f792e681ed9a1405"
+    },
+    {
+      "file": "compress-photo-for-gate/index.html",
+      "bytes": 23649,
+      "sha256": "07b418dc3b06ef1ca39c0907ad7ebc7e6507e55f3a2ac7ac6fcc58e1d6fe12cc"
+    },
+    {
+      "file": "compress-photo-for-ibps/index.html",
+      "bytes": 23529,
+      "sha256": "e791569afbacfaf1f742c836fdf02c59fc704160e525dc9980cf7bd655f9fdc7"
+    },
+    {
+      "file": "compress-photo-for-jee/index.html",
+      "bytes": 25157,
+      "sha256": "32523db9e4c269abb40359e2d6011b1ead5dbb6008ee89bf35cff2327745b99e"
+    },
+    {
+      "file": "compress-photo-for-neet/index.html",
+      "bytes": 23283,
+      "sha256": "cde94746836af7d9a102e6531ab6da2b68947f69998522cbd535c3c5282acb62"
+    },
+    {
+      "file": "compress-photo-for-railway-rrb/index.html",
+      "bytes": 18108,
+      "sha256": "3750773a2464558485d5c3975a9ef13b4a501f11510f099f39247b1c3129a2d7"
+    },
+    {
+      "file": "compress-photo-for-ssc/index.html",
+      "bytes": 26052,
+      "sha256": "80a31d5edb39d3e3e2bf506eeafbfe23a6eb6b44cdd583d0a04b6f0de534105d"
+    },
+    {
+      "file": "compress-photo-for-upsc/index.html",
+      "bytes": 24166,
+      "sha256": "5acba70b7552dc94eb10e19fe73253bc5e955e009df73489d7ad9b8174a1c8fc"
+    },
+    {
+      "file": "compress-png-online/index.html",
+      "bytes": 25058,
+      "sha256": "a6f909a330f5d79b6e5c694a9d24b86801e99222b0b037cf17f67b5401f20c53"
+    },
+    {
+      "file": "compress-png-without-losing-quality/index.html",
+      "bytes": 15563,
+      "sha256": "c89411b6a9d361c5026ab49a2d2453fa4e5af164c4d7f2f5be520e3b9858244c"
+    },
+    {
+      "file": "compress-screenshot/index.html",
+      "bytes": 15617,
+      "sha256": "471ff89fab2a7ac5891fdde8adf13e54eae42fee66f77dc42e9f80659124e5bb"
+    },
+    {
+      "file": "compress-signature-for-government-form/index.html",
+      "bytes": 18246,
+      "sha256": "6376191df82ad8150a073e86fce08b8c01009c03f6d398b31ef251ce0246a8a0"
+    },
+    {
+      "file": "compress-webp-online/index.html",
+      "bytes": 18375,
+      "sha256": "537449d9c8c376fd51ba4707341a0b339ba35cdb8c31e74c6315dd0501c5698f"
+    },
+    {
+      "file": "convert-png-to-jpg-and-compress/index.html",
+      "bytes": 15444,
+      "sha256": "9aa0fe06a0387a2e8d3060f170fe001b22afc90d51044683d7c85443101ceaea"
+    },
+    {
+      "file": "convert-webp-to-jpg/index.html",
+      "bytes": 24916,
+      "sha256": "3c2d5ecd04faa13fa88a97d89e03ffafa174a9a36395ef235292ecb487fc975a"
+    },
+    {
+      "file": "drive-folder-copy/index.html",
+      "bytes": 3082,
+      "sha256": "eb8cd72f7e1fcc25d41e6d6c0dfb6c4b93b3228691c250545096d21fa1cceb49"
+    },
+    {
+      "file": "emi-calculator/index.html",
+      "bytes": 3082,
+      "sha256": "eb8cd72f7e1fcc25d41e6d6c0dfb6c4b93b3228691c250545096d21fa1cceb49"
+    },
+    {
+      "file": "favicon.svg",
+      "bytes": 386,
+      "sha256": "6fa325a7196ca9a57914c80796ce7d67c03978bcc76a023ad60a13648c8b1b89"
+    },
+    {
+      "file": "free-image-compressor-no-signup/index.html",
+      "bytes": 17576,
+      "sha256": "3964bf0d51ceb569223521cd4d3be437aae025d6eb234d89c01dfd2ec74cbfff"
+    },
+    {
+      "file": "gst-calculator/index.html",
+      "bytes": 3082,
+      "sha256": "eb8cd72f7e1fcc25d41e6d6c0dfb6c4b93b3228691c250545096d21fa1cceb49"
+    },
+    {
+      "file": "handwriting-font/index.html",
+      "bytes": 3082,
+      "sha256": "eb8cd72f7e1fcc25d41e6d6c0dfb6c4b93b3228691c250545096d21fa1cceb49"
+    },
+    {
+      "file": "how-to-compress-image-on-mobile/index.html",
+      "bytes": 15930,
+      "sha256": "9c4b0b85ac80110b9506a90d429deb6446c31697a16671e7003a8ef099b08842"
+    },
+    {
+      "file": "how-to-reduce-image-size-without-losing-quality/index.html",
+      "bytes": 24307,
+      "sha256": "bd4b9479a4983d030da732924e2614ae59d859caa1e6e954a41095865a4f006f"
+    },
+    {
+      "file": "image-compressor-without-losing-quality/index.html",
+      "bytes": 26048,
+      "sha256": "e1c69d0bd31dc5ee428008039e4caef13b46fc5ed019d92a2084a2d4294c4a1a"
+    },
+    {
+      "file": "image-compressor/index.html",
+      "bytes": 3082,
+      "sha256": "eb8cd72f7e1fcc25d41e6d6c0dfb6c4b93b3228691c250545096d21fa1cceb49"
+    },
+    {
+      "file": "images-to-pdf/index.html",
+      "bytes": 3082,
+      "sha256": "eb8cd72f7e1fcc25d41e6d6c0dfb6c4b93b3228691c250545096d21fa1cceb49"
+    },
+    {
+      "file": "index.html",
+      "bytes": 3082,
+      "sha256": "eb8cd72f7e1fcc25d41e6d6c0dfb6c4b93b3228691c250545096d21fa1cceb49"
+    },
+    {
+      "file": "llms.txt",
+      "bytes": 1330,
+      "sha256": "4e6921575b68334fd1c3fb769eab1fbe787f91f5631948497e86375fc67b906c"
+    },
+    {
+      "file": "monthly-sip-calculator/index.html",
+      "bytes": 23922,
+      "sha256": "93b3361e47261abe8623b76b33c6d1604364681a2beb7dd9655168f95641cc8a"
+    },
+    {
+      "file": "og-image.png",
+      "bytes": 277798,
+      "sha256": "663fc1894665404941653048245758726e331e2e6ae51abf3b9eeaa32d568d0b"
+    },
+    {
+      "file": "passport-photo-compressor/index.html",
+      "bytes": 23635,
+      "sha256": "2689effa334e965fd457d97787c2072007345be258f3736fc321616cf6107ad0"
+    },
+    {
+      "file": "pdf-compress/index.html",
+      "bytes": 3082,
+      "sha256": "eb8cd72f7e1fcc25d41e6d6c0dfb6c4b93b3228691c250545096d21fa1cceb49"
+    },
+    {
+      "file": "pdf-merge/index.html",
+      "bytes": 3082,
+      "sha256": "eb8cd72f7e1fcc25d41e6d6c0dfb6c4b93b3228691c250545096d21fa1cceb49"
+    },
+    {
+      "file": "pdf-split/index.html",
+      "bytes": 3082,
+      "sha256": "eb8cd72f7e1fcc25d41e6d6c0dfb6c4b93b3228691c250545096d21fa1cceb49"
+    },
+    {
+      "file": "pdf-to-images/index.html",
+      "bytes": 3082,
+      "sha256": "eb8cd72f7e1fcc25d41e6d6c0dfb6c4b93b3228691c250545096d21fa1cceb49"
+    },
+    {
+      "file": "privacy/index.html",
+      "bytes": 7439,
+      "sha256": "0ee759955662056adea07324a42e8d5b30a7ef24c806b39b2b9dfd4fdba51ece"
+    },
+    {
+      "file": "reduce-image-size-from-mb-to-kb/index.html",
+      "bytes": 24515,
+      "sha256": "100810fe2e44701d25337e320cb6ee003a9193e09ea1f23deae320afd0925402"
+    },
+    {
+      "file": "reduce-pdf-file-size/index.html",
+      "bytes": 22998,
+      "sha256": "eab628bebc819743d4641669264e1dc1b282df70393a8a5d91241b9a24f43128"
+    },
+    {
+      "file": "reduce-photo-size-for-email-attachment/index.html",
+      "bytes": 23681,
+      "sha256": "e47bb4cb0c91799242a4fd1df062fa58cc6d0922811e1a2da1655ccfc5dd1db0"
+    },
+    {
+      "file": "resize-image-for-facebook/index.html",
+      "bytes": 22663,
+      "sha256": "e8834de9f698fe36afcc1c9678cad6ada2cd8e31e66e4300fe31d3c534694300"
+    },
+    {
+      "file": "resize-image-for-instagram-reel-cover/index.html",
+      "bytes": 15547,
+      "sha256": "ddba8d83efad02239cfd34139540ff36bd5cd5b2d1fdca90144bfa1ee2405997"
+    },
+    {
+      "file": "resize-image-for-instagram-story/index.html",
+      "bytes": 15617,
+      "sha256": "d6187f9d22a73ba1ae0f817e022e2c8252534667ee9679216aa912b36518e54b"
+    },
+    {
+      "file": "resize-image-for-instagram/index.html",
+      "bytes": 23780,
+      "sha256": "0234eff56c1902e0791f10cb78a3b99a022f0d27fbd0e5461ec63b635e125166"
+    },
+    {
+      "file": "resize-image-for-linkedin-banner/index.html",
+      "bytes": 15850,
+      "sha256": "37abe2c8818d2ee9e598b267fe02316f66083bdf5884cf78c2c7d22d9227b102"
+    },
+    {
+      "file": "resize-image-for-linkedin/index.html",
+      "bytes": 23776,
+      "sha256": "105b978d34ead643b007b6ec98507a10c6617c9e6396970ae090d694cfec561e"
+    },
+    {
+      "file": "resize-image-for-twitter/index.html",
+      "bytes": 15912,
+      "sha256": "2132d186123d5a5bb6c3987a2c3a7c21ba00c07cd3f1d85a8a5ecb27bb8aa57a"
+    },
+    {
+      "file": "resize-image-for-whatsapp-dp/index.html",
+      "bytes": 25909,
+      "sha256": "46b84d183f42ce9ac72591188c6e0999b8511c6992c12d8c1b100ba337f82b04"
+    },
+    {
+      "file": "resize-image-for-youtube-thumbnail/index.html",
+      "bytes": 25038,
+      "sha256": "caa24f2164768561f8e77dd88bfc23616ef78d7254ce2c19ba09702689babe87"
+    },
+    {
+      "file": "robots.txt",
+      "bytes": 267,
+      "sha256": "a48cc9759945bbf07b9d445203b35540347e84ab0a13474bd91d10c12b8e8883"
+    },
+    {
+      "file": "salary-calculator/index.html",
+      "bytes": 3082,
+      "sha256": "eb8cd72f7e1fcc25d41e6d6c0dfb6c4b93b3228691c250545096d21fa1cceb49"
+    },
+    {
+      "file": "sip-calculator-10-years/index.html",
+      "bytes": 23251,
+      "sha256": "0d50ede2504d429ebac1e850001c284714ecad33f40165003328757488dbfe5c"
+    },
+    {
+      "file": "sip-calculator-online/index.html",
+      "bytes": 24169,
+      "sha256": "02bc8d5a096a3b1e98ba2de8afde64545ba7e47ffc7da50f5aad0ffe5353ee74"
+    },
+    {
+      "file": "sip-calculator/index.html",
+      "bytes": 3082,
+      "sha256": "eb8cd72f7e1fcc25d41e6d6c0dfb6c4b93b3228691c250545096d21fa1cceb49"
+    },
+    {
+      "file": "sip-maturity-calculator/index.html",
+      "bytes": 23400,
+      "sha256": "21ee6af1a2d4b3350839e9cd145ba86975fbf882832d6d92f81cd47786a1d48f"
+    },
+    {
+      "file": "sip-return-calculator/index.html",
+      "bytes": 22566,
+      "sha256": "35c5102b2fc459ecf7136cb48b6f1dfb6e513d3302d55d00e8f80be269140743"
+    },
+    {
+      "file": "sitemap.xml",
+      "bytes": 9891,
+      "sha256": "e4d7c12b7aa3896d4e39daf3dd8e77e03bb0989ba804b58f1f34b7554660da11"
+    },
+    {
+      "file": "tinypng-alternative/index.html",
+      "bytes": 26671,
+      "sha256": "8ddd8bbc5b1231c65a8854200c635d322e2aea5837d40af60d3b207836a42df6"
+    },
+    {
+      "file": "vite.svg",
+      "bytes": 1497,
+      "sha256": "4a748afd443918bb16591c834c401dae33e87861ab5dbad0811c3a3b4a9214fb"
+    }
+  ]
+}

@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+    (function () {
+      var host = window.location.hostname;
+      if (host === 'localhost' || host === '127.0.0.1') {
+        document.documentElement.setAttribute('data-env', 'local');
+      }
+    })();
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YouTube Thumbnail Size — Resize to 1280×720px Free | Aero Tools</title>
+  <meta name="description" content="Resize any image to the perfect YouTube thumbnail: 1280×720px (16:9), under 2MB, JPEG. Pre-configured tool, free, no upload to server, no watermark." />
+  <link rel="canonical" href="https://aeroniqx.in/resize-image-for-youtube-thumbnail/" />
+  <meta property="og:title" content="YouTube Thumbnail Size — Resize to 1280×720px Free | Aero Tools" />
+  <meta property="og:description" content="Resize any image to the perfect YouTube thumbnail: 1280×720px (16:9), under 2MB, JPEG. Pre-configured tool, free, no upload to server, no watermark." />
+  <meta property="og:url" content="https://aeroniqx.in/resize-image-for-youtube-thumbnail/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://aeroniqx.in/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:site_name" content="Aero Tools" />
+  <meta property="og:locale" content="en_IN" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="YouTube Thumbnail Size — Resize to 1280×720px Free | Aero Tools" />
+  <meta name="twitter:description" content="Resize any image to the perfect YouTube thumbnail: 1280×720px (16:9), under 2MB, JPEG. Pre-configured tool, free, no upload to server, no watermark." />
+  <meta name="twitter:image" content="https://aeroniqx.in/og-image.png" />
+  <meta name="robots" content="index, follow" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1450536013584517" crossorigin="anonymous"></script>
+  <script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "YouTube Thumbnail Resizer",
+      "url": "https://aeroniqx.in/resize-image-for-youtube-thumbnail/",
+      "description": "Resize any image to the perfect YouTube thumbnail size: 1280×720px (16:9), under 2MB, JPEG. Free, no upload to server.",
+      "applicationCategory": "UtilityApplication",
+      "operatingSystem": "All",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "INR"
+      }
+    },
+    {
+      "@type": "HowTo",
+      "name": "How to resize image for YouTube thumbnail",
+      "step": [
+        {
+          "@type": "HowToStep",
+          "text": "Upload your image to the tool below."
+        },
+        {
+          "@type": "HowToStep",
+          "text": "It is pre-set to 1280×720px at 85% JPEG quality. Click Compress."
+        },
+        {
+          "@type": "HowToStep",
+          "text": "Download and upload as your YouTube video thumbnail."
+        }
+      ]
+    }
+  ]
+}</script>
+  <style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #ffffff; --surface: #f8f9fa; --surface2: #f1f3f4; --border: #dadce0;
+    --primary: #1a73e8; --primary-dark: #1557b0; --primary-light: #e8f0fe;
+    --text: #202124; --muted: #5f6368; --dim: #80868b;
+    --success: #34a853; --success-light: #e6f4ea;
+    --error: #ea4335; --error-light: #fce8e6;
+    --radius: 8px; --radius-lg: 12px; --radius-xl: 16px;
+    --shadow-1: 0 1px 2px rgba(60,64,67,.3),0 1px 3px rgba(60,64,67,.15);
+    --shadow-2: 0 1px 3px rgba(60,64,67,.3),0 4px 8px rgba(60,64,67,.15);
+    --shadow-3: 0 2px 6px rgba(60,64,67,.3),0 8px 24px rgba(60,64,67,.15);
+    --font: -apple-system, BlinkMacSystemFont, 'Google Sans', 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'Roboto Mono', 'SFMono-Regular', Consolas, monospace;
+    --max-w: 1160px;
+    --content-w: 860px;
+  }
+  body { background: var(--bg); color: var(--text); font-family: var(--font); line-height: 1.6; }
+  a { color: var(--primary); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .site-main { min-height: calc(100vh - 64px); }
+
+  /* Header */
+  header { background: rgba(255,255,255,.92); backdrop-filter: saturate(180%) blur(14px); border-bottom: 1px solid rgba(218,220,224,.9); padding: 0 24px; height: 64px; display: flex; align-items: center; justify-content: center; position: sticky; top: 0; z-index: 10; box-shadow: var(--shadow-1); }
+  .header-inner { max-width: var(--max-w); width: 100%; display: flex; align-items: center; gap: 24px; }
+  header .logo { font-size: 1.1rem; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 10px; }
+  header .logo svg { flex-shrink: 0; }
+  header nav { display: flex; gap: 6px; font-size: 0.92rem; align-items: center; }
+  header nav a { color: var(--muted); padding: 8px 12px; border-radius: 999px; transition: background 0.15s, color 0.15s; }
+  header nav a:hover { background: var(--surface); color: var(--text); text-decoration: none; }
+  .nav-cta { margin-left: auto; display: inline-flex; align-items: center; justify-content: center; background: var(--primary-light); border: 1px solid var(--primary-light); color: var(--primary); border-radius: 999px; padding: 8px 18px; font-size: .86rem; font-weight: 700; text-decoration: none; }
+  .nav-cta:hover { background: #d2e3fc; border-color: #d2e3fc; text-decoration: none; }
+
+  /* Hero */
+  .hero { background: linear-gradient(135deg,#f0f4ff 0%,#e8f0fe 60%,#f8fbff 100%); border-bottom: 1px solid var(--border); padding: 56px 24px 48px; }
+  .hero-inner { max-width: var(--max-w); margin: 0 auto; }
+  .hero > h1, .hero > p, .hero > .badges, .hero > div:not(.hero-inner) { max-width: var(--content-w); margin-left: auto; margin-right: auto; }
+  .hero h1 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 900; line-height: 1.08; margin-bottom: 14px; color: var(--text); letter-spacing: -.03em; }
+  .hero h1 span { color: var(--primary); }
+  .hero p { color: var(--muted); font-size: 1.03rem; max-width: 640px; margin-bottom: 18px; line-height: 1.7; }
+  .hero-tag { display: inline-block; font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--primary); background: var(--primary-light); border-radius: 999px; padding: 4px 14px; margin-bottom: 18px; }
+  .badges { display: flex; gap: 8px; flex-wrap: wrap; }
+  .badge { background: var(--bg); border: 1px solid #c5d9fd; border-radius: 999px; padding: 4px 14px; font-size: 0.78rem; font-weight: 700; color: var(--primary); }
+
+  /* Tool iframe */
+  .tool-wrap { max-width: var(--content-w); margin: 32px auto 0; padding: 0 20px; }
+  .tool-frame { width: 100%; height: 360px; min-height: 260px; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface); box-shadow: var(--shadow-2); transition: height 300ms ease; }
+
+  /* Ad slot */
+  .ad-slot { max-width: var(--content-w); margin: 24px auto; padding: 0 20px; text-align: center; min-height: 90px; }
+  html[data-env="local"] .ad-slot { display: none; }
+
+  /* Content */
+  .content { max-width: var(--content-w); margin: 40px auto; padding: 0 20px; }
+  .content h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: 14px; color: var(--text); }
+  .content p { color: var(--muted); margin-bottom: 14px; font-size: 0.95rem; line-height: 1.65; }
+
+  /* Table */
+  .table-wrap { overflow-x: auto; margin: 20px 0; border: 1px solid var(--border); border-radius: var(--radius-lg); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  thead th { background: var(--surface); color: var(--muted); text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--border); font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  tbody td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--muted); }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover td { background: var(--surface); color: var(--text); }
+  .ok { color: var(--success); font-weight: 600; }
+
+  /* Steps */
+  .steps { counter-reset: step; list-style: none; margin: 16px 0; }
+  .steps li { counter-increment: step; display: flex; gap: 14px; align-items: flex-start; margin-bottom: 16px; }
+  .steps li::before { content: counter(step); min-width: 28px; height: 28px; border-radius: 50%; background: var(--primary); color: #fff; font-size: 0.8rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .steps li p { color: var(--muted); font-size: 0.93rem; margin: 0; padding-top: 4px; line-height: 1.6; }
+
+  /* FAQ */
+  .faq { margin: 16px 0; }
+  details { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); margin-bottom: 8px; padding: 16px 20px; }
+  summary { font-weight: 600; cursor: pointer; list-style: none; color: var(--text); font-size: 0.93rem; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: '+'; float: right; color: var(--primary); font-size: 1.2rem; line-height: 1; }
+  details[open] summary::after { content: '−'; }
+  details p { margin-top: 12px; color: var(--muted); font-size: 0.91rem; line-height: 1.6; }
+
+  /* Related grid */
+  .related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(195px, 1fr)); gap: 10px; margin-top: 16px; }
+  .related-card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 14px 16px; transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s; }
+  .related-card:hover { border-color: var(--primary); box-shadow: var(--shadow-2); transform: translateY(-1px); }
+  .related-card a { color: var(--text); font-size: 0.88rem; font-weight: 700; }
+  .related-card p { color: var(--muted); font-size: 0.8rem; margin-top: 4px; line-height: 1.55; }
+
+  /* Backlink box */
+  .backlink-box { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-xl); box-shadow: var(--shadow-1); padding: 18px 20px; margin: 24px 0; }
+  .backlink-box h3 { font-size: 1rem; font-weight: 800; margin-bottom: 10px; color: var(--text); }
+  .backlink-links { display: flex; flex-wrap: wrap; gap: 8px; }
+  .backlink-links a { background: var(--surface); border: 1px solid var(--border); border-radius: 999px; padding: 7px 12px; font-size: 0.82rem; color: var(--muted); font-weight: 600; transition: all 0.15s; }
+  .backlink-links a:hover { border-color: #c5d9fd; color: var(--primary); text-decoration: none; background: var(--primary-light); }
+
+  /* Authority links */
+  .authority-links { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-xl); box-shadow: var(--shadow-1); padding: 18px 20px; margin: 24px 0; }
+  .authority-links h4 { font-size: 1rem; font-weight: 800; color: var(--text); margin-bottom: 10px; }
+  .authority-links ul { padding-left: 18px; }
+  .authority-links li { color: var(--muted); margin-bottom: 6px; }
+  .authority-links ul li a { color: var(--primary-dark); font-size: 0.86rem; }
+  .authority-links ul li a:hover { color: var(--primary); text-decoration: underline; }
+
+  /* Spec bar (Passport Seva, exam-specific pages) */
+  .spec-bar { max-width: var(--content-w); margin: 18px auto 0; background: rgba(255,255,255,.9); border: 1px solid var(--border); border-radius: var(--radius-xl); box-shadow: var(--shadow-1); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; overflow: hidden; }
+  .spec-item { padding: 16px 18px; text-align: left; border-right: 1px solid var(--border); }
+  .spec-item:last-child { border-right: none; }
+  .spec-val { font-size: 1rem; font-weight: 800; color: var(--primary); line-height: 1.1; }
+  .spec-label { font-size: .78rem; color: var(--muted); margin-top: 4px; font-weight: 500; letter-spacing: normal; text-transform: none; }
+
+  /* Alert box */
+  .alert-box { background: #fffdf5; border: 1px solid #f3e2a6; border-radius: var(--radius-xl); box-shadow: var(--shadow-1); padding: 18px 20px; margin: 24px 0; font-size: .9rem; color: #5a4000; line-height: 1.6; }
+  .alert-box strong { color: #4a3200; }
+
+  /* Embed widget */
+  .embed-widget { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-xl); box-shadow: var(--shadow-1); padding: 18px 20px; margin: 24px 0; }
+  .embed-widget h3 { font-size: 1rem; font-weight: 800; color: var(--text); margin-bottom: 10px; }
+  .embed-widget p { color: var(--muted); font-size: 0.86rem; margin-bottom: 14px; }
+  .embed-code { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; font-family: var(--font-mono); font-size: 0.76rem; color: #1557b0; overflow-x: auto; white-space: pre; line-height: 1.5; }
+  .copy-btn { margin-top: 10px; background: var(--primary); color: #fff; border: none; border-radius: 999px; padding: 10px 18px; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: background 0.15s; }
+  .copy-btn:hover { background: var(--primary-dark); }
+
+  /* Footer */
+  footer { background: var(--surface); border-top: 1px solid var(--border); text-align: center; padding: 28px 20px; color: var(--muted); font-size: 0.83rem; margin-top: 60px; }
+  footer a { color: var(--muted); margin: 0 8px; transition: color 0.15s; }
+  footer a:hover { color: var(--primary); text-decoration: none; }
+  footer .footer-links { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; }
+
+  @media (max-width: 600px) {
+    .tool-frame { height: 480px; min-height: 360px; }
+    header nav { display: none; }
+    .nav-cta { display: none; }
+    .hero { padding: 36px 16px 30px; }
+    .content, .tool-wrap, .ad-slot { padding: 0 16px; }
+    .spec-bar, .trust-bar { grid-template-columns: 1fr 1fr; margin-left: 16px; margin-right: 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="site-main">
+
+
+<header>
+  <div class="header-inner">
+    <a href="/" class="logo">
+      <svg width="26" height="26" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+        <rect width="28" height="28" rx="6" fill="#1a73e8"/>
+        <path d="M7 14a7 7 0 0 1 14 0" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+        <circle cx="14" cy="14" r="3" fill="#fff"/>
+        <path d="M14 17v4M11 19h6" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+      Aero Tools
+    </a>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/image-compressor/">Image Compressor</a>
+      <a href="/compress-photo-for-upsc/">UPSC Photo</a>
+      <a href="/compress-image-to-50kb/">50KB Tool</a>
+    </nav>
+    <a href="/image-compressor/" class="nav-cta">Compress Now</a>
+  </div>
+</header>
+<main>
+  <div class="hero">
+    <h1>Resize Image for <span>YouTube Thumbnail</span></h1>
+    <p>The perfect YouTube thumbnail is 1280×720px (16:9 ratio), under 2MB, in JPEG format. This tool is pre-configured to those exact specs — resize and compress in one step.</p>
+    <div class="badges">
+      <span class="badge">✓ 1280×720px pre-set</span>
+      <span class="badge">✓ 16:9 aspect ratio</span>
+      <span class="badge">✓ Under 2MB target</span>
+      <span class="badge">✓ No account needed</span>
+    </div>
+  </div>
+
+  <div class="tool-wrap">
+    <iframe class="tool-frame"
+      src="/image-compressor/?embed=1&width=1280&height=720&format=jpeg&quality=85&label=YouTube+Thumbnail+(1280×720px)"
+      title="YouTube thumbnail resizer" loading="eager" frameborder="0"></iframe>
+  </div>
+
+  
+<div class="ad-slot">
+  <script>
+    (function () {
+      var host = window.location.hostname;
+      var isLocal = host === 'localhost' || host === '127.0.0.1';
+      var slot = document.currentScript.parentElement;
+
+      if (isLocal) {
+        slot.style.display = 'none';
+        return;
+      }
+
+      slot.innerHTML = '<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1450536013584517" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>';
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+    })();
+  </script>
+</div>
+
+  <div class="content">
+    <h2>YouTube thumbnail specifications (official)</h2>
+    <p>YouTube's own help documentation specifies these requirements for custom thumbnails. Getting the dimensions right matters because YouTube displays thumbnails at multiple sizes — in search results, suggested videos, and on your channel page — and a poorly sized thumbnail looks blurry or gets cropped unexpectedly.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Spec</th><th>Requirement</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td>Dimensions</td><td>1280 × 720 pixels</td><td>Minimum 640px wide</td></tr>
+          <tr><td>Aspect ratio</td><td>16:9</td><td>Standard widescreen — matches video player</td></tr>
+          <tr><td>Max file size</td><td>2 MB</td><td>Our tool targets well under this</td></tr>
+          <tr><td>Format</td><td>JPEG, PNG, GIF, BMP, WebP</td><td>JPEG recommended for smallest size</td></tr>
+          <tr><td>Safe zone</td><td>Keep text/faces away from bottom 25%</td><td>Progress bar overlaps in some views</td></tr>
+          <tr><td>Account requirement</td><td>Verified account needed</td><td>Verify at youtube.com/verify</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    
+<div class="authority-links">
+  <h4>Official sources &amp; references</h4>
+  <ul>
+    <li><a href="https://support.google.com/youtube/answer/72431" target="_blank" rel="noopener noreferrer">YouTube thumbnail specs — support.google.com ↗</a></li>
+    <li><a href="https://creatoracademy.youtube.com/" target="_blank" rel="noopener noreferrer">YouTube Creator Academy ↗</a></li>
+    <li><a href="https://developers.google.com/search/docs/appearance/google-images" target="_blank" rel="noopener noreferrer">Google image best practices ↗</a></li>
+  </ul>
+</div>
+
+    <h2>Why thumbnail quality directly impacts your CTR</h2>
+    <p>YouTube's algorithm uses Click-Through Rate (CTR) as a key ranking signal — the more people click your thumbnail relative to how often it's shown, the more YouTube promotes your video. A blurry, poorly sized, or low-contrast thumbnail immediately loses clicks to better-optimized competitors showing in the same row.</p>
+    <p>The two most common thumbnail mistakes: uploading at the wrong size (YouTube upscales small images, causing visible blur) and using an image that's too compressed (pixelation at 1280px). This tool ensures you upload at the native resolution YouTube expects, with maximum quality within the 2MB limit.</p>
+
+    
+<div class="backlink-box">
+  <h3>🔗 Related Tools on Aero Tools</h3>
+  <div class="backlink-links">
+    <a href="/resize-image-for-instagram/">Instagram Image Size</a>
+    <a href="/resize-image-for-instagram-story/">Instagram Story Size</a>
+    <a href="/resize-image-for-linkedin/">LinkedIn Image Size</a>
+    <a href="/resize-image-for-linkedin-banner/">LinkedIn Banner</a>
+    <a href="/resize-image-for-twitter/">Twitter / X Header</a>
+    <a href="/resize-image-for-facebook/">Facebook Cover</a>
+    <a href="/resize-image-for-whatsapp-dp/">WhatsApp DP</a>
+    <a href="/compress-image-under-2mb/">Compress Under 2MB</a>
+    <a href="/compress-jpg-online/">Compress JPEG Online</a>
+    <a href="/image-compressor-without-losing-quality/">No Quality Loss</a>
+  </div>
+</div>
+
+    <h2>How to create the perfect YouTube thumbnail (3 steps)</h2>
+    <ol class="steps">
+      <li><p>Upload your image — a screenshot from your video, a custom graphic, or a photo. The tool accepts JPEG, PNG, WebP.</p></li>
+      <li><p>It is pre-set to <strong>1280×720px at 85% JPEG quality</strong>. This gives you a crisp thumbnail well under the 2MB YouTube limit. Click <strong>Compress</strong>.</p></li>
+      <li><p>Download and go to YouTube Studio → your video → <strong>Thumbnail</strong> → Upload. Done.</p></li>
+    </ol>
+
+    
+<div class="embed-widget">
+  <h3>📎 Embed this tool on your website — free</h3>
+  <p>Bloggers, educators, and developers: copy the snippet below to add this tool to your site. It's free forever and links back automatically.</p>
+  <div class="embed-code" id="embed-code">&lt;iframe
+  src="https://aeroniqx.in/?embed=1&width=1280&height=720&format=jpeg&quality=85&label=YouTube+Thumbnail+1280x720"
+  width="100%" height="620"
+  frameborder="0"
+  style="border-radius:12px;border:1px solid #2a2a3a;"
+  title="YouTube thumbnail resizer free tool"
+&gt;&lt;/iframe&gt;
+&lt;p style="font-size:0.8rem;text-align:center;margin-top:6px;"&gt;
+  Powered by &lt;a href="https://aeroniqx.in/resize-image-for-youtube-thumbnail/"&gt;Aero Tools&lt;/a&gt; — free image compressor
+&lt;/p&gt;</div>
+  <button class="copy-btn" onclick="(function(){const el=document.getElementById('embed-code');navigator.clipboard.writeText(el.innerText).then(()=>{const b=document.querySelector('.copy-btn');b.textContent='✓ Copied!';setTimeout(()=>b.textContent='Copy embed code',2000)})})()">Copy embed code</button>
+</div>
+
+    <h2>Frequently Asked Questions</h2>
+    <div class="faq">
+      <details>
+        <summary>Can I upload a 4K image as a YouTube thumbnail?</summary>
+        <p>Yes, but YouTube displays thumbnails at a maximum of 1280px wide, so anything larger gets downscaled. Uploading at exactly 1280×720px means no downscaling happens and YouTube shows it at native resolution — the sharpest possible result. Uploading 4K just wastes the 2MB limit on pixels YouTube throws away.</p>
+      </details>
+      <details>
+        <summary>Does my thumbnail affect YouTube SEO?</summary>
+        <p>Indirectly, yes. YouTube's algorithm uses CTR (Click-Through Rate) as a ranking signal. A compelling thumbnail gets more clicks → higher CTR → YouTube ranks your video higher. Google Images also indexes YouTube thumbnails, so a properly-sized thumbnail can appear in Google image search results.</p>
+      </details>
+      <details>
+        <summary>What's the ideal thumbnail text size to stay readable in search results?</summary>
+        <p>In YouTube search results, thumbnails are displayed at roughly 168×94px on mobile and 246×138px on desktop. Text needs to be large enough to read at those sizes — typically at least 60–80px font size at 1280px canvas. Less is more: 3–5 words maximum at high contrast.</p>
+      </details>
+    </div>
+
+    <h2>Other social media image tools</h2>
+    
+<div class="related-grid">
+  
+  <div class="related-card">
+    <a href="/resize-image-for-instagram/">Instagram Post</a>
+    <p>1080×1080 square or 1080×1350 portrait</p>
+  </div>
+  <div class="related-card">
+    <a href="/resize-image-for-instagram-story/">Instagram Story</a>
+    <p>1080×1920px, 9:16 ratio</p>
+  </div>
+  <div class="related-card">
+    <a href="/resize-image-for-linkedin-banner/">LinkedIn Banner</a>
+    <p>1584×396px LinkedIn cover</p>
+  </div>
+  <div class="related-card">
+    <a href="/resize-image-for-twitter/">Twitter Header</a>
+    <p>1500×500px X/Twitter header</p>
+  </div>
+  <div class="related-card">
+    <a href="/resize-image-for-facebook/">Facebook Cover</a>
+    <p>820×312px cover photo</p>
+  </div>
+  <div class="related-card">
+    <a href="/resize-image-for-whatsapp-dp/">WhatsApp DP</a>
+    <p>500×500px, displays as circle</p>
+  </div>
+</div>
+  </div>
+</main>
+
+<footer>
+  <p>© 2026 <a href="/">Aero Tools on aeroniqx.in</a> — Free image tools, 100% in your browser. No uploads. No sign-up.</p>
+  <div class="footer-links">
+    <a href="/">Home</a>
+    <a href="/compress-image-to-50kb/">50KB</a>
+    <a href="/compress-image-to-100kb/">100KB</a>
+    <a href="/compress-image-to-200kb/">200KB</a>
+    <a href="/compress-jpg-online/">JPEG</a>
+    <a href="/compress-png-online/">PNG</a>
+    <a href="/compress-webp-online/">WebP</a>
+    <a href="/compress-image-for-passport-seva/">Passport Seva</a>
+    <a href="/compress-photo-for-upsc/">UPSC</a>
+    <a href="/compress-photo-for-ssc/">SSC</a>
+    <a href="/resize-image-for-instagram/">Instagram</a>
+    <a href="/resize-image-for-youtube-thumbnail/">YouTube</a>
+    <a href="/reduce-image-size-from-mb-to-kb/">MB to KB</a>
+    <a href="/tinypng-alternative/">TinyPNG Alt</a>
+  </div>
+</footer>
+</div>
+<script>
+  (function () {
+    function resizeToolFrame(event) {
+      if (!event || !event.data || event.data.type !== 'aerotools:embed-height') return;
+      var frames = Array.prototype.slice.call(document.querySelectorAll('.tool-frame'));
+      var activeFrame = frames.find(function (frame) {
+        return frame.contentWindow === event.source;
+      });
+
+      if (!activeFrame) return;
+
+      var nextHeight = Math.max(300, Number(event.data.height) || 0);
+      activeFrame.style.height = nextHeight + 'px';
+    }
+
+    window.addEventListener('message', resizeToolFrame);
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+# Recovered production files must retain their exact bytes for checksum validation.
+legacy-site/** -text
+tools/** text eol=lf
+scripts/** text eol=lf
+deployment/** text eol=lf
+src/test/timesheet.test.js text eol=lf
+.github/** text eol=lf

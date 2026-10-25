@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+    (function () {
+      var host = window.location.hostname;
+      if (host === 'localhost' || host === '127.0.0.1') {
+        document.documentElement.setAttribute('data-env', 'local');
+      }
+    })();
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIP Maturity Calculator — Final Corpus Value for Any SIP India</title>
+  <meta name="description" content="Calculate SIP maturity value for retirement, child education, or any goal. Free SIP maturity calculator with 20-30 year projection tables for India." />
+  <link rel="canonical" href="https://aeroniqx.in/sip-maturity-calculator/" />
+  <meta property="og:title" content="SIP Maturity Calculator — Final Corpus Value for Any SIP India" />
+  <meta property="og:description" content="Calculate SIP maturity value for retirement, child education, or any goal. Free SIP maturity calculator with 20-30 year projection tables for India." />
+  <meta property="og:url" content="https://aeroniqx.in/sip-maturity-calculator/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://aeroniqx.in/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:site_name" content="Aero Tools" />
+  <meta property="og:locale" content="en_IN" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="SIP Maturity Calculator — Final Corpus Value for Any SIP India" />
+  <meta name="twitter:description" content="Calculate SIP maturity value for retirement, child education, or any goal. Free SIP maturity calculator with 20-30 year projection tables for India." />
+  <meta name="twitter:image" content="https://aeroniqx.in/og-image.png" />
+  <meta name="robots" content="index, follow" />
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1450536013584517" crossorigin="anonymous"></script>
+  <script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "SIP Maturity Calculator",
+      "url": "https://aeroniqx.in/sip-maturity-calculator/",
+      "description": "Calculate the maturity value of your SIP investment. Free SIP maturity calculator for any monthly amount, duration, and expected return rate in India.",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "All",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "INR"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is SIP maturity value?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "SIP maturity value is the total amount you receive at the end of your SIP investment tenure. It includes your total invested principal plus all the returns earned through compounding over the investment period."
+          }
+        }
+      ]
+    }
+  ]
+}</script>
+  <style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #ffffff; --surface: #f8f9fa; --surface2: #f1f3f4; --border: #dadce0;
+    --primary: #1a73e8; --primary-dark: #1557b0; --primary-light: #e8f0fe;
+    --text: #202124; --muted: #5f6368; --dim: #80868b;
+    --success: #34a853; --success-light: #e6f4ea;
+    --error: #ea4335; --error-light: #fce8e6;
+    --radius: 8px; --radius-lg: 12px; --radius-xl: 16px;
+    --shadow-1: 0 1px 2px rgba(60,64,67,.3),0 1px 3px rgba(60,64,67,.15);
+    --shadow-2: 0 1px 3px rgba(60,64,67,.3),0 4px 8px rgba(60,64,67,.15);
+    --shadow-3: 0 2px 6px rgba(60,64,67,.3),0 8px 24px rgba(60,64,67,.15);
+    --font: -apple-system, BlinkMacSystemFont, 'Google Sans', 'Segoe UI', Roboto, sans-serif;
+    --font-mono: 'Roboto Mono', 'SFMono-Regular', Consolas, monospace;
+    --max-w: 1160px;
+    --content-w: 860px;
+  }
+  body { background: var(--bg); color: var(--text); font-family: var(--font); line-height: 1.6; }
+  a { color: var(--primary); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .site-main { min-height: calc(100vh - 64px); }
+
+  /* Header */
+  header { background: rgba(255,255,255,.92); backdrop-filter: saturate(180%) blur(14px); border-bottom: 1px solid rgba(218,220,224,.9); padding: 0 24px; height: 64px; display: flex; align-items: center; justify-content: center; position: sticky; top: 0; z-index: 10; box-shadow: var(--shadow-1); }
+  .header-inner { max-width: var(--max-w); width: 100%; display: flex; align-items: center; gap: 24px; }
+  header .logo { font-size: 1.1rem; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 10px; }
+  header .logo svg { flex-shrink: 0; }
+  header nav { display: flex; gap: 6px; font-size: 0.92rem; align-items: center; }
+  header nav a { color: var(--muted); padding: 8px 12px; border-radius: 999px; transition: background 0.15s, color 0.15s; }
+  header nav a:hover { background: var(--surface); color: var(--text); text-decoration: none; }
+  .nav-cta { margin-left: auto; display: inline-flex; align-items: center; justify-content: center; background: var(--primary-light); border: 1px solid var(--primary-light); color: var(--primary); border-radius: 999px; padding: 8px 18px; font-size: .86rem; font-weight: 700; text-decoration: none; }
+  .nav-cta:hover { background: #d2e3fc; border-color: #d2e3fc; text-decoration: none; }
+
+  /* Hero */
+  .hero { background: linear-gradient(135deg,#f0f4ff 0%,#e8f0fe 60%,#f8fbff 100%); border-bottom: 1px solid var(--border); padding: 56px 24px 48px; }
+  .hero-inner { max-width: var(--max-w); margin: 0 auto; }
+  .hero > h1, .hero > p, .hero > .badges, .hero > div:not(.hero-inner) { max-width: var(--content-w); margin-left: auto; margin-right: auto; }
+  .hero h1 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 900; line-height: 1.08; margin-bottom: 14px; color: var(--text); letter-spacing: -.03em; }
+  .hero h1 span { color: var(--primary); }
+  .hero p { color: var(--muted); font-size: 1.03rem; max-width: 640px; margin-bottom: 18px; line-height: 1.7; }
+  .hero-tag { display: inline-block; font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--primary); background: var(--primary-light); border-radius: 999px; padding: 4px 14px; margin-bottom: 18px; }
+  .badges { display: flex; gap: 8px; flex-wrap: wrap; }
+  .badge { background: var(--bg); border: 1px solid #c5d9fd; border-radius: 999px; padding: 4px 14px; font-size: 0.78rem; font-weight: 700; color: var(--primary); }
+
+  /* Tool iframe */
+  .tool-wrap { max-width: var(--content-w); margin: 32px auto 0; padding: 0 20px; }
+  .tool-frame { width: 100%; height: 360px; min-height: 260px; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--surface); box-shadow: var(--shadow-2); transition: height 300ms ease; }
+
+  /* Ad slot */
+  .ad-slot { max-width: var(--content-w); margin: 24px auto; padding: 0 20px; text-align: center; min-height: 90px; }
+  html[data-env="local"] .ad-slot { display: none; }
+
+  /* Content */
+  .content { max-width: var(--content-w); margin: 40px auto; padding: 0 20px; }
+  .content h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: 14px; color: var(--text); }
+  .content p { color: var(--muted); margin-bottom: 14px; font-size: 0.95rem; line-height: 1.65; }
+
+  /* Table */
+  .table-wrap { overflow-x: auto; margin: 20px 0; border: 1px solid var(--border); border-radius: var(--radius-lg); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+  thead th { background: var(--surface); color: var(--muted); text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--border); font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  tbody td { padding: 10px 14px; border-bottom: 1px solid var(--border); color: var(--muted); }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover td { background: var(--surface); color: var(--text); }
+  .ok { color: var(--success); font-weight: 600; }
+
+  /* Steps */
+  .steps { counter-reset: step; list-style: none; margin: 16px 0; }
+  .steps li { counter-increment: step; display: flex; gap: 14px; align-items: flex-start; margin-bottom: 16px; }
+  .steps li::before { content: counter(step); min-width: 28px; height: 28px; border-radius: 50%; background: var(--primary); color: #fff; font-size: 0.8rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .steps li p { color: var(--muted); font-size: 0.93rem; margin: 0; padding-top: 4px; line-height: 1.6; }
+
+  /* FAQ */
+  .faq { margin: 16px 0; }
+  details { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); margin-bottom: 8px; padding: 16px 20px; }
+  summary { font-weight: 600; cursor: pointer; list-style: none; color: var(--text); font-size: 0.93rem; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: '+'; float: right; color: var(--primary); font-size: 1.2rem; line-height: 1; }
+  details[open] summary::after { content: '−'; }
+  details p { margin-top: 12px; color: var(--muted); font-size: 0.91rem; line-height: 1.6; }
+
+  /* Related grid */
+  .related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(195px, 1fr)); gap: 10px; margin-top: 16px; }
+  .related-card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 14px 16px; transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s; }
+  .related-card:hover { border-color: var(--primary); box-shadow: var(--shadow-2); transform: translateY(-1px); }
+  .related-card a { color: var(--text); font-size: 0.88rem; font-weight: 700; }
+  .related-card p { color: var(--muted); font-size: 0.8rem; margin-top: 4px; line-height: 1.55; }
+
+  /* Backlink box */
+  .backlink-box { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-xl); box-shadow: var(--shadow-1); padding: 18px 20px; margin: 24px 0; }
+  .backlink-box h3 { font-size: 1rem; font-weight: 800; margin-bottom: 10px; color: var(--text); }
+  .backlink-links { display: flex; flex-wrap: wrap; gap: 8px; }
+  .backlink-links a { background: var(--surface); border: 1px solid var(--border); border-radius: 999px; padding: 7px 12px; font-size: 0.82rem; color: var(--muted); font-weight: 600; transition: all 0.15s; }
+  .backlink-links a:hover { border-color: #c5d9fd; color: var(--primary); text-decoration: none; background: var(--primary-light); }
+
+  /* Authority links */
+  .authority-links { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-xl); box-shadow: var(--shadow-1); padding: 18px 20px; margin: 24px 0; }
+  .authority-links h4 { font-size: 1rem; font-weight: 800; color: var(--text); margin-bottom: 10px; }
+  .authority-links ul { padding-left: 18px; }
+  .authority-links li { color: var(--muted); margin-bottom: 6px; }
+  .authority-links ul li a { color: var(--primary-dark); font-size: 0.86rem; }
+  .authority-links ul li a:hover { color: var(--primary); text-decoration: underline; }
+
+  /* Spec bar (Passport Seva, exam-specific pages) */
+  .spec-bar { max-width: var(--content-w); margin: 18px auto 0; background: rgba(255,255,255,.9); border: 1px solid var(--border); border-radius: var(--radius-xl); box-shadow: var(--shadow-1); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; overflow: hidden; }
+  .spec-item { padding: 16px 18px; text-align: left; border-right: 1px solid var(--border); }
+  .spec-item:last-child { border-right: none; }
+  .spec-val { font-size: 1rem; font-weight: 800; color: var(--primary); line-height: 1.1; }
+  .spec-label { font-size: .78rem; color: var(--muted); margin-top: 4px; font-weight: 500; letter-spacing: normal; text-transform: none; }
+
+  /* Alert box */
+  .alert-box { background: #fffdf5; border: 1px solid #f3e2a6; border-radius: var(--radius-xl); box-shadow: var(--shadow-1); padding: 18px 20px; margin: 24px 0; font-size: .9rem; color: #5a4000; line-height: 1.6; }
+  .alert-box strong { color: #4a3200; }
+
+  /* Embed widget */
+  .embed-widget { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-xl); box-shadow: var(--shadow-1); padding: 18px 20px; margin: 24px 0; }
+  .embed-widget h3 { font-size: 1rem; font-weight: 800; color: var(--text); margin-bottom: 10px; }
+  .embed-widget p { color: var(--muted); font-size: 0.86rem; margin-bottom: 14px; }
+  .embed-code { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; font-family: var(--font-mono); font-size: 0.76rem; color: #1557b0; overflow-x: auto; white-space: pre; line-height: 1.5; }
+  .copy-btn { margin-top: 10px; background: var(--primary); color: #fff; border: none; border-radius: 999px; padding: 10px 18px; font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: background 0.15s; }
+  .copy-btn:hover { background: var(--primary-dark); }
+
+  /* Footer */
+  footer { background: var(--surface); border-top: 1px solid var(--border); text-align: center; padding: 28px 20px; color: var(--muted); font-size: 0.83rem; margin-top: 60px; }
+  footer a { color: var(--muted); margin: 0 8px; transition: color 0.15s; }
+  footer a:hover { color: var(--primary); text-decoration: none; }
+  footer .footer-links { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; }
+
+  @media (max-width: 600px) {
+    .tool-frame { height: 480px; min-height: 360px; }
+    header nav { display: none; }
+    .nav-cta { display: none; }
+    .hero { padding: 36px 16px 30px; }
+    .content, .tool-wrap, .ad-slot { padding: 0 16px; }
+    .spec-bar, .trust-bar { grid-template-columns: 1fr 1fr; margin-left: 16px; margin-right: 16px; }
+  }
+</style>
+</head>
+<body>
+<div class="site-main">
+
+
+<header>
+  <div class="header-inner">
+    <a href="/" class="logo">
+      <svg width="26" height="26" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+        <rect width="28" height="28" rx="6" fill="#1a73e8"/>
+        <path d="M7 14a7 7 0 0 1 14 0" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+        <circle cx="14" cy="14" r="3" fill="#fff"/>
+        <path d="M14 17v4M11 19h6" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+      Aero Tools
+    </a>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/image-compressor/">Image Compressor</a>
+      <a href="/compress-photo-for-upsc/">UPSC Photo</a>
+      <a href="/compress-image-to-50kb/">50KB Tool</a>
+    </nav>
+    <a href="/image-compressor/" class="nav-cta">Compress Now</a>
+  </div>
+</header>
+<main>
+  <div class="hero">
+    <div class="hero-tag">SIP Maturity Calculator</div>
+    <h1>SIP Maturity Calculator — <span>Final Corpus Value</span></h1>
+    <p>Find out the exact maturity value of your SIP — the final amount you'll receive when your investment tenure ends. Plan your retirement corpus, child's education fund, or any wealth goal with precise maturity projections.</p>
+    <div class="badges">
+      <span class="badge">✓ Exact maturity corpus</span>
+      <span class="badge">✓ Goal-based reverse calculation</span>
+      <span class="badge">✓ Retirement & education planning</span>
+      <span class="badge">✓ Free, instant</span>
+    </div>
+  </div>
+
+  <div class="tool-wrap">
+    <iframe class="tool-frame"
+      src="/sip-calculator/?embed=1"
+      title="SIP Maturity Calculator" loading="eager" frameborder="0"></iframe>
+  </div>
+
+  
+<div class="ad-slot">
+  <script>
+    (function () {
+      var host = window.location.hostname;
+      var isLocal = host === 'localhost' || host === '127.0.0.1';
+      var slot = document.currentScript.parentElement;
+
+      if (isLocal) {
+        slot.style.display = 'none';
+        return;
+      }
+
+      slot.innerHTML = '<ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-1450536013584517" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>';
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+    })();
+  </script>
+</div>
+
+  <div class="content">
+    <h2>SIP maturity for retirement planning — India scenarios</h2>
+    <p>Retirement planning in India requires accounting for inflation. A corpus that feels large today will have lower purchasing power in 20–30 years. These tables show what your SIP maturity looks like vs. common retirement corpus targets.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>SIP Amount</th><th>20 Yrs @ 12%</th><th>25 Yrs @ 12%</th><th>30 Yrs @ 12%</th></tr></thead>
+        <tbody>
+          <tr><td>₹5,000/mo</td><td>₹49.5L</td><td>₹94.7L</td><td>₹1.76Cr</td></tr>
+          <tr><td>₹10,000/mo</td><td>₹99L</td><td>₹1.89Cr</td><td>₹3.53Cr</td></tr>
+          <tr><td>₹15,000/mo</td><td>₹1.49Cr</td><td>₹2.84Cr</td><td>₹5.29Cr</td></tr>
+          <tr><td>₹20,000/mo</td><td>₹1.98Cr</td><td>₹3.78Cr</td><td>₹7.06Cr</td></tr>
+          <tr><td>₹30,000/mo</td><td>₹2.97Cr</td><td>₹5.68Cr</td><td>₹10.6Cr</td></tr>
+          <tr><td>₹50,000/mo</td><td>₹4.95Cr</td><td>₹9.47Cr</td><td>₹17.6Cr</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>SIP maturity for child's education — timeline</h2>
+    <p>Higher education costs in India have been rising at 10–12% per year. Planning with a dedicated SIP from when a child is born gives 18 years for compounding — enough to build a meaningful education corpus even with modest monthly investments.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Child's Age Now</th><th>Years to College</th><th>₹5K/mo @ 12% gives</th><th>₹10K/mo @ 12% gives</th></tr></thead>
+        <tbody>
+          <tr><td>0 (newborn)</td><td>18 years</td><td>₹1.58Cr</td><td>₹3.16Cr... wait — use calculator</td></tr>
+          <tr><td>2 years</td><td>16 years</td><td>₹76L</td><td>₹1.53Cr</td></tr>
+          <tr><td>5 years</td><td>13 years</td><td>₹37.8L</td><td>₹75.6L</td></tr>
+          <tr><td>8 years</td><td>10 years</td><td>₹11.6L</td><td>₹23.2L</td></tr>
+          <tr><td>10 years</td><td>8 years</td><td>₹7.9L</td><td>₹15.8L</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    
+<div class="backlink-box">
+  <h3>🔗 Related Tools on Aero Tools</h3>
+  <div class="backlink-links">
+    <a href="/sip-calculator-online/">SIP Calculator Online</a>
+    <a href="/sip-return-calculator/">SIP Return Calculator</a>
+    <a href="/monthly-sip-calculator/">Monthly SIP Calculator</a>
+    <a href="/sip-calculator-10-years/">SIP for 10 Years</a>
+    <a href="/emi-calculator/">EMI Calculator</a>
+    <a href="/salary-calculator/">Salary Calculator</a>
+  </div>
+</div>
+
+    <h2>How to plan for a specific maturity target (3 steps)</h2>
+    <ol class="steps">
+      <li><p>Define your <strong>target corpus</strong> — how much money do you need at the end? For retirement: estimate your monthly expenses × 300 (25-year corpus at 4% withdrawal rate). For education: research current fees and apply 10% annual inflation for the years until your child enters college.</p></li>
+      <li><p>Enter your <strong>timeline</strong> — how many years until you need the money? Then try different monthly SIP amounts in the calculator until the maturity value meets your target. The calculator instantly shows which monthly amount hits your goal.</p></li>
+      <li><p>Start immediately. Every month of delay on a long-term SIP costs significantly more than it appears. A 30-year-old starting a ₹10,000 SIP at 12% reaches ₹3.53Cr by 60. Starting at 35 only gives ₹1.89Cr by 60 — ₹1.64Cr less, for just 5 years of delay.</p></li>
+    </ol>
+
+    <h2>Frequently asked questions</h2>
+    <div class="faq">
+      <details open>
+        <summary>What is SIP maturity value?</summary>
+        <p>SIP maturity value is the total amount you receive when your SIP tenure ends. It includes everything: your invested principal (monthly amount × months) plus all the compounded returns earned over the period. This is the number that tells you whether your SIP met your financial goal.</p>
+      </details>
+      <details>
+        <summary>Can I withdraw SIP before maturity?</summary>
+        <p>Yes — open-ended mutual funds allow withdrawal anytime (except ELSS which has a 3-year lock-in per installment). Withdrawing early means you receive the current NAV value of your units, which may be higher or lower than planned depending on market conditions at withdrawal time.</p>
+      </details>
+      <details>
+        <summary>How much corpus is enough for retirement in India?</summary>
+        <p>A common rule: multiply your expected monthly retirement expenses by 300 (25x annual expenses, supporting a 4% annual withdrawal). If you expect ₹50,000/month in expenses (in today's terms), target ₹1.5 crore (inflation-adjusted). Use this calculator to find the SIP amount that reaches your target corpus by your planned retirement age.</p>
+      </details>
+    </div>
+
+    <h2>Related financial tools</h2>
+    
+<div class="related-grid">
+  
+  <div class="related-card">
+    <a href="/sip-calculator-online/">SIP Calculator Online</a>
+    <p>Full SIP wealth projector</p>
+  </div>
+  <div class="related-card">
+    <a href="/monthly-sip-calculator/">Monthly SIP Calculator</a>
+    <p>Reference tables for common amounts</p>
+  </div>
+  <div class="related-card">
+    <a href="/emi-calculator/">EMI Calculator</a>
+    <p>Loan EMI and total interest paid</p>
+  </div>
+  <div class="related-card">
+    <a href="/salary-calculator/">Salary Calculator</a>
+    <p>In-hand salary after all deductions</p>
+  </div>
+</div>
+  </div>
+</main>
+
+<footer>
+  <p>© 2026 <a href="/">Aero Tools on aeroniqx.in</a> — Free image tools, 100% in your browser. No uploads. No sign-up.</p>
+  <div class="footer-links">
+    <a href="/">Home</a>
+    <a href="/compress-image-to-50kb/">50KB</a>
+    <a href="/compress-image-to-100kb/">100KB</a>
+    <a href="/compress-image-to-200kb/">200KB</a>
+    <a href="/compress-jpg-online/">JPEG</a>
+    <a href="/compress-png-online/">PNG</a>
+    <a href="/compress-webp-online/">WebP</a>
+    <a href="/compress-image-for-passport-seva/">Passport Seva</a>
+    <a href="/compress-photo-for-upsc/">UPSC</a>
+    <a href="/compress-photo-for-ssc/">SSC</a>
+    <a href="/resize-image-for-instagram/">Instagram</a>
+    <a href="/resize-image-for-youtube-thumbnail/">YouTube</a>
+    <a href="/reduce-image-size-from-mb-to-kb/">MB to KB</a>
+    <a href="/tinypng-alternative/">TinyPNG Alt</a>
+  </div>
+</footer>
+</div>
+<script>
+  (function () {
+    function resizeToolFrame(event) {
+      if (!event || !event.data || event.data.type !== 'aerotools:embed-height') return;
+      var frames = Array.prototype.slice.call(document.querySelectorAll('.tool-frame'));
+      var activeFrame = frames.find(function (frame) {
+        return frame.contentWindow === event.source;
+      });
+
+      if (!activeFrame) return;
+
+      var nextHeight = Math.max(300, Number(event.data.height) || 0);
+      activeFrame.style.height = nextHeight + 'px';
+    }
+
+    window.addEventListener('message', resizeToolFrame);
+  })();
+</script>
+</body>
+</html>
