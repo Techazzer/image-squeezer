@@ -18,7 +18,7 @@ test('categories constrain results and unmatched searches stay empty',()=>{
   assert.equal(findTools(tools,'font','PDF').length,0)
   assert.equal(findTools(tools,'zzznomatch').length,0)
   assert.equal(findTools(tools,'  ').length,tools.length)
-  assert.equal(findTools(tools,'','Finance').length,4)
+  assert.equal(findTools(tools,'','Finance').length,5)
 })
 test('older saved entries remain searchable without descriptions or keywords',()=>{
   assert.equal(findTools([{title:'Handwriting Font',path:'/handwriting-font/',category:'Create'}],'hand writing').length,1)
@@ -36,7 +36,7 @@ const {catalog,resources}=buildToolCatalog([...pages,
 ])
 
 test('browsing lists implementations once while preserving every resource link',()=>{
-  assert.equal(catalog.length,13)
+  assert.equal(catalog.length,14)
   assert.equal(resources.length,6)
   assert.equal(findTools(catalog,'','PDF').length,5)
   assert.equal(findTools(catalog,'SIP').length,1)

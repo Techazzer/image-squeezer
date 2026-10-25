@@ -5,10 +5,10 @@ import { readFile } from 'node:fs/promises'
 
 const template = await readFile(new URL('../../tools/app-shell/service-worker.js',import.meta.url),'utf8')
 function worker(network) {
-  const events={},files=new Map([['/',new Response('cached home')],['/work-hours-calculator/',new Response('cached calculator')],['/offline/',new Response('offline instructions')],['/assets/app-test.js',new Response('app code')]])
+  const events={},files=new Map([['/',new Response('cached home')],['/work-hours-calculator/',new Response('cached calculator')],['/bill-splitter/',new Response('cached splitter')],['/offline/',new Response('offline instructions')],['/assets/app-test.js',new Response('app code')]])
   const cache={match:async path=>files.get(path)?.clone(),put:async(path,response)=>files.set(path,response),addAll:async()=>{}}
   const scope={self:{location:{origin:'https://aeroniqx.in'},addEventListener:(name,fn)=>events[name]=fn,clients:{claim:async()=>{}}},caches:{open:async()=>cache},URL,Response,fetch:network}
-  vm.runInNewContext(template.replace('__VERSION__','test').replace('__PRECACHE__',JSON.stringify(['/','/offline/','/work-hours-calculator/','/assets/app-test.js'])),scope)
+  vm.runInNewContext(template.replace('__VERSION__','test').replace('__PRECACHE__',JSON.stringify(['/','/offline/','/work-hours-calculator/','/bill-splitter/','/assets/app-test.js'])),scope)
   function request(path,options={}){let response;events.fetch({request:{url:new URL(path,'https://aeroniqx.in').href,method:'GET',mode:'navigate',...options},respondWith:promise=>response=promise});return response}
   return {request,files}
 }
@@ -16,6 +16,7 @@ test('offline calculator and homepage remain available, other routes show an hon
   const w=worker(async()=>{throw Error('offline')})
   assert.equal(await (await w.request('/work-hours-calculator/')).text(),'cached calculator')
   assert.equal(await (await w.request('/')).text(),'cached home')
+  assert.equal(await (await w.request('/bill-splitter/')).text(),'cached splitter')
   assert.equal(await (await w.request('/pdf-merge/')).text(),'offline instructions')
 })
 test('online navigation is fresh while offline HTML stays paired with installed assets',async()=>{

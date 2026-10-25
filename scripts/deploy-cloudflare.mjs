@@ -35,7 +35,7 @@ const deploymentUrl = result.stdout.match(/https:\/\/[a-f0-9]+\.image-resizer-66
 if (!deploymentUrl) throw new Error('Deployment completed but its immutable URL could not be read. Inspect Wrangler output before retrying.')
 
 const build = JSON.parse(await readFile('deployment/build.json', 'utf8'))
-const assetPaths = [build.entryBundle, build.pdfChunk, build.updatesCss, ...build.calculatorAssets, ...build.mobileApp.assets]
+const assetPaths = [build.entryBundle, build.pdfChunk, build.updatesCss, ...build.calculatorAssets, ...build.billSplitterAssets, ...build.mobileApp.assets]
 const expectedHashes = new Map(await Promise.all(assetPaths.map(async file => [file, sha256(await readFile(`dist/${file}`))])))
 const homeTitle = (await readFile('dist/index.html', 'utf8')).match(/<title>([^<]+)<\/title>/)[1]
 
@@ -57,6 +57,9 @@ async function verify(origin) {
   if (!guides.ok || !guidesHtml.includes(build.mobileApp.script) || !guidesHtml.includes('platform-resource-list')) throw new Error(`Guides and presets are missing at ${origin}`)
   const calculator = await fetch(`${origin}/work-hours-calculator/`, { signal: AbortSignal.timeout(20000) })
   if (!calculator.ok || !(await calculator.text()).includes('id="calculator-ui"')) throw new Error(`Calculator is unavailable at ${origin}`)
+  const splitter = await fetch(`${origin}/bill-splitter/`, { signal: AbortSignal.timeout(20000) })
+  const splitterHtml = await splitter.text()
+  if (!splitter.ok || !splitterHtml.includes('id="bs-app"') || !splitterHtml.includes(build.billSplitterAssets.find(f => /\/split-[a-f0-9]+\.js$/.test(f)).split('/')[1])) throw new Error(`Bill Splitter is not serving this release at ${origin}`)
   for (const [file, expected] of expectedHashes) {
     const response = await fetch(`${origin}/${file}`, { signal: AbortSignal.timeout(20000) })
     if (!response.ok || sha256(Buffer.from(await response.arrayBuffer())) !== expected) throw new Error(`Release asset mismatch: ${origin}/${file}`)

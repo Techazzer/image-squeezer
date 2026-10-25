@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Free Bill Splitter & Shared Expense Calculator | Aeroniqx</title>
+  <meta name="description" content="Split a bill or settle shared expenses with friends. Choose equal, percentage or exact splits, see who owes whom, and share the result. Free, no ads or login.">
+  <link rel="canonical" href="https://aeroniqx.in/bill-splitter/">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <meta property="og:title" content="Bill Splitter & Shared Expense Calculator | Aeroniqx">
+  <meta property="og:description" content="One bill or a whole trip. Split expenses, see who pays whom, and share a clear summary. Free, with no ads or login.">
+  <meta property="og:url" content="https://aeroniqx.in/bill-splitter/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary">
+  <link rel="stylesheet" href="./split.css">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Bill Splitter & Shared Expense Calculator","url":"https://aeroniqx.in/bill-splitter/","description":"Split bills equally, by percentage or exact amounts, and calculate who owes whom across shared expenses.","applicationCategory":"FinanceApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","offers":{"@type":"Offer","price":"0","priceCurrency":"INR"}}</script>
+  <script type="module" src="./split.js"></script>
+</head>
+<body class="platform-page bs-page">
+  <a class="platform-skip" href="#main">Skip to calculator</a>
+  <!--SITE_HEADER-->
+  <main class="bs-main" id="main">
+    <section class="bs-hero">
+      <p class="platform-eyebrow">LESS MATH. MORE GOOD TIMES.</p>
+      <h1>Bill Splitter <span>&amp; Shared Expenses</span></h1>
+      <p>One bill or a whole trip. Find out who pays whom.</p>
+      <div class="bs-promise"><span>Free · No ads · No login</span><span>Calculated on your device</span></div>
+    </section>
+    <noscript><p class="bs-notice">Enable JavaScript to calculate your split. Your expense details stay in your browser unless you choose to share or export them.</p></noscript>
+    <div id="bs-app" inert aria-busy="true">
+      <div class="bs-mode" role="group" aria-label="Calculator mode"><button id="mode-quick" type="button" aria-pressed="true">Quick bill</button><button id="mode-group" type="button" aria-pressed="false">Shared expenses</button></div>
+      <p class="bs-mode-help" id="mode-help">Split one payment. Choose the people, amount and who paid.</p>
+      <div class="bs-layout">
+        <div class="bs-editor">
+          <section class="bs-card" aria-labelledby="people-heading">
+            <div class="bs-card-head"><h2 id="people-heading">Who’s sharing?</h2><button class="bs-text" id="try-example" type="button">Try an example</button></div>
+            <div class="bs-settings"><label class="bs-field">Currency<select id="bs-currency"><option value="INR">INR · ₹</option><option value="USD">USD · $</option><option value="EUR">EUR · €</option><option value="GBP">GBP · £</option><option value="CAD">CAD · $</option><option value="AUD">AUD · $</option><option value="AED">AED · د.إ</option><option value="SGD">SGD · $</option></select></label><label class="bs-field">Group name <span class="bs-optional">(optional)</span><input id="group-name" maxlength="80" autocomplete="off" placeholder="e.g. Weekend away"></label></div>
+            <div id="people-list" class="bs-people"></div>
+            <button class="bs-secondary" id="add-person" type="button">+ Add person</button>
+            <p id="people-error" class="bs-error" role="alert" hidden></p>
+          </section>
+
+          <section class="bs-card" aria-labelledby="expense-heading">
+            <div class="bs-card-head"><h2 id="expense-heading">The bill</h2><span id="editing-tag" class="bs-tag" hidden>Editing</span></div>
+            <form id="expense-form" novalidate>
+              <div class="bs-amount-row"><label class="bs-field bs-amount-field">Bill total <span id="amount-currency">INR</span><input id="expense-amount" type="text" inputmode="decimal" maxlength="30" autocomplete="off" placeholder="0.00" aria-describedby="expense-error"></label><label class="bs-field">Paid by<select id="expense-payer"></select></label></div>
+              <label class="bs-field bs-description">What was it for? <span class="bs-optional">(optional)</span><input id="expense-description" maxlength="100" autocomplete="off" placeholder="e.g. Dinner, groceries or hotel"></label>
+              <div class="bs-split-head"><label class="bs-field">Split method<select id="split-method"><option value="equal">Equally</option><option value="percent">By percentage</option><option value="exact">By exact amounts</option></select></label><p id="split-help">Choose who shares this expense.</p></div>
+              <fieldset class="bs-participants"><legend class="bs-sr">People included and their shares</legend><div id="participant-list"></div></fieldset>
+              <p id="split-check" class="bs-small"></p>
+              <p id="expense-error" class="bs-error" role="alert" hidden></p>
+              <div class="bs-form-actions"><button class="bs-primary" type="submit" id="expense-submit">See the split <span aria-hidden="true">→</span></button><button class="bs-secondary" id="cancel-edit" type="button" hidden>Cancel edit</button></div>
+            </form>
+          </section>
+
+
+        </div>
+
+        <aside class="bs-summary" id="split-result" tabindex="-1" aria-labelledby="result-heading">
+          <div class="bs-summary-top"><p id="result-label">BILL TOTAL</p><h2 id="result-heading">Your split, simplified.</h2><strong id="result-total">—</strong><p id="result-meta">Add an amount to get started.</p></div>
+          <div class="bs-summary-body"><h3>Who pays whom</h3><div id="settlements"><p class="bs-empty">Your settlement will appear here.</p></div><p class="bs-small" id="settlement-note">Suggested transfers only. No payments are sent.</p>
+            <details id="balance-details"><summary>Each person’s breakdown</summary><div id="balances"></div></details>
+            <div class="bs-share-actions"><button class="bs-primary" id="share-summary" type="button" disabled>Share summary</button><button class="bs-secondary" id="copy-summary" type="button" disabled>Copy summary</button></div>
+            <p class="bs-small">Share through your phone’s apps, or copy the text into WhatsApp or a message.</p>
+            <button class="bs-secondary bs-another" id="add-another" type="button" hidden>+ Add another expense</button>
+          </div>
+        </aside>
+          <section class="bs-card" id="expense-history" aria-labelledby="history-heading" hidden>
+            <div class="bs-card-head"><h2 id="history-heading">Expenses</h2><span id="expense-count" class="bs-small">0 added</span></div>
+            <div id="expense-list"></div>
+          </section>
+      </div>
+
+      <details class="bs-storage bs-card"><summary>Save, restore &amp; start fresh</summary><div class="bs-storage-body"><label class="bs-save-choice"><input type="checkbox" id="remember-group"> Remember this on this device</label><p class="bs-small">Optional saving in this browser only. Clearing browser data removes it. Download a backup to keep an editable copy. Unadded shared expenses are drafts and are not saved.</p><div class="bs-storage-actions"><button id="download-backup" class="bs-secondary" type="button">Download backup</button><button id="restore-backup" class="bs-secondary" type="button">Restore backup</button><button id="start-fresh" class="bs-text bs-danger" type="button">Start fresh</button><input id="backup-file" type="file" accept=".json,application/json" hidden></div><p id="save-status" class="bs-small" role="status">Not saved on this device.</p></div></details>
+      <p id="bs-status" class="bs-status" role="status" aria-live="polite"></p>
+      <button id="undo-delete" class="bs-secondary" type="button" hidden>Undo last deletion</button>
+    </div>
+
+    <section class="bs-guide" aria-labelledby="how-heading"><h2 id="how-heading">From shared costs to a clear plan</h2><div class="bs-how"><div><span>01</span><h3>Add your people</h3><p>Use names everyone recognizes and one currency for the group.</p></div><div><span>02</span><h3>Enter who paid</h3><p>Split equally, by percentage, or by exact amounts. Leave people out of expenses they didn’t share.</p></div><div><span>03</span><h3>Share the settlement</h3><p>We combine the balances into a short list of transfers, ready to send to your group.</p></div></div></section>
+    <section class="bs-faq" aria-labelledby="faq-heading"><h2 id="faq-heading">Good to know</h2>
+      <details><summary>How do you calculate who owes whom?</summary><p>For each person, we subtract their share of all expenses from the amount they paid. A positive balance means they should receive money; a negative balance means they owe money. We then match these balances into suggested transfers. Someone may pay a person who didn’t directly pay their original bill.</p></details>
+      <details><summary>How do uneven splits and rounding work?</summary><p>Choose percentages that total 100%, or exact amounts that total the bill. We calculate using whole paise or cents. For equal or percentage splits, leftover paise or cents go to the largest fractional shares, with ties following the displayed participant order. For example, ₹100 split three ways becomes ₹33.34, ₹33.33 and ₹33.33.</p></details>
+      <details><summary>Can I split rent or household expenses by income?</summary><p>Yes. Enter your agreed percentages using “By percentage.” For example, a 60/40 split of ₹20,000 is ₹12,000 and ₹8,000. The calculator applies the arrangement you choose; it does not decide what is fair for your household.</p></details>
+      <details><summary>Can everyone edit together or make payments here?</summary><p>This version is managed by one person in one browser. Sharing sends a text summary, not a live group link. It does not transfer money or track completed repayments. For a new settled period, keep a backup and start fresh.</p></details>
+      <details><summary>Are my expenses uploaded? Can I use it offline?</summary><p>Expense calculations and optional saved records stay on this device. Sharing and downloads happen only when you choose them. Keep a backup because browser storage can be cleared. Once Aeroniqx has finished saving its app files during a connected visit, this calculator is available offline too.</p></details>
+      <details><summary>Can I mix currencies or include tips and taxes?</summary><p>Use one currency per group; changing the currency does not convert amounts. Include any tip or tax in the total you enter. For mixed-currency expenses, convert them to your chosen group currency first. Each group supports up to 50 people and 500 expenses.</p></details>
+      <p class="bs-related">More useful tools: <a href="/work-hours-calculator/">Work Hours &amp; Timesheet</a> · <a href="/gst-calculator/">GST Calculator</a> · <a href="/tools/">All tools</a></p>
+    </section>
+  </main>
+  <!--SITE_FOOTER-->
+  <dialog id="bs-confirm" class="bs-confirm" aria-labelledby="confirm-title"><h2 id="confirm-title">Replace current details?</h2><p id="confirm-message"></p><div><button class="bs-secondary" id="confirm-cancel" type="button" autofocus>Cancel</button><button class="bs-primary" id="confirm-accept" type="button">Continue</button></div></dialog>
+  <dialog id="bs-copy-dialog" class="bs-confirm" aria-labelledby="copy-title"><h2 id="copy-title">Your summary</h2><p>Select and copy this text to share it.</p><textarea id="summary-text" readonly aria-label="Summary to copy"></textarea><button class="bs-secondary" id="copy-close" type="button">Done</button></dialog>
+</body>
+</html>

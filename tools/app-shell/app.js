@@ -29,7 +29,7 @@
     const core = catalog && canonicalTool(catalog,path)
     if (core) return {path:core.path,title:core.title,category:core.category}
     const title = document.querySelector('h1')?.textContent.trim().replace(/\s+/g,' ') || document.title.split(' | ')[0]
-    return { path, title: title.slice(0,160), category: /work-hours/.test(path)?'Work':/calculator/.test(path)?'Finance':/pdf/.test(path)?'PDF':/handwriting/.test(path)?'Create':/drive/.test(path)?'Files':'Image' }
+    return { path, title: title.slice(0,160), category: /work-hours/.test(path)?'Work':/calculator|bill-splitter/.test(path)?'Finance':/pdf/.test(path)?'PDF':/handwriting/.test(path)?'Create':/drive/.test(path)?'Files':'Image' }
   }
   function syncRoute() {
     const tool = currentTool()

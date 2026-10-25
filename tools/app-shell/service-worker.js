@@ -1,7 +1,7 @@
 const CACHE = 'aeroniqx-app-__VERSION__'
 const PRECACHE = __PRECACHE__
 const OFFLINE = '/offline/'
-const DOCUMENTS = new Set(['/', '/work-hours-calculator/'])
+const DOCUMENTS = new Set(['/', '/work-hours-calculator/', '/bill-splitter/'])
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(PRECACHE)))
   // Activate updates after existing tabs close; never reload an in-progress tool.

@@ -8,6 +8,7 @@ import { addMobileApp } from './mobile-app.mjs'
 import { renderShiftRows } from '../tools/work-hours/timesheet-view.js'
 import { parseAppTarget } from '../tools/app-shell/search.js'
 import { categories, coreTools } from './tool-content.mjs'
+import { buildBillSplitter } from './build-bill-splitter.mjs'
 
 const root = fileURLToPath(new URL('../', import.meta.url))
 const baseline = path.join(root, 'legacy-site')
@@ -105,12 +106,13 @@ for (const [file, source] of calculatorSources) await writeFile(path.join(toolDi
 const html = versionCalculator((await readFile(path.join(toolDir, 'index.html'), 'utf8')).replace('<!--SITE_HEADER-->', header).replace('<!--SITE_FOOTER-->', footer).replace('<!--SHIFT_ROWS-->', renderShiftRows()).replace('assets/aeroniqx-updates.css', updatesCssName))
 await writeFile(path.join(toolDir, 'index.html'), html)
 
+const billSplitterAssets = await buildBillSplitter(root, dist)
 const seo = await addSearchContent(root, dist)
 await optimizeHomepage(dist)
 const calculatorAssets = [...calculatorNames.values()].map(file => `work-hours-calculator/${file}`)
-const mobileApp = await addMobileApp(root, dist, { calculatorAssets, updatesCss: updatesCssName })
+const mobileApp = await addMobileApp(root, dist, { calculatorAssets, billSplitterAssets, updatesCss: updatesCssName })
 seo.sitemapPages = await writeSitemap(dist)
 for (const file of ['_headers', '_redirects']) await cp(path.join(root, 'deployment', file), path.join(dist, file))
 await mkdir(path.join(root, 'deployment'), { recursive: true })
-await writeFile(path.join(root, 'deployment/build.json'), JSON.stringify({ baselineDeployment: manifest.deploymentId, baselineFiles: manifest.files.length, entryBundle: bundleName, pdfChunk: pdfChunkName, updatesCss: updatesCssName, calculatorAssets, mobileApp, calculator: '/work-hours-calculator/' }, null, 2) + '\n')
-console.log(`Built ${manifest.files.length} preserved paths plus Work Hours & Timesheet Calculator. Entry: ${bundleName}. Prerendered ${seo.prerendered} pages; sitemap contains ${seo.sitemapPages} pages.`)
+await writeFile(path.join(root, 'deployment/build.json'), JSON.stringify({ baselineDeployment: manifest.deploymentId, baselineFiles: manifest.files.length, entryBundle: bundleName, pdfChunk: pdfChunkName, updatesCss: updatesCssName, calculatorAssets, billSplitterAssets, mobileApp, calculator: '/work-hours-calculator/' }, null, 2) + '\n')
+console.log(`Built ${manifest.files.length} preserved paths plus Work Hours and Bill Splitter. Entry: ${bundleName}. Prerendered ${seo.prerendered} pages; sitemap contains ${seo.sitemapPages} pages.`)
