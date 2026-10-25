@@ -1,8 +1,8 @@
 {
   "baselineDeployment": "312c5019-ce54-4b5d-a127-ce84018f3a5a",
   "baselineFiles": 104,
-  "entryBundle": "assets/index-5dd0413376e7.js",
-  "pdfChunk": "assets/index.es-5dd0413376e7.js",
+  "entryBundle": "assets/index-3959b7fa7c52.js",
+  "pdfChunk": "assets/index.es-3959b7fa7c52.js",
   "updatesCss": "assets/aeroniqx-updates-454b44599fcb.css",
   "calculatorAssets": [
     "work-hours-calculator/timesheet-ad1bf4562245.js",
@@ -12,9 +12,9 @@
   ],
   "mobileApp": {
     "assets": [
-      "assets/mobile-app-ee2a6bd190a1.css",
-      "assets/mobile-app-291dba7be409.js",
-      "assets/app-catalog-55d1675d3b8e.json",
+      "assets/mobile-app-9a2201a7d918.css",
+      "assets/mobile-app-bb78f08985f0.js",
+      "assets/app-catalog-4ae436acf606.json",
       "manifest.webmanifest",
       "assets/app-icons/icon-192.png",
       "assets/app-icons/icon-512.png",
@@ -23,9 +23,9 @@
       "service-worker.js",
       "offline/index.html"
     ],
-    "script": "assets/mobile-app-291dba7be409.js",
-    "catalog": "assets/app-catalog-55d1675d3b8e.json",
-    "version": "713e329c224d",
+    "script": "assets/mobile-app-bb78f08985f0.js",
+    "catalog": "assets/app-catalog-4ae436acf606.json",
+    "version": "542d59dd2656",
     "tools": 85
   },
   "calculator": "/work-hours-calculator/"

@@ -26,7 +26,7 @@ const tool = await readFile('dist/work-hours-calculator/index.html', 'utf8')
 assert.doesNotMatch(tool, /<!--SHIFT_ROWS-->|id="calculator-ui" hidden/)
 assert.equal([...tool.matchAll(/class="wh-shift"/g)].length, 7, 'All seven rows have initial layout space')
 const home = await readFile('dist/index.html', 'utf8')
-assert.ok(home.includes(build.updatesCss) && tool.includes(build.updatesCss), 'Both pages use the current stylesheet version')
+assert.ok(tool.includes(build.updatesCss), 'Calculator uses the current shared stylesheet version')
 for (const file of build.calculatorAssets) {
   const source = await readFile(`dist/${file}`, 'utf8')
   if (file.endsWith('.js')) {
@@ -37,7 +37,10 @@ for (const file of build.calculatorAssets) {
 assert.doesNotMatch(tool, /(?:href|src)="\.\/timesheet\.(?:js|css)"/, 'Calculator entry assets are versioned')
 assert.doesNotMatch(home, /mobile-drawer|src="\/assets\/index-/, 'Homepage does not require the legacy tool application')
 assert.equal([...home.matchAll(/<script[^>]*src="([^"]+)"/g)].map(m=>m[1]).join(','), '/'+build.mobileApp.script, 'Only the small app shell runs on the homepage')
-assert.match(home, /<details class="faq-item">/, 'FAQ works without JavaScript')
+assert.match(home, /<details class="platform-about-summary">/, 'About and common answers work without JavaScript')
+assert.equal([...home.matchAll(/class="platform-tool"/g)].length,6,'Homepage shows six curated tools')
+assert.doesNotMatch(home,/class="tool-grid"|Compress Now|FREE TOOLS/, 'Homepage is the focused platform layout')
+const directory = await readFile('dist/tools/index.html','utf8')
 const webmanifest = JSON.parse(await readFile('dist/manifest.webmanifest','utf8'))
 assert.equal(webmanifest.display, 'standalone')
 assert.equal(webmanifest.scope, '/')
@@ -52,7 +55,10 @@ for(const icon of webmanifest.icons) {
 for(const file of [build.mobileApp.script,'service-worker.js']) assert.equal(spawnSync(process.execPath,['--check',`dist/${file}`],{encoding:'utf8'}).status,0,`App script parses: ${file}`)
 const catalog = JSON.parse(await readFile(`dist/${build.mobileApp.catalog}`,'utf8'))
 assert.equal(new Set(catalog.map(t=>t.path)).size,catalog.length,'Tool catalog paths are unique')
-for(const entry of catalog) assert.ok((await stat(`dist${entry.path}index.html`)).isFile(),`App tool exists: ${entry.path}`)
+for(const entry of catalog) {
+  assert.ok((await stat(`dist${entry.path}index.html`)).isFile(),`App tool exists: ${entry.path}`)
+  assert.ok(directory.includes(`href="${entry.path}"`),`Directory has a crawlable tool link: ${entry.path}`)
+}
 assert.doesNotMatch(tool, /<!--SITE_(?:HEADER|FOOTER)-->/)
 assert.match(tool, /canonical" href="https:\/\/aeroniqx.in\/work-hours-calculator\//)
 assert.match(await readFile('dist/sitemap.xml','utf8'), /https:\/\/aeroniqx.in\/work-hours-calculator\//)

@@ -1,4 +1,5 @@
 (() => {
+  /* SEARCH_HELPERS */
   if (new URLSearchParams(location.search).get('embed') === '1') {
     document.documentElement.dataset.aeroEmbed = 'true'
     return
@@ -7,7 +8,7 @@
   const library = $('aero-library'), install = $('aero-install')
   if (!library || !install) return
   const storageKey = 'aeroniqx.saved-tools.v1'
-  const icons = { Image:'image', PDF:'file', Work:'clock', Finance:'calculator', More:'grid' }
+  const icons = { Image:'image', PDF:'file', Work:'clock', Finance:'calculator', Create:'pen', Files:'folder' }
   const icon = name => `<svg class="aero-icon" aria-hidden="true"><use href="#aero-symbol-${name}"></use></svg>`
   let saved = [], catalog, catalogRequest, activeCategory = 'All', savedOnly = false, installPrompt, lastPath, lastFocus
   try {
@@ -24,9 +25,9 @@
   }
   function currentTool() {
     const path = location.pathname.replace(/\/?$/, '/')
-    if (['/','/about/','/privacy/','/offline/'].includes(path)) return null
+    if (['/','/tools/','/about/','/privacy/','/offline/'].includes(path)||path.startsWith('/how-to-')) return null
     const title = document.querySelector('h1')?.textContent.trim().replace(/\s+/g,' ') || document.title.split(' | ')[0]
-    return { path, title: title.slice(0,160), category: /work-hours/.test(path)?'Work':/calculator/.test(path)?'Finance':/pdf/.test(path)?'PDF':/drive|handwriting/.test(path)?'More':'Image' }
+    return { path, title: title.slice(0,160), category: /work-hours/.test(path)?'Work':/calculator/.test(path)?'Finance':/pdf/.test(path)?'PDF':/handwriting/.test(path)?'Create':/drive/.test(path)?'Files':'Image' }
   }
   function syncRoute() {
     const tool = currentTool()
@@ -37,8 +38,8 @@
     $('aero-back').hidden = !tool
     $('aero-home-label').hidden = !!tool
     $('aero-save-page').hidden = !tool
-    $('aero-nav-home').toggleAttribute('aria-current', !tool)
-    if (!tool) $('aero-nav-home').setAttribute('aria-current','page')
+    $('aero-nav-home').removeAttribute('aria-current')
+    if (location.pathname==='/') $('aero-nav-home').setAttribute('aria-current','page')
     if (tool) {
       const isSaved = saved.some(t=>t.path===tool.path)
       $('aero-save-page').setAttribute('aria-pressed',String(isSaved))
@@ -61,38 +62,52 @@
   }
   function renderLibrary() {
     const query = $('aero-search').value.trim().toLowerCase()
-    const source = savedOnly ? saved : catalog || []
-    const matches = source.filter(t=>(activeCategory==='All'||t.category===activeCategory) && `${t.title} ${t.path} ${t.category}`.toLowerCase().includes(query))
+    const source = savedOnly ? saved.map(t=>catalog?.find(c=>c.path===t.path)||t) : catalog || []
+    const matches = findTools(source,query,activeCategory)
     $('aero-result-count').textContent = `${matches.length} ${matches.length===1?'tool':'tools'}${savedOnly?' saved on this device':''}`
-    $('aero-library-list').innerHTML = matches.length ? matches.map(t=>`<div class="aero-library-row"><a class="aero-library-link" href="${escape(t.path)}"><span class="aero-tool-symbol" data-kind="${escape(t.category)}">${icon(icons[t.category]||'grid')}</span><span><strong>${escape(t.title)}</strong><small>${escape(t.category)} tools</small></span></a><button class="aero-icon-button" type="button" data-save-path="${escape(t.path)}" aria-label="${saved.some(s=>s.path===t.path)?'Unsave':'Save'} ${escape(t.title)}" aria-pressed="${saved.some(s=>s.path===t.path)}">${icon('bookmark')}</button></div>`).join('') : `<p class="aero-empty">${savedOnly&&!saved.length?'Your everyday tools, one tap away.<br>Use the bookmark beside a tool to save it here.':'No tools match. Try a different name or category.'}</p>`
+    $('aero-library-list').innerHTML = matches.length ? matches.map(t=>`<div class="aero-library-row"><a class="aero-library-link" href="${escape(t.path)}"><span class="aero-tool-symbol" data-kind="${escape(t.category)}">${icon(icons[t.category]||'grid')}</span><span><strong>${escape(t.title)}</strong><small>${escape(t.description||t.category+' tools')}</small></span></a><button class="aero-icon-button" type="button" data-save-path="${escape(t.path)}" aria-label="${saved.some(s=>s.path===t.path)?'Unsave':'Save'} ${escape(t.title)}" aria-pressed="${saved.some(s=>s.path===t.path)}">${icon('bookmark')}</button></div>`).join('') : `<p class="aero-empty">${savedOnly&&!saved.length?'Your everyday tools, one tap away.<br>Use the bookmark beside a tool to save it here.':'No tools match yet.<br>Try a shorter phrase or choose All.'}</p>`
   }
+  function fitLibrary() {
+    if (!library.open) return
+    const viewport=window.visualViewport
+    library.style.setProperty('--aero-vv-height',`${viewport?.height||window.innerHeight}px`)
+    library.style.setProperty('--aero-vv-top',`${viewport?.offsetTop||0}px`)
+  }
+  let viewportFrame
+  function scheduleFit() { cancelAnimationFrame(viewportFrame);viewportFrame=requestAnimationFrame(fitLibrary) }
+  window.visualViewport?.addEventListener('resize',scheduleFit)
+  window.visualViewport?.addEventListener('scroll',scheduleFit)
+  window.addEventListener('resize',scheduleFit)
   function showDialog(dialog) {
     lastFocus = document.activeElement
     dialog.showModal()
     document.documentElement.style.overflow = 'hidden'
+    if(dialog===library)fitLibrary()
   }
   for (const dialog of [library,install]) {
     dialog.addEventListener('close',()=>{document.documentElement.style.overflow='';lastFocus?.focus()})
     dialog.addEventListener('click',event=>{if(event.target===dialog){const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)dialog.close()}})
     dialog.querySelector('[data-close]').addEventListener('click',()=>dialog.close())
   }
-  async function openLibrary(onlySaved=false) {
-    savedOnly=onlySaved;activeCategory='All';$('aero-search').value=''
+  async function openLibrary(onlySaved=false,category='All',focusSearch=false) {
+    savedOnly=onlySaved;activeCategory=category;$('aero-search').value=''
     $('aero-library-title').textContent=onlySaved?'Saved tools':'Find your tool'
-    library.querySelectorAll('[data-category]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.category==='All')))
+    library.querySelectorAll('[data-category]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.category===category)))
     $('aero-library-list').innerHTML='<p class="aero-empty">Loading tools…</p>'
     $('aero-result-count').textContent=''
     showDialog(library)
-    // Avoid raising a phone keyboard until the user chooses to search.
-    if(matchMedia('(min-width:721px)').matches) $('aero-search').focus()
-    if (onlySaved) { renderLibrary(); return }
-    try { await getCatalog(); if(library.open&&!savedOnly)renderLibrary() }
-    catch { $('aero-library-list').innerHTML='<p class="aero-empty">The tool library could not load. <a href="/#tools">Browse tools on the homepage</a>, or try again when connected.</p>' }
+    // Keep this synchronous with the visitor's tap so iOS can open its keyboard.
+    if(focusSearch||matchMedia('(min-width:721px)').matches) $('aero-search').focus({preventScroll:true})
+    if (onlySaved) renderLibrary()
+    try { await getCatalog(); if(library.open)renderLibrary() }
+    catch { if(!savedOnly)$('aero-library-list').innerHTML='<p class="aero-empty">The tool library could not load. <a href="/tools/">Browse all tools</a>, or try again when connected.</p>' }
   }
   document.querySelectorAll('[data-aero-tools]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();openLibrary()}))
+  document.querySelectorAll('[data-aero-search]').forEach(el=>el.addEventListener('click',()=>openLibrary(false,'All',true)))
+  document.querySelectorAll('[data-aero-category]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();openLibrary(false,el.dataset.aeroCategory)}))
   $('aero-nav-saved').addEventListener('click',()=>openLibrary(true))
   $('aero-save-page').addEventListener('click',()=>{const tool=currentTool();if(tool)toggleSaved(tool)})
-  $('aero-search').addEventListener('input',renderLibrary)
+  $('aero-search').addEventListener('input',()=>{renderLibrary();$('aero-library-list').scrollTop=0})
   library.querySelectorAll('[data-category]').forEach(button=>button.addEventListener('click',()=>{
     activeCategory=button.dataset.category
     library.querySelectorAll('[data-category]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)))
@@ -124,6 +139,15 @@
   syncRoute()
   window.addEventListener('popstate',syncRoute)
   const root=document.getElementById('root')
+  // The recovered tool router must load maintained platform pages from the server.
+  if(root)document.addEventListener('click',event=>{
+    const link=event.target.closest('a[href]')
+    if(!link||!root.contains(link)||event.defaultPrevented||event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey||link.target==='_blank')return
+    const url=new URL(link.href,location.href)
+    if(url.origin===location.origin&&['/','/tools/','/about/','/privacy/'].includes(url.pathname)){
+      event.preventDefault();event.stopImmediatePropagation();location.assign(url.href)
+    }
+  },true)
   if(root)new MutationObserver(()=>{if(lastPath!==location.pathname)syncRoute()}).observe(root,{childList:true,subtree:true})
   if('serviceWorker' in navigator && window.top===window) {
     const register=()=>navigator.serviceWorker.register('/service-worker.js',{updateViaCache:'none'}).catch(()=>{})

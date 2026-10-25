@@ -2,6 +2,11 @@ import { readFile, writeFile, readdir } from 'node:fs/promises'
 import path from 'node:path'
 
 export const contentReplacements = [
+  ['Aero Tools', 'Aeroniqx'],
+  ['AeroTools', 'Aeroniqx'],
+  ['Free online image & PDF tools — compress, resize, and convert 100% in your browser. No uploads. No sign-up. No watermark.', 'Useful tools for work, money, documents and creative tasks. Free to use, with no ads or Aeroniqx account.'],
+  ['Free online image, PDF & productivity tools — compress, resize, and convert 100% in your browser. No uploads. No sign-up. No watermark.', 'Useful tools for work, money, documents and creative tasks. Free to use, with no ads or Aeroniqx account.'],
+  ['All processing in your browser.', 'Everyday tools, made simple.'],
   ['/privacy-policy-generator/', '/privacy/'],
   ['We make', 'Free tools.'],
   ['files easy.', 'Every day.'],
@@ -11,7 +16,7 @@ export const contentReplacements = [
 ]
 
 const titles = {
-  home: 'Free Image, PDF & Everyday Tools | Aeroniqx',
+  home: 'Aeroniqx — Free Online Tools for Everyday Tasks',
   'image-compressor': 'Free Image Compressor & Resizer | Aeroniqx',
   'pdf-compress': 'Compress PDF Online Free — No Upload | Aeroniqx',
   'pdf-merge': 'Merge PDF Files Online Free | Aeroniqx',
@@ -72,6 +77,11 @@ export async function addSearchContent(root, dist) {
     await writeFile(path.join(dist, target), html)
   }
 
+  const sitemapPages = await writeSitemap(dist)
+  return { prerendered: entries.length, sitemapPages }
+}
+
+export async function writeSitemap(dist) {
   const pages = (await readdir(dist, { recursive: true })).filter(f => f.endsWith('.html')).sort()
   const urls = []
   for (const file of pages) {
@@ -85,5 +95,5 @@ export async function addSearchContent(root, dist) {
     urls.push(canonical)
   }
   await writeFile(path.join(dist, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(url => `  <url><loc>${escape(url)}</loc></url>`).join('\n')}\n</urlset>\n`)
-  return { prerendered: entries.length, sitemapPages: urls.length }
+  return urls.length
 }
