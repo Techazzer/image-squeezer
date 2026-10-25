@@ -41,6 +41,8 @@
     $('aero-back').hidden = !tool
     $('aero-home-label').hidden = !!tool
     $('aero-save-page').hidden = !tool
+    const desktopSave = $('aero-desktop-save')
+    if(desktopSave)desktopSave.hidden=!tool
     $('aero-nav-home').removeAttribute('aria-current')
     if (location.pathname==='/') $('aero-nav-home').setAttribute('aria-current','page')
     $('aero-nav-splitter').removeAttribute('aria-current')
@@ -49,6 +51,7 @@
       const isSaved = saved.some(t=>t.path===tool.path)
       $('aero-save-page').setAttribute('aria-pressed',String(isSaved))
       $('aero-save-page').setAttribute('aria-label',isSaved?'Remove this tool from saved':'Save this tool')
+      if(desktopSave){desktopSave.setAttribute('aria-pressed',String(isSaved));desktopSave.querySelector('span').textContent=isSaved?'Tool saved':'Save this tool'}
     }
   }
   function toggleSaved(tool) {
@@ -119,6 +122,9 @@
   document.querySelectorAll('[data-aero-tools]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();openLibrary()}))
   document.querySelectorAll('[data-aero-search]').forEach(el=>el.addEventListener('click',()=>openLibrary(false,'All',true)))
   document.querySelectorAll('[data-aero-category]').forEach(el=>el.addEventListener('click',e=>{e.preventDefault();openLibrary(false,el.dataset.aeroCategory)}))
+  /* DESKTOP_CONTROLLER */
+  document.querySelectorAll('[data-aero-saved]').forEach(el=>{el.disabled=false;el.addEventListener('click',()=>openLibrary(true))})
+  $('aero-desktop-save')?.addEventListener('click',()=>$('aero-save-page').click())
   $('aero-nav-saved').addEventListener('click',()=>openLibrary(true))
   $('aero-save-page').addEventListener('click',async()=>{try{await getCatalog()}catch{}const tool=currentTool();if(tool)toggleSaved(tool)})
   $('aero-search').addEventListener('input',()=>{renderLibrary();$('aero-library-list').scrollTop=0})
