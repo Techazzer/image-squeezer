@@ -43,7 +43,9 @@
 .aero-offline-note{display:none}
 .aero-dialog :focus-visible,.aero-app-header :focus-visible,.aero-app-nav :focus-visible{outline:2px solid #1557b0;outline-offset:3px}
 .aero-search input:focus-visible{outline:none}
-.aero-dialog [hidden],.aero-app-header [hidden],.aero-toast[hidden],.aero-install-body [hidden]{display:none!important}
+.aero-dialog [hidden],.aero-app-header [hidden],.aero-app-nav [hidden],.aero-toast[hidden],.aero-install-body [hidden]{display:none!important}
+/* Match the installed launch state before the deferred app script runs. */
+@media(display-mode:standalone){#aero-nav-install{display:none!important}#aero-nav-splitter{display:flex!important}}
 html[data-aero-embed=true] .aero-app-header,html[data-aero-embed=true] .aero-app-nav,html[data-aero-embed=true] .aero-home-search{display:none!important}
 @media(max-width:720px){
  html{scroll-padding-top:90px;scroll-padding-bottom:100px}

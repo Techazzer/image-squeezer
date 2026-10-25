@@ -42,6 +42,8 @@
     $('aero-save-page').hidden = !tool
     $('aero-nav-home').removeAttribute('aria-current')
     if (location.pathname==='/') $('aero-nav-home').setAttribute('aria-current','page')
+    $('aero-nav-splitter').removeAttribute('aria-current')
+    if (location.pathname.replace(/\/?$/, '/')==='/bill-splitter/') $('aero-nav-splitter').setAttribute('aria-current','page')
     if (tool) {
       const isSaved = saved.some(t=>t.path===tool.path)
       $('aero-save-page').setAttribute('aria-pressed',String(isSaved))
@@ -130,14 +132,27 @@
     const tool=[...(catalog||[]),...saved].find(t=>t.path===button.dataset.savePath)
     if (tool) { toggleSaved(tool); library.querySelector(`[data-save-path="${tool.path}"]`)?.focus() }
   })
-  function installed() {return matchMedia('(display-mode: standalone)').matches || navigator.standalone===true}
+  const standaloneMode = matchMedia('(display-mode: standalone)')
+  let installedThisVisit = false
+  // Browser tabs cannot reliably detect a past installation or uninstall.
+  // Use the current app context and confirmed installs, not a stale stored flag.
+  function installed() {return standaloneMode.matches || navigator.standalone===true || installedThisVisit}
   function installStatus() {
-    $('aero-install-now').hidden=!installPrompt||installed()
-    $('aero-install-guidance').hidden=installed()
-    $('aero-installed').hidden=!installed()
+    const isInstalled = installed()
+    $('aero-nav-install').hidden=isInstalled
+    $('aero-nav-splitter').hidden=!isInstalled
+    $('aero-install-now').hidden=!installPrompt||isInstalled
+    $('aero-install-guidance').hidden=isInstalled
+    $('aero-installed').hidden=!isInstalled
+    if (isInstalled && install.open) {
+      lastFocus=$('aero-nav-splitter')
+      install.close()
+    }
   }
+  standaloneMode.addEventListener('change',installStatus)
+  window.addEventListener('pageshow',installStatus)
   window.addEventListener('beforeinstallprompt',event=>{event.preventDefault();installPrompt=event;installStatus()})
-  window.addEventListener('appinstalled',()=>{installPrompt=null;installStatus();notify('Aeroniqx is ready on your home screen')})
+  window.addEventListener('appinstalled',()=>{installedThisVisit=true;installPrompt=null;installStatus();notify('Aeroniqx is ready on your home screen')})
   $('aero-nav-install').addEventListener('click',()=>{installStatus();showDialog(install)})
   $('aero-install-now').addEventListener('click',async()=>{
     if(!installPrompt)return
@@ -147,6 +162,7 @@
   function networkStatus() {$('aero-offline').dataset.offline=String(!navigator.onLine)}
   window.addEventListener('online',networkStatus);window.addEventListener('offline',networkStatus);networkStatus()
   $('aero-nav-saved').disabled=false;$('aero-nav-install').disabled=false
+  installStatus()
   syncRoute()
   if(currentTool()) getCatalog().catch(()=>{})
   window.addEventListener('popstate',syncRoute)

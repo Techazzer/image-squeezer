@@ -20,6 +20,7 @@ const glyphs = {
   file:'<path d="M14 3H5v18h14V8zM14 3v6h5M8 13h8M8 17h5"/>',
   clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 2"/>',
   calculator:'<rect x="5" y="2" width="14" height="20" rx="3"/><path d="M8 6h8M8 11h1m6 0h1M8 15h1m6 0h1M8 19h1m6 0h1"/>',
+  split:'<path d="M12 3v5m0 0L5 15v6m7-13 7 7v6M2 18l3 3 3-3m8 0 3 3 3-3"/>',
   pen:'<path d="m15 4 5 5M4 20l5-1L21 7l-4-4L5 15zM3 22h18"/>',
   folder:'<path d="M3 7V5a1 1 0 0 1 1-1h5l3 3h8a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/>'
 }
@@ -38,12 +39,14 @@ function shell(current, name) {
 <div id="aero-offline" class="aero-offline-note" role="status">You’re offline. Work Hours and Bill Splitter are available once their app files are saved.</div>`
 }
 
-function controls(isHome) {
+function controls(current) {
+  const isHome = current === '/'
   return `<nav class="aero-app-nav" aria-label="App navigation">
 <a href="/" id="aero-nav-home"${isHome?' aria-current="page"':''}>${icon('home')}<span>Home</span></a>
 <a href="/tools/" data-aero-tools>${icon('grid')}<span>Tools</span></a>
 <button type="button" id="aero-nav-saved" disabled>${icon('bookmark')}<span>Saved</span></button>
 <button type="button" id="aero-nav-install" disabled>${icon('download')}<span>Get app</span></button>
+<a href="/bill-splitter/" id="aero-nav-splitter" hidden${current==='/bill-splitter/'?' aria-current="page"':''}>${icon('split')}<span>Bill Splitter</span></a>
 </nav>
 <dialog id="aero-library" class="aero-dialog" aria-labelledby="aero-library-title">
  <div class="aero-dialog-head"><h2 id="aero-library-title">Find your tool</h2><button type="button" class="aero-icon-button" data-close aria-label="Close tool library" autofocus>${icon('close')}</button></div>
@@ -57,9 +60,9 @@ function controls(isHome) {
  <div class="aero-dialog-head"><h2 id="aero-install-title">Your toolkit. One tap away.</h2><button type="button" class="aero-icon-button" data-close aria-label="Close installation help" autofocus>${icon('close')}</button></div>
  <div class="aero-install-body"><img class="aero-install-brand" src="/assets/app-icons/icon-192.png" alt="" width="64" height="64"><p>Add Aeroniqx to your home screen and open your tools in their own app window. Free, with no account or app store download.</p>
  <button type="button" class="aero-install-button" id="aero-install-now" hidden>Install Aeroniqx</button>
- <p id="aero-installed" hidden>Aeroniqx is already running as an app on this device.</p>
+ <p id="aero-installed" hidden>Aeroniqx is installed. Open it from your home screen.</p>
  <div id="aero-install-guidance"><h3>On iPhone or iPad</h3><ol><li>Open Aeroniqx in Safari and tap <strong>Share</strong>.</li><li>Choose <strong>Add to Home Screen</strong>, then <strong>Add</strong>.</li></ol><h3>On Android</h3><p>Open your browser menu (⋮), then choose <strong>Install app</strong> or <strong>Add to Home screen</strong>. The option depends on your browser.</p></div>
- <p class="aero-local-note">Saved tools stay on this device. Work Hours can open offline after a connected visit; other tools may need an internet connection. Your files and timesheet entries are never stored by the app’s offline cache.</p></div>
+ <p class="aero-local-note">Saved tools stay on this device. Work Hours and Bill Splitter can open offline once their app files are saved during a connected visit. Other tools may need a connection. The app’s offline cache does not store your files, timesheet entries or expense records.</p></div>
 </dialog>
 <div id="aero-toast" class="aero-toast" role="status" aria-live="polite" hidden></div>`
 }
@@ -96,7 +99,7 @@ export async function addMobileApp(root, dist, { calculatorAssets, billSplitterA
       .replace(/(<meta[^>]*name="viewport"[^>]*content=")([^"]*)"/,(_,prefix,value)=>`${prefix}${value.replace(/,?\s*viewport-fit=[^,]+/,'')}, viewport-fit=cover, interactive-widget=resizes-content"`)
       .replace('</head>',`<meta name="theme-color" content="#ffffff"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Aeroniqx"><link rel="manifest" href="/manifest.webmanifest"><link rel="apple-touch-icon" href="/assets/app-icons/apple-touch-icon.png"><link rel="stylesheet" href="/${cssFile}"><script src="/${jsFile}" defer></script>\n</head>`)
       .replace(/<body([^>]*)>/,(_,attrs)=>`<body${attrs}>${shell(url,title)}`)
-      .replace('</body>',controls(url==='/')+'\n</body>')
+      .replace('</body>',controls(url)+'\n</body>')
     await writeFile(path.join(dist,file),html)
   }
   await mkdir(path.join(dist,'offline'),{recursive:true})
