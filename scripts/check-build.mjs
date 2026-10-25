@@ -27,6 +27,18 @@ const tool = await readFile('dist/work-hours-calculator/index.html', 'utf8')
 assert.doesNotMatch(tool, /<!--SHIFT_ROWS-->|id="calculator-ui" hidden/)
 assert.equal([...tool.matchAll(/class="wh-shift"/g)].length, 7, 'All seven rows have initial layout space')
 const home = await readFile('dist/index.html', 'utf8')
+const splitter = await readFile('dist/bill-splitter/index.html', 'utf8')
+assert.doesNotMatch(splitter, /<!--SITE_|src="https?:|<iframe|\.\/split\.(?:js|css)/)
+assert.match(splitter, /id="bs-app"/)
+assert.match(home, /href="\/bill-splitter\/"/, 'Bill Splitter is featured on the homepage')
+for (const file of build.billSplitterAssets) {
+  const source = await readFile(`dist/${file}`, 'utf8')
+  if (file.endsWith('.js')) {
+    assert.equal(spawnSync(process.execPath, ['--check', `dist/${file}`], { encoding: 'utf8' }).status, 0, `Bill Splitter module parses: ${file}`)
+    for (const [, dependency] of source.matchAll(/from ['"]\.\/([^'"]+)['"]/g)) assert.ok((await stat(`dist/bill-splitter/${dependency}`)).isFile(), `Bill Splitter module exists: ${dependency}`)
+  }
+  assert.ok((await readFile('dist/service-worker.js', 'utf8')).includes('/' + file), `Bill Splitter asset is available offline: ${file}`)
+}
 assert.ok(tool.includes(build.updatesCss), 'Calculator uses the current shared stylesheet version')
 for (const file of build.calculatorAssets) {
   const source = await readFile(`dist/${file}`, 'utf8')

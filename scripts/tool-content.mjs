@@ -1,6 +1,6 @@
 export const categories = [
   {id:'Work',label:'Work & time',icon:'clock',description:'Plan your week and calculate working hours.'},
-  {id:'Finance',label:'Money',icon:'calculator',description:'Estimate payments, taxes, salary and savings.'},
+  {id:'Finance',label:'Money',icon:'calculator',description:'Split shared expenses and estimate payments, taxes, salary and savings.'},
   {id:'PDF',label:'PDFs',icon:'file',description:'Combine, split, convert and reduce documents.'},
   {id:'Image',label:'Images',icon:'image',description:'Resize, compress and prepare photos.'},
   {id:'Create',label:'Creative',icon:'pen',description:'Turn your handwriting into something reusable.'},
@@ -9,6 +9,7 @@ export const categories = [
 
 // Editorial descriptions, not usage rankings. Keep claims tied to shipped tools.
 export const coreTools = {
+  '/bill-splitter/': {title:'Bill Splitter & Shared Expenses',category:'Finance',description:'Split bills and trip costs. See who pays whom and share the result.',keywords:'bill splitter shared expense group trip travel dinner restaurant roommates rent household unequal percentage exact amount settle settlement who owes whom money friends'},
   '/work-hours-calculator/': {title:'Work Hours & Timesheet',category:'Work',description:'Add shifts and breaks. Get hours, overtime and estimated pay.',keywords:'time sheet timecard work hours clock overtime weekly wages hours worked'},
   '/handwriting-font/': {title:'Handwriting Font Generator',category:'Create',description:'Turn your own handwriting into a downloadable font.',keywords:'hand writing personal custom font letters ttf create text'},
   '/emi-calculator/': {title:'EMI Calculator',category:'Finance',description:'Estimate monthly loan payments and total interest.',keywords:'loan monthly payment mortgage interest repayment money'},
@@ -24,4 +25,4 @@ export const coreTools = {
   '/drive-folder-copy/': {title:'Google Drive Folder Copy',category:'Files',description:'Copy Drive folders between connected Google accounts.',keywords:'copy transfer google drive files folders account backup'},
 }
 
-export const featuredPaths = ['/work-hours-calculator/','/handwriting-font/','/pdf-merge/','/image-compressor/','/emi-calculator/','/gst-calculator/']
+export const featuredPaths = ['/bill-splitter/','/work-hours-calculator/','/handwriting-font/','/pdf-merge/','/image-compressor/','/emi-calculator/']
