@@ -28,15 +28,15 @@
     </section>
     <noscript><p class="bs-notice">Enable JavaScript to calculate your split. Your expense details stay in your browser unless you choose to share or export them.</p></noscript>
     <div id="bs-app" inert aria-busy="true">
-      <div class="bs-mode" role="group" aria-label="Calculator mode"><button id="mode-quick" type="button" aria-pressed="true">Quick bill</button><button id="mode-group" type="button" aria-pressed="false">Shared expenses</button></div>
+      <div class="bs-mode" role="group" aria-label="Calculator mode"><button id="mode-quick" type="button" aria-pressed="true">Quick Split</button><button id="mode-group" type="button" aria-pressed="false">Shared Split</button></div>
       <p class="bs-mode-help" id="mode-help">Split one payment. Choose the people, amount and who paid.</p>
       <div class="bs-layout">
         <div class="bs-editor">
           <section class="bs-card" aria-labelledby="people-heading">
             <div class="bs-card-head"><h2 id="people-heading">Who’s sharing?</h2><button class="bs-text" id="try-example" type="button">Try an example</button></div>
             <div class="bs-settings"><label class="bs-field">Currency<select id="bs-currency"><option value="INR">INR · ₹</option><option value="USD">USD · $</option><option value="EUR">EUR · €</option><option value="GBP">GBP · £</option><option value="CAD">CAD · $</option><option value="AUD">AUD · $</option><option value="AED">AED · د.إ</option><option value="SGD">SGD · $</option></select></label><label class="bs-field">Group name <span class="bs-optional">(optional)</span><input id="group-name" maxlength="80" autocomplete="off" placeholder="e.g. Weekend away"></label></div>
-            <div id="people-list" class="bs-people"></div>
-            <button class="bs-secondary" id="add-person" type="button">+ Add person</button>
+            <div class="bs-people-controls"><label class="bs-field">People<select id="people-count" aria-describedby="people-error"></select></label><button class="bs-secondary" id="edit-names" type="button">Edit names</button></div>
+            <p id="people-preview" class="bs-people-preview"></p>
             <p id="people-error" class="bs-error" role="alert" hidden></p>
           </section>
 
@@ -46,7 +46,7 @@
               <div class="bs-amount-row"><label class="bs-field bs-amount-field">Bill total <span id="amount-currency">INR</span><input id="expense-amount" type="text" inputmode="decimal" maxlength="30" autocomplete="off" placeholder="0.00" aria-describedby="expense-error"></label><label class="bs-field">Paid by<select id="expense-payer"></select></label></div>
               <label class="bs-field bs-description">What was it for? <span class="bs-optional">(optional)</span><input id="expense-description" maxlength="100" autocomplete="off" placeholder="e.g. Dinner, groceries or hotel"></label>
               <div class="bs-split-head"><label class="bs-field">Split method<select id="split-method"><option value="equal">Equally</option><option value="percent">By percentage</option><option value="exact">By exact amounts</option></select></label><p id="split-help">Choose who shares this expense.</p></div>
-              <fieldset class="bs-participants"><legend class="bs-sr">People included and their shares</legend><div id="participant-list"></div></fieldset>
+              <details id="split-people" class="bs-split-people"><summary><span id="participants-summary">Everyone is included</span><span class="bs-small">Adjust</span></summary><fieldset class="bs-participants"><legend class="bs-sr">People included and their shares</legend><div id="participant-list"></div></fieldset></details>
               <p id="split-check" class="bs-small"></p>
               <p id="expense-error" class="bs-error" role="alert" hidden></p>
               <div class="bs-form-actions"><button class="bs-primary" type="submit" id="expense-submit">See the split <span aria-hidden="true">→</span></button><button class="bs-secondary" id="cancel-edit" type="button" hidden>Cancel edit</button></div>
@@ -60,8 +60,7 @@
           <div class="bs-summary-top"><p id="result-label">BILL TOTAL</p><h2 id="result-heading">Your split, simplified.</h2><strong id="result-total">—</strong><p id="result-meta">Add an amount to get started.</p></div>
           <div class="bs-summary-body"><h3>Who pays whom</h3><div id="settlements"><p class="bs-empty">Your settlement will appear here.</p></div><p class="bs-small" id="settlement-note">Suggested transfers only. No payments are sent.</p>
             <details id="balance-details"><summary>Each person’s breakdown</summary><div id="balances"></div></details>
-            <div class="bs-share-actions"><button class="bs-primary" id="share-summary" type="button" disabled>Share result</button><button class="bs-secondary" id="copy-summary" type="button" disabled>Copy full summary</button></div>
-            <p class="bs-small">Share an image and short message on WhatsApp or another app.</p>
+            <div class="bs-share-actions"><button class="bs-primary" id="share-summary" type="button" data-share-control disabled>Share with friends</button></div>
             <button class="bs-secondary bs-another" id="add-another" type="button" hidden>+ Add another expense</button>
           </div>
         </aside>
@@ -89,6 +88,6 @@
   </main>
   <!--SITE_FOOTER-->
   <dialog id="bs-confirm" class="bs-confirm" aria-labelledby="confirm-title"><h2 id="confirm-title">Replace current details?</h2><p id="confirm-message"></p><div><button class="bs-secondary" id="confirm-cancel" type="button" autofocus>Cancel</button><button class="bs-primary" id="confirm-accept" type="button">Continue</button></div></dialog>
-  <dialog id="bs-copy-dialog" class="bs-confirm" aria-labelledby="copy-title"><h2 id="copy-title">Your summary</h2><p>Select and copy this text to share it.</p><textarea id="summary-text" readonly aria-label="Summary to copy"></textarea><button class="bs-secondary" id="copy-close" type="button">Done</button></dialog>
+  <dialog id="names-dialog" class="bs-names-dialog" aria-labelledby="names-title"><div class="bs-names-head"><h2 id="names-title">Edit names</h2><button class="bs-text" id="names-close" type="button" aria-label="Cancel name changes">Cancel</button></div><p class="bs-small">Give each person a name your friends recognize.</p><form id="names-form" novalidate><div id="people-list" class="bs-name-list"></div><p id="names-error" class="bs-error" role="alert" hidden></p><button class="bs-primary" type="submit">Done</button></form></dialog>
 </body>
 </html>

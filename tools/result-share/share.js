@@ -1,5 +1,5 @@
 /* SHARE_MODEL */
-let activeDialog = null
+
 
 async function createCards(model) {
   const canvas = document.createElement('canvas'), ctx = canvas.getContext('2d')
@@ -50,46 +50,11 @@ async function createCards(model) {
   }))
 }
 
-export async function openResultShare(data) {
-  if (activeDialog?.open) return
-  const model = shareModel(data), focus = document.activeElement
-  const dialog = document.createElement('dialog'); activeDialog = dialog
-  dialog.className = 'aero-share'; dialog.setAttribute('aria-labelledby', 'aero-share-title')
-  dialog.innerHTML = `<div class="aero-share-head"><h2 id="aero-share-title">Share your result</h2><button type="button" data-close aria-label="Close sharing preview" autofocus>×</button></div><div class="aero-share-body"><p class="aero-share-hint">Preview what you’ll share. Choose WhatsApp from your phone’s share menu.</p><div class="aero-share-preview" aria-busy="true"><p>Creating your image…</p></div><div class="aero-share-pages" hidden><button type="button" data-prev aria-label="Previous image">←</button><span data-page></span><button type="button" data-next aria-label="Next image">→</button></div><label class="aero-share-text-label">Short message<textarea readonly aria-label="Message to share"></textarea></label><p class="aero-share-status" role="status" aria-live="polite"></p></div><div class="aero-share-actions"><button type="button" data-native class="aero-share-primary" disabled>Share image + text</button><div><button type="button" data-copy>Copy text</button><a data-whatsapp target="_blank" rel="noopener noreferrer">WhatsApp text ↗</a></div><div class="aero-share-downloads"></div><p class="aero-share-hint">If your app drops the caption, paste the copied text. For WhatsApp text, attach the downloaded image yourself.</p></div>`
-  const find = selector => dialog.querySelector(selector), status = text => { find('.aero-share-status').textContent = text }
-  find('textarea').value = model.text
-  find('[data-whatsapp]').href = 'https://wa.me/?text=' + encodeURIComponent(model.text)
-  find('[data-close]').onclick = () => dialog.close()
-  const urls = []
-  dialog.addEventListener('close', () => { urls.forEach(url => URL.revokeObjectURL(url)); dialog.remove(); if (activeDialog === dialog) activeDialog = null; if (focus?.isConnected) focus.focus({ preventScroll: true }) }, { once: true })
-  find('[data-copy]').onclick = async () => {
-    try { await navigator.clipboard.writeText(model.text); status('Text copied. Paste it with your image.') }
-    catch { find('textarea').focus(); find('textarea').select(); status('Select and copy the message above.') }
-  }
-  document.body.append(dialog); dialog.showModal()
+export async function prepareResultShare(data) {
+  const model = shareModel(data)
   try {
+    if (!navigator.share || !navigator.canShare?.({ files: [new File(['probe'], 'result.png', { type: 'image/png' })] })) return { model, payload: null }
     const files = await createCards(model)
-    if (!dialog.open) return
-    urls.push(...files.map(file => URL.createObjectURL(file)))
-    const image = document.createElement('img'); image.alt = `${model.tool} result card. All details are included in the images.`
-    const preview = find('.aero-share-preview'); preview.replaceChildren(image); preview.setAttribute('aria-busy', 'false')
-    let page = 0
-    const render = () => { image.src = urls[page]; find('[data-page]').textContent = `Image ${page + 1} of ${files.length}`; find('[data-prev]').disabled = page === 0; find('[data-next]').disabled = page === files.length - 1 }
-    find('[data-prev]').onclick = () => { page--; render() }; find('[data-next]').onclick = () => { page++; render() }
-    find('.aero-share-pages').hidden = files.length === 1; render()
-    files.forEach((file, i) => { const link = document.createElement('a'); link.href = urls[i]; link.download = file.name; link.textContent = files.length === 1 ? 'Download image' : `Download image ${i + 1}`; find('.aero-share-downloads').append(link) })
-    const payload = imageSharePayload(navigator, files, model), button = find('[data-native]')
-    button.hidden = !payload; button.disabled = !payload
-    if (!payload) status('Download the image and use WhatsApp text to share your message.')
-    // Images are prepared before this separate tap, preserving mobile user activation.
-    button.onclick = async () => {
-      button.disabled = true
-      try { await navigator.share(payload); status('Share menu opened. Complete sharing in your chosen app.') }
-      catch (error) { if (error.name !== 'AbortError') status('Sharing is unavailable. Download the image and copy the text below.') }
-      finally { button.disabled = false }
-    }
-  } catch {
-    find('.aero-share-preview').textContent = 'Image preview could not be created. You can still share the text.'
-    find('.aero-share-preview').setAttribute('aria-busy', 'false'); find('[data-native]').hidden = true
-  }
+    return { model, payload: imageSharePayload(navigator, files, model) }
+  } catch { return { model, payload: null } }
 }

@@ -49,9 +49,9 @@ bundle = updateCopy(bundle)
 bundle = compactHelpBundle(bundle)
 // Share explicit size metrics only; preserve the original file download actions.
 const pdfDownload = 'p.jsx("button",{className:"pdf-btn pdf-btn-primary",onClick:()=>{os("download",{tool:"pdf-compress",file_type:"pdf",file_size_kb:Math.round(C.compressedSize/1024)});const X=document.createElement("a");X.href=C.url,X.download=C.name,X.click()},children:"⬇ Download"})'
-bundle = replaceOnce(bundle, pdfDownload, pdfDownload + ',p.jsx("button",{className:"aero-result-share",type:"button",onClick:()=>window.dispatchEvent(new CustomEvent("aero:share-result",{detail:{kind:"compression",tool:"pdf",before:C.originalSize,after:C.compressedSize,unchanged:C.enlarged,targetMissed:!C.hitTarget&&!C.enlarged}})),children:"Share result"})', 'PDF result sharing')
+bundle = replaceOnce(bundle, pdfDownload, pdfDownload + ',p.jsx("button",{className:"aero-result-share",type:"button",disabled:!0,"data-share-control":"","data-aero-share":JSON.stringify({kind:"compression",tool:"pdf",before:C.originalSize,after:C.compressedSize,unchanged:C.enlarged,targetMissed:!C.hitTarget&&!C.enlarged}),children:"Share with friends"})', 'PDF result sharing')
 const imageDownload = 'l&&p.jsx("button",{className:"btn-download",onClick:Ke,children:"⬇ Download Compressed Image"})'
-bundle = replaceOnce(bundle, imageDownload, imageDownload + ',l&&p.jsx("button",{className:"aero-result-share",type:"button",onClick:()=>window.dispatchEvent(new CustomEvent("aero:share-result",{detail:{kind:"compression",tool:"image",before:a,after:u}})),children:"Share result"})', 'image result sharing')
+bundle = replaceOnce(bundle, imageDownload, imageDownload + ',l&&p.jsx("button",{className:"aero-result-share",type:"button",disabled:!0,"data-share-control":"","data-aero-share":JSON.stringify({kind:"compression",tool:"image",before:a,after:u}),children:"Share with friends"})', 'image result sharing')
 const bundleName = `assets/index-${hash(bundle).slice(0,12)}.js`
 // The PDF export chunk imports shared utilities from the entry bundle. Point its
 // copy back to this release so loading it cannot execute the old app a second time.

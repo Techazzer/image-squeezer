@@ -33,6 +33,7 @@ export function shareModel(data) {
   } else throw Error('This result cannot be shared yet.')
   model.url = ORIGIN + model.path
   model.text = `${model.title}\n${model.label}: ${model.value}\n${model.meta}\n\n${model.summary}\n\nMade with Aeroniqx · Free tools, no ads\n${model.url}`
+  model.fullText = `${model.title}\n${model.label}: ${model.value}\n${model.meta}\n\n${model.rows.map(row => row.heading ? '\n' + row.heading : `${row.label}: ${row.value}`).join('\n')}\n\n${model.note}\nMade with Aeroniqx · Free tools, no ads\n${model.url}`
   return model
 }
 
