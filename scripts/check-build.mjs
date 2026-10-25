@@ -2,6 +2,7 @@ import assert from 'node:assert/strict'
 import { readFile, stat, readdir } from 'node:fs/promises'
 import { createHash } from 'node:crypto'
 import { spawnSync } from 'node:child_process'
+import { coreTools } from './tool-content.mjs'
 
 const baseline = JSON.parse(await readFile('deployment/production-baseline.json', 'utf8'))
 const build = JSON.parse(await readFile('deployment/build.json', 'utf8'))
@@ -41,6 +42,7 @@ assert.match(home, /<details class="platform-about-summary">/, 'About and common
 assert.equal([...home.matchAll(/class="platform-tool"/g)].length,6,'Homepage shows six curated tools')
 assert.doesNotMatch(home,/class="tool-grid"|Compress Now|FREE TOOLS/, 'Homepage is the focused platform layout')
 const directory = await readFile('dist/tools/index.html','utf8')
+const guides = await readFile('dist/guides/index.html','utf8')
 const webmanifest = JSON.parse(await readFile('dist/manifest.webmanifest','utf8'))
 assert.equal(webmanifest.display, 'standalone')
 assert.equal(webmanifest.scope, '/')
@@ -55,9 +57,20 @@ for(const icon of webmanifest.icons) {
 for(const file of [build.mobileApp.script,'service-worker.js']) assert.equal(spawnSync(process.execPath,['--check',`dist/${file}`],{encoding:'utf8'}).status,0,`App script parses: ${file}`)
 const catalog = JSON.parse(await readFile(`dist/${build.mobileApp.catalog}`,'utf8'))
 assert.equal(new Set(catalog.map(t=>t.path)).size,catalog.length,'Tool catalog paths are unique')
+assert.deepEqual(catalog.map(t=>t.path).sort(),Object.keys(coreTools).sort(),'Only distinct core tools appear in the app')
+assert.equal([...directory.matchAll(/class="platform-tool"/g)].length,catalog.length,'One directory card per core tool')
+assert.match(directory,/href="\/guides\/"/,'Presets have a separate entry point')
 for(const entry of catalog) {
   assert.ok((await stat(`dist${entry.path}index.html`)).isFile(),`App tool exists: ${entry.path}`)
   assert.ok(directory.includes(`href="${entry.path}"`),`Directory has a crawlable tool link: ${entry.path}`)
+  for(const preset of entry.presets) {
+    assert.ok((await stat(`dist${preset.path}index.html`)).isFile(),`Existing preset preserved: ${preset.path}`)
+    assert.ok(guides.includes(`href="${preset.path}"`),`Preset remains discoverable: ${preset.path}`)
+    assert.ok(!directory.includes(`href="${preset.path}"`),`Preset is not a separate tool: ${preset.path}`)
+    const url=new URL(preset.href,'https://aeroniqx.in')
+    assert.equal(url.pathname,entry.path,'Preset opens the parent tool')
+    assert.ok(!url.searchParams.has('embed'),'App preset retains navigation')
+  }
 }
 assert.doesNotMatch(tool, /<!--SITE_(?:HEADER|FOOTER)-->/)
 assert.match(tool, /canonical" href="https:\/\/aeroniqx.in\/work-hours-calculator\//)
