@@ -84,7 +84,8 @@ export async function addMobileApp(root, dist, { calculatorAssets, billSplitterA
   const catalogText=JSON.stringify(catalog),catalogFile=`assets/app-catalog-${hash(catalogText)}.json`
   await writeFile(path.join(dist,catalogFile),catalogText)
   const shareSource=path.join(root,'tools/result-share')
-  const shareJs=(await readFile(path.join(shareSource,'share.js'),'utf8')).replace('/* SHARE_MODEL */',(await readFile(path.join(shareSource,'model.js'),'utf8')).replace(/^export /gm,''))
+  const outputFile=(await readFile(path.join(shareSource,'output-file.js'),'utf8')).replace(/^import .*\r?\n/gm,'').replace(/^export /gm,'')
+  const shareJs=(await readFile(path.join(shareSource,'share.js'),'utf8')).replace('/* SHARE_MODEL */',(await readFile(path.join(shareSource,'model.js'),'utf8')).replace(/^export /gm,'')).replace('/* OUTPUT_FILE */',outputFile)
   const shareFile=`assets/result-share-${hash(shareJs)}.js`
   await writeFile(path.join(dist,shareFile),shareJs)
   const css=(await Promise.all([path.join(source,'app.css'),path.join(source,'platform.css'),path.join(source,'compact.css'),path.join(shareSource,'share.css')].map(file=>readFile(file,'utf8')))).join('\n'),cssFile=`assets/mobile-app-${hash(css)}.css`

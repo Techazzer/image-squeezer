@@ -2,6 +2,8 @@ import assert from 'node:assert/strict'
 import { readFile, stat, readdir } from 'node:fs/promises'
 import { createHash } from 'node:crypto'
 import { spawnSync } from 'node:child_process'
+import { pathToFileURL } from 'node:url'
+import path from 'node:path'
 import { coreTools } from './tool-content.mjs'
 
 const baseline = JSON.parse(await readFile('deployment/production-baseline.json', 'utf8'))
@@ -74,6 +76,32 @@ assert.equal(spawnSync(process.execPath,['--check',`dist/${shareAsset}`],{encodi
 assert.ok((await readFile(`dist/${build.mobileApp.script}`,'utf8')).includes('/'+shareAsset),'App loads the matching sharing module')
 assert.match(await readFile(`dist/${build.mobileApp.script}`,'utf8'), /installResultSharing\(\(\)=>import\(/,'Direct sharing controller is installed')
 assert.doesNotMatch(await readFile(`dist/${shareAsset}`,'utf8'), /showModal|openResultShare|Copy text|Download image/,'No intermediate sharing dialog is shipped')
+// Exercise the shipped module with local Blob URLs. No DOM or canvas is needed
+// for a file-tool share; the attachment must be identical to its output bytes.
+const originalLocation = Object.getOwnPropertyDescriptor(globalThis,'location')
+const originalNavigator = Object.getOwnPropertyDescriptor(globalThis,'navigator')
+try {
+  Object.defineProperty(globalThis,'location',{configurable:true,value:{origin:'null'}})
+  Object.defineProperty(globalThis,'navigator',{configurable:true,value:{share(){},canShare:data=>Array.isArray(data.files)}})
+  const {prepareResultShare} = await import(pathToFileURL(path.resolve('dist',shareAsset)).href)
+  for(const [toolName,type] of [['pdf','application/pdf'],['image','image/jpeg'],['image','image/png'],['image','image/webp']]) {
+    const bytes = new Uint8Array([37,80,68,70,0,255]), url = URL.createObjectURL(new Blob([bytes],{type}))
+    try {
+      const result = await prepareResultShare({kind:'file',tool:toolName,url,filename:'output'})
+      assert.equal(result.payload.files.length,1)
+      assert.equal(result.payload.files[0].type,type)
+      assert.deepEqual(new Uint8Array(await result.payload.files[0].arrayBuffer()),bytes)
+      assert.equal(result.payload.text,`Made with Aeroniqx\nhttps://aeroniqx.in/${toolName==='pdf'?'pdf-compress':'image-compressor'}/`)
+    } finally { URL.revokeObjectURL(url) }
+  }
+} finally {
+  if(originalLocation)Object.defineProperty(globalThis,'location',originalLocation);else delete globalThis.location
+  if(originalNavigator)Object.defineProperty(globalThis,'navigator',originalNavigator);else delete globalThis.navigator
+}
+const releasedBundle = await readFile(`dist/${build.entryBundle}`,'utf8')
+assert.match(releasedBundle,/kind:"file",tool:"pdf",url:C.url,filename:C.name/,'PDF share uses the downloaded output')
+assert.match(releasedBundle,/kind:"file",tool:"image",url:l,filename:"compressed"/,'Image share uses the downloaded output')
+assert.doesNotMatch(releasedBundle,/kind:"compression"/,'File shares no longer send size statistics')
 assert.ok((await readFile('dist/service-worker.js','utf8')).includes('/'+shareAsset),'Result sharing is available offline')
 for(const icon of webmanifest.icons) {
   const png = await readFile(`dist${icon.src}`)

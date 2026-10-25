@@ -72,7 +72,7 @@ test('cancelling does not open WhatsApp; an unsupported browser uses full text o
   const opened=[]
   const controller=createDirectShare({load:async()=>({prepareResultShare:async()=>prepared('bill')}),navigator:{share:()=>Promise.reject({name:'AbortError'})},openWhatsApp:text=>opened.push(text)})
   await controller.prepare('bill'); await controller.send(()=>assert.fail('Cancellation should be silent'))
-  assert.equal(opened.length,0); assert.equal(controller.hasImage,true)
+  assert.equal(opened.length,0); assert.equal(controller.hasAttachment,true)
   const fallback=createDirectShare({load:async()=>({prepareResultShare:async()=>({model:{fullText:'Every settlement'},payload:null})}),navigator:{},openWhatsApp:text=>opened.push(text)})
   await fallback.prepare('bill'); const promise=fallback.send(()=>{})
   assert.deepEqual(opened,['Every settlement']); await promise

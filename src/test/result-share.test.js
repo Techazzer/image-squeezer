@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { shareModel, wrapText, paginateRows, imageSharePayload } from '../../tools/result-share/model.js'
+import { shareModel, wrapText, paginateRows, fileSharePayload } from '../../tools/result-share/model.js'
 import { calculate } from '../../tools/bill-splitter/split-core.js'
 import { emptySheet, calculateSheet } from '../../tools/work-hours/timesheet-core.js'
 
@@ -27,16 +27,9 @@ test('large groups keep every transfer and person in cards while text stays shor
   assert.ok(model.fullText.includes('https://aeroniqx.in/bill-splitter/'))
   assert.ok(!model.fullText.includes('attached cards'))
 })
-test('compression shares metrics without file content, names, or false reduction claims', () => {
-  const model = shareModel({ kind: 'compression', tool: 'pdf', before: 204800, after: 102400, filename: 'private.pdf', url: 'blob:secret' })
-  assert.equal(model.value, '100.0 KB')
-  assert.ok(model.text.includes('50.0% smaller'))
-  assert.ok(!JSON.stringify(model).includes('private.pdf'))
-  assert.ok(!JSON.stringify(model).includes('blob:secret'))
-  assert.ok(shareModel({ kind: 'compression', before: 100, after: 125 }).text.includes('25.0% larger'))
-  assert.ok(shareModel({ kind: 'compression', before: 100, after: 100, unchanged: true }).note.includes('Original returned'))
-  assert.ok(shareModel({ kind: 'compression', before: 200, after: 150, targetMissed: true }).text.includes('not reached'))
-  assert.throws(() => shareModel({ kind: 'compression', before: 0, after: 10 }))
+test('file outputs cannot accidentally fall back to a compression statistics screenshot', () => {
+  assert.throws(() => shareModel({ kind: 'compression', tool: 'pdf', before: 204800, after: 102400 }))
+  assert.throws(() => shareModel({ kind: 'file', tool: 'image', url: 'blob:output' }))
 })
 test('timesheet shares validated hours, dates and optional gross pay only', () => {
   const sheet = emptySheet('2026-10-19')
@@ -63,8 +56,8 @@ test('text wrapping preserves long names and unicode; pagination loses no rows o
 test('native sharing uses prepared images and text only when file sharing is supported', () => {
   const files = ['prepared-file'], model = { title:'Dinner', text:'A pays B ₹100\nhttps://aeroniqx.in/bill-splitter/' }
   const nav = { share() {}, canShare: data => Array.isArray(data.files) }
-  assert.deepEqual(imageSharePayload(nav, files, model), { files, title:model.title, text:model.text })
-  assert.equal(imageSharePayload({}, files, model), null)
-  assert.equal(imageSharePayload({ ...nav, canShare: () => false }, files, model), null)
-  assert.equal(imageSharePayload({ ...nav, canShare: () => { throw Error('blocked') } }, files, model), null)
+  assert.deepEqual(fileSharePayload(nav, files, model), { files, title:model.title, text:model.text })
+  assert.equal(fileSharePayload({}, files, model), null)
+  assert.equal(fileSharePayload({ ...nav, canShare: () => false }, files, model), null)
+  assert.equal(fileSharePayload({ ...nav, canShare: () => { throw Error('blocked') } }, files, model), null)
 })
