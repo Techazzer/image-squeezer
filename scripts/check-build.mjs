@@ -44,6 +44,11 @@ assert.equal(webmanifest.scope, '/')
 assert.ok(webmanifest.icons.some(icon=>icon.sizes==='192x192'))
 assert.ok(webmanifest.icons.some(icon=>icon.sizes==='512x512'&&icon.purpose==='maskable'))
 for(const file of build.mobileApp.assets) assert.ok((await stat(`dist/${file}`)).isFile(), `App asset exists: ${file}`)
+for(const icon of webmanifest.icons) {
+  const png = await readFile(`dist${icon.src}`)
+  assert.equal(png.subarray(0,8).toString('hex'),'89504e470d0a1a0a',`PNG signature: ${icon.src}`)
+  assert.equal(`${png.readUInt32BE(16)}x${png.readUInt32BE(20)}`,icon.sizes,`Icon dimensions: ${icon.src}`)
+}
 for(const file of [build.mobileApp.script,'service-worker.js']) assert.equal(spawnSync(process.execPath,['--check',`dist/${file}`],{encoding:'utf8'}).status,0,`App script parses: ${file}`)
 const catalog = JSON.parse(await readFile(`dist/${build.mobileApp.catalog}`,'utf8'))
 assert.equal(new Set(catalog.map(t=>t.path)).size,catalog.length,'Tool catalog paths are unique')
