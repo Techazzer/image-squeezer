@@ -90,6 +90,32 @@ Clock-time estimates do not adjust for daylight saving, split shifts, taxes,
 deductions, or jurisdiction-specific payroll rules. These limits are described
 on the page.
 
+## Mobile web app
+
+`tools/app-shell/` contains the mobile layout, tool library, install guidance,
+icons and service worker. `scripts/mobile-app.mjs` adds this shell to all 90
+indexable pages, generates the tool catalog from the built pages, and writes a
+standalone web app manifest. Desktop layouts remain in place; the app header and
+bottom navigation appear at widths up to 720px. Use `Get app` on a phone for
+Android installation or iPhone/iPad home-screen instructions. Installation is
+always optional and explicitly initiated by the visitor.
+
+Bookmarks use local storage on that device. No account, server storage, ads,
+analytics or notification permission is added. The service worker precaches
+public homepage and Work Hours HTML, their code/styles, and the tool catalog.
+It never caches uploaded files or timesheet entries. Other tools show an offline
+fallback when a network connection is unavailable. First-time offline use is
+not supported. Existing opt-in timesheet storage is separate and unchanged.
+
+Online navigation uses the network. Offline documents stay paired with their
+precached assets until a complete new worker activates after existing tabs close;
+updates do not force a reload during a calculation. Source changes generate a
+new worker version and content-hashed app assets. Deployment checks verify all
+of these assets on both the immutable Pages URL and aeroniqx.in.
+
+The local-only `/__mobile-preview/` route displays the homepage and calculator
+in 390px frames for layout QA. It is not included in the deployed site.
+
 ## Recovery and future additions
 
 The SEO build adds initial HTML for 13 core pages and generates the sitemap

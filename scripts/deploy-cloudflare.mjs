@@ -35,13 +35,14 @@ const deploymentUrl = result.stdout.match(/https:\/\/[a-f0-9]+\.image-resizer-66
 if (!deploymentUrl) throw new Error('Deployment completed but its immutable URL could not be read. Inspect Wrangler output before retrying.')
 
 const build = JSON.parse(await readFile('deployment/build.json', 'utf8'))
-const assetPaths = [build.entryBundle, build.pdfChunk, build.updatesCss, ...build.calculatorAssets]
+const assetPaths = [build.entryBundle, build.pdfChunk, build.updatesCss, ...build.calculatorAssets, ...build.mobileApp.assets]
 const expectedHashes = new Map(await Promise.all(assetPaths.map(async file => [file, sha256(await readFile(`dist/${file}`))])))
 const homeTitle = (await readFile('dist/index.html', 'utf8')).match(/<title>([^<]+)<\/title>/)[1]
 
 async function verify(origin) {
   const home = await fetch(`${origin}/`, { signal: AbortSignal.timeout(20000) })
   const homeHtml = await home.text()
+  if (!homeHtml.includes(build.mobileApp.script) || !homeHtml.includes('rel="manifest"')) throw new Error(`Mobile app shell is missing at ${origin}`)
   if (!/\bno-cache\b/.test(home.headers.get('cache-control') || '')) throw new Error(`HTML cache revalidation is missing at ${origin}`)
   if (!home.ok || !homeHtml.includes(`<title>${homeTitle}</title>`) || !homeHtml.includes('id="tools"') || !homeHtml.includes('<h1') || homeHtml.includes(`<script type="module"`)) throw new Error(`Homepage is not serving the static release at ${origin}`)
   const pdf = await fetch(`${origin}/pdf-compress/`, { signal: AbortSignal.timeout(20000) })

@@ -10,5 +10,23 @@
     "work-hours-calculator/timesheet-view-ad1bf4562245.js",
     "work-hours-calculator/timesheet-ad1bf4562245.css"
   ],
+  "mobileApp": {
+    "assets": [
+      "assets/mobile-app-ee2a6bd190a1.css",
+      "assets/mobile-app-291dba7be409.js",
+      "assets/app-catalog-55d1675d3b8e.json",
+      "manifest.webmanifest",
+      "assets/app-icons/icon-192.png",
+      "assets/app-icons/icon-512.png",
+      "assets/app-icons/maskable-512.png",
+      "assets/app-icons/apple-touch-icon.png",
+      "service-worker.js",
+      "offline/index.html"
+    ],
+    "script": "assets/mobile-app-291dba7be409.js",
+    "catalog": "assets/app-catalog-55d1675d3b8e.json",
+    "version": "713e329c224d",
+    "tools": 85
+  },
   "calculator": "/work-hours-calculator/"
 }

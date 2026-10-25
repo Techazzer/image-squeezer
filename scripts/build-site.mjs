@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url'
 import path from 'node:path'
 import { addSearchContent, updateCopy, updateClientTitles } from './seo.mjs'
 import { optimizeHomepage } from './performance.mjs'
+import { addMobileApp } from './mobile-app.mjs'
 import { renderShiftRows } from '../tools/work-hours/timesheet-view.js'
 
 const root = fileURLToPath(new URL('../', import.meta.url))
@@ -97,9 +98,11 @@ await writeFile(path.join(toolDir, 'index.html'), html)
 
 const seo = await addSearchContent(root, dist)
 await optimizeHomepage(dist)
+const calculatorAssets = [...calculatorNames.values()].map(file => `work-hours-calculator/${file}`)
+const mobileApp = await addMobileApp(root, dist, { calculatorAssets, updatesCss: updatesCssName })
 const llms = await readFile(path.join(dist, 'llms.txt'), 'utf8')
 await writeFile(path.join(dist, 'llms.txt'), `${llms}\n## Work & Productivity\n- [Work Hours & Timesheet Calculator](https://aeroniqx.in/work-hours-calculator/): Calculate shifts, unpaid breaks, overnight work, daily or weekly overtime and estimated pay. Free CSV, print, and local backup; no ads or login.\n`)
 for (const file of ['_headers', '_redirects']) await cp(path.join(root, 'deployment', file), path.join(dist, file))
 await mkdir(path.join(root, 'deployment'), { recursive: true })
-await writeFile(path.join(root, 'deployment/build.json'), JSON.stringify({ baselineDeployment: manifest.deploymentId, baselineFiles: manifest.files.length, entryBundle: bundleName, pdfChunk: pdfChunkName, updatesCss: updatesCssName, calculatorAssets: [...calculatorNames.values()].map(file => `work-hours-calculator/${file}`), calculator: '/work-hours-calculator/' }, null, 2) + '\n')
+await writeFile(path.join(root, 'deployment/build.json'), JSON.stringify({ baselineDeployment: manifest.deploymentId, baselineFiles: manifest.files.length, entryBundle: bundleName, pdfChunk: pdfChunkName, updatesCss: updatesCssName, calculatorAssets, mobileApp, calculator: '/work-hours-calculator/' }, null, 2) + '\n')
 console.log(`Built ${manifest.files.length} preserved paths plus Work Hours & Timesheet Calculator. Entry: ${bundleName}. Prerendered ${seo.prerendered} pages; sitemap contains ${seo.sitemapPages} pages.`)
