@@ -10,6 +10,7 @@ import { parseAppTarget } from '../tools/app-shell/search.js'
 import { categories, coreTools } from './tool-content.mjs'
 import { buildBillSplitter } from './build-bill-splitter.mjs'
 import { compactHelpBundle } from './compact-tools.mjs'
+import { instrumentLegacyEvents } from './analytics-integration.mjs'
 
 const root = fileURLToPath(new URL('../', import.meta.url))
 const baseline = path.join(root, 'legacy-site')
@@ -52,6 +53,7 @@ const pdfDownload = 'p.jsx("button",{className:"pdf-btn pdf-btn-primary",onClick
 bundle = replaceOnce(bundle, pdfDownload, pdfDownload + ',p.jsx("button",{className:"aero-result-share",type:"button",disabled:!0,"data-share-control":"","data-aero-share":JSON.stringify({kind:"file",tool:"pdf",url:C.url,filename:C.name}),children:"Share with friends"})', 'PDF result sharing')
 const imageDownload = 'l&&p.jsx("button",{className:"btn-download",onClick:Ke,children:"⬇ Download Compressed Image"})'
 bundle = replaceOnce(bundle, imageDownload, imageDownload + ',l&&p.jsx("button",{className:"aero-result-share",type:"button",disabled:!0,"data-share-control":"","data-aero-share":JSON.stringify({kind:"file",tool:"image",url:l,filename:"compressed"}),children:"Share with friends"})', 'image result sharing')
+bundle = instrumentLegacyEvents(bundle)
 const bundleName = `assets/index-${hash(bundle).slice(0,12)}.js`
 // The PDF export chunk imports shared utilities from the entry bundle. Point its
 // copy back to this release so loading it cannot execute the old app a second time.

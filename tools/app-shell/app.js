@@ -1,4 +1,5 @@
 (() => {
+  /* ANALYTICS_CONTROLLER */
   /* SEARCH_HELPERS */
   /* RESULT_SHARE_CONTROLLER */
   if (new URLSearchParams(location.search).get('embed') === '1') {
@@ -33,6 +34,7 @@
     return { path, title: title.slice(0,160), category: /work-hours/.test(path)?'Work':/calculator|bill-splitter/.test(path)?'Finance':/pdf/.test(path)?'PDF':/handwriting/.test(path)?'Create':/drive/.test(path)?'Files':'Image' }
   }
   function syncRoute() {
+    window.aeroAnalytics?.route()
     const tool = currentTool()
     lastPath = location.pathname
     $('aero-page-name').textContent = tool?.title || 'Aeroniqx'
@@ -56,6 +58,7 @@
   }
   function toggleSaved(tool) {
     const exists = saved.some(t => t.path === tool.path)
+    window.aeroTrack?.('tool_save',{tool:tool.path.replaceAll('/',''),action:exists?'unsave':'save'})
     const bookmark={path:tool.path,title:tool.title,category:tool.category}
     saved = exists ? saved.filter(t=>t.path!==tool.path) : [...saved,bookmark].slice(-100)
     let persistent = true
@@ -108,6 +111,7 @@
     dialog.querySelector('[data-close]').addEventListener('click',()=>dialog.close())
   }
   async function openLibrary(onlySaved=false,category='All',focusSearch=false) {
+    if(!onlySaved)window.aeroTrack?.('search_open',{action:focusSearch?'search':'browse'})
     savedOnly=onlySaved;activeCategory=category;$('aero-search').value=''
     $('aero-library-title').textContent=onlySaved?'Saved tools':'Find your tool'
     library.querySelectorAll('[data-category]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.category===category)))
@@ -134,6 +138,8 @@
     renderLibrary()
   }))
   $('aero-library-list').addEventListener('click',event=>{
+    const link=event.target.closest('.aero-library-link')
+    if(link)window.aeroTrack?.('search_select',{tool:toolForPath(new URL(link.href).pathname),action:'search'})
     const button=event.target.closest('[data-save-path]')
     if (!button) return
     const tool=[...(catalog||[]),...saved].find(t=>t.path===button.dataset.savePath)
@@ -159,7 +165,7 @@
   standaloneMode.addEventListener('change',installStatus)
   window.addEventListener('pageshow',installStatus)
   window.addEventListener('beforeinstallprompt',event=>{event.preventDefault();installPrompt=event;installStatus()})
-  window.addEventListener('appinstalled',()=>{installedThisVisit=true;installPrompt=null;installStatus();notify('Aeroniqx is ready on your home screen')})
+  window.addEventListener('appinstalled',()=>{window.aeroTrack?.('app_install');installedThisVisit=true;installPrompt=null;installStatus();notify('Aeroniqx is ready on your home screen')})
   $('aero-nav-install').addEventListener('click',()=>{installStatus();showDialog(install)})
   $('aero-install-now').addEventListener('click',async()=>{
     if(!installPrompt)return

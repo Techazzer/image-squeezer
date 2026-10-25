@@ -1,0 +1,13 @@
+{
+  "name": "aero-analytics",
+  "main": "worker.js",
+  "account_id": "c6dc45311b3f186087681b93e4f683c1",
+  "compatibility_date": "2026-10-25",
+  "workers_dev": true,
+  "keep_vars": true,
+  "vars": { "ALLOWED_ORIGIN": "https://aeroniqx.in" },
+  "kv_namespaces": [{ "binding": "ANALYTICS_BUFFER", "id": "8e106abeca6c4c3daf7aea1052483e4d" }],
+  "durable_objects": { "bindings": [{ "name": "EVENT_QUEUE", "class_name": "EventQueue" }] },
+  "migrations": [{ "tag": "analytics-v2", "new_sqlite_classes": ["EventQueue"] }],
+  "triggers": { "crons": ["* * * * *"] }
+}

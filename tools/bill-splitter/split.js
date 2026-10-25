@@ -183,9 +183,11 @@ $('participant-list').addEventListener('change', event => {
 })
 $('expense-form').addEventListener('submit', event => {
   event.preventDefault(); touched = true
-  if (!peopleValid()) { $('people-error').scrollIntoView({ block: 'center' }); return }
-  try { splitExpense(bill(), state.people) } catch (error) { notice('expense-error', error.message); $('split-people').open = true; return }
+  window.aeroTrack?.('tool_start',{tool:'bill-splitter',action:state.mode})
+  if (!peopleValid()) {window.aeroTrack?.('tool_error',{tool:'bill-splitter',error_code:'invalid_input'}); $('people-error').scrollIntoView({ block: 'center' }); return }
+  try { splitExpense(bill(), state.people) } catch (error) {window.aeroTrack?.('tool_error',{tool:'bill-splitter',error_code:'invalid_input'}); notice('expense-error', error.message); $('split-people').open = true; return }
   if (state.mode === 'quick') {
+    window.aeroTrack?.('tool_success',{tool:'bill-splitter',action:'quick'})
     refresh(); document.activeElement?.blur(); $('split-result').focus({ preventScroll: true }); $('split-result').scrollIntoView({ block: 'start', behavior: 'auto' }); return
   }
   if (!editing && state.expenses.length >= MAX_EXPENSES) { notice('expense-error', 'This group has 500 expenses. Back it up and start a new group.'); return }
@@ -194,6 +196,7 @@ $('expense-form').addEventListener('submit', event => {
   else state.expenses.push(expense)
   editing = null; draft = emptyBill(state.people); unsavedDraft = false
   renderForm(); renderHistory(); refresh(); status('Expense saved. The group settlement is updated.')
+  window.aeroTrack?.('tool_success',{tool:'bill-splitter',action:'group'})
   document.activeElement?.blur(); $('split-result').focus({ preventScroll: true }); $('split-result').scrollIntoView({ block: 'start', behavior: 'auto' })
 })
 $('cancel-edit').addEventListener('click', () => { editing = null; draft = emptyBill(state.people); unsavedDraft = false; renderForm(); refresh(); status('Edit cancelled. The saved expense is unchanged.') })

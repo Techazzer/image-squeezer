@@ -120,7 +120,13 @@ $('shift-rows').addEventListener('input', event => {
   if (row === undefined || !key) return
   sheet.rows[Number(row)][key] = key === 'nextDay' ? event.target.checked : event.target.validity.badInput ? 'invalid' : event.target.value
   render(); persist()
+  measureCalculation()
 })
+function measureCalculation() {
+  window.aeroTrack?.('tool_start',{tool:'work-hours-calculator',action:'calculate'},{once:true})
+  const result=calculateSheet(sheet)
+  if(result.valid&&result.days)window.aeroTrack?.('tool_success',{tool:'work-hours-calculator',action:'calculate'},{once:true})
+}
 for (const [key, id] of Object.entries(fieldIds)) {
   $(id).addEventListener('input', () => {
     const previous = sheet[key]
@@ -130,6 +136,7 @@ for (const [key, id] of Object.entries(fieldIds)) {
       $('threshold').value = sheet.threshold
     }
     render(); persist()
+    measureCalculation()
   })
 }
 $('sample-week').addEventListener('click', () => {
@@ -150,8 +157,8 @@ $('remember-sheet').addEventListener('change', () => {
     catch { status('Your browser did not allow removing the saved copy. Clear this site’s browser data to remove it.', true) }
   }
 })
-$('download-csv').addEventListener('click', () => download(exportCsv(sheet), 'text/csv;charset=utf-8', `aeroniqx-timesheet-${sheet.weekStart}.csv`))
-$('print-sheet').addEventListener('click', () => { buildPrintView(calculateSheet(sheet)); window.print() })
+$('download-csv').addEventListener('click', () => {download(exportCsv(sheet), 'text/csv;charset=utf-8', `aeroniqx-timesheet-${sheet.weekStart}.csv`);window.aeroTrack?.('download',{tool:'work-hours-calculator',file_type:'csv',action:'result'})})
+$('print-sheet').addEventListener('click', () => { buildPrintView(calculateSheet(sheet)); window.print();window.aeroTrack?.('tool_interaction',{tool:'work-hours-calculator',action:'print'}) })
 $('day-picker').addEventListener('click', event => {
   const button = event.target.closest('[data-day]')
   if (!button) return
