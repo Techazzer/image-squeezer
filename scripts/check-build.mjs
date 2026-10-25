@@ -16,13 +16,18 @@ for (const item of baseline.files) {
     for (const [, asset] of html.matchAll(/(?:src|href)=["']\/(assets\/[^"']+)["']/g)) assert.ok((await stat(`dist/${asset}`)).isFile(), `HTML asset exists: ${asset}`)
   }
 }
-for (const file of [build.entryBundle, build.pdfChunk, 'work-hours-calculator/timesheet.js', 'work-hours-calculator/timesheet-core.js']) {
+for (const file of [build.entryBundle, build.pdfChunk, 'work-hours-calculator/timesheet.js', 'work-hours-calculator/timesheet-core.js', 'work-hours-calculator/timesheet-view.js']) {
   const result = spawnSync(process.execPath, ['--check', `dist/${file}`], { encoding: 'utf8' })
   assert.equal(result.status, 0, `${file}: ${result.stderr}`)
 }
 assert.match(await readFile(`dist/${build.pdfChunk}`, 'utf8'), new RegExp(build.entryBundle.replace('assets/', '').replaceAll('.', '\\.')))
 assert.doesNotMatch(await readFile(`dist/${build.pdfChunk}`, 'utf8'), /index-Do-dAaN2\.js/)
 const tool = await readFile('dist/work-hours-calculator/index.html', 'utf8')
+assert.doesNotMatch(tool, /<!--SHIFT_ROWS-->|id="calculator-ui" hidden/)
+assert.equal([...tool.matchAll(/class="wh-shift"/g)].length, 7, 'All seven rows have initial layout space')
+const home = await readFile('dist/index.html', 'utf8')
+assert.doesNotMatch(home, /<script[^>]*src=|mobile-drawer/, 'Homepage does not require the tool application')
+assert.match(home, /<details class="faq-item">/, 'FAQ works without JavaScript')
 assert.doesNotMatch(tool, /<!--SITE_(?:HEADER|FOOTER)-->/)
 assert.match(tool, /canonical" href="https:\/\/aeroniqx.in\/work-hours-calculator\//)
 assert.match(await readFile('dist/sitemap.xml','utf8'), /https:\/\/aeroniqx.in\/work-hours-calculator\//)

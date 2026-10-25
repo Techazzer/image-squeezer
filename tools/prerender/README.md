@@ -15,3 +15,10 @@ content, until the original complete component source can be restored. Keep
 the initial content consistent with the interactive page; do not add content
 visible only to crawlers. New standalone tools should ship their own semantic
 HTML directly, as the work-hours calculator does.
+
+The homepage is now entirely static: `scripts/performance.mjs` removes the
+application entry script and replaces menu buttons with links to the tool
+directory. Its FAQ uses native `details` elements. Interactive tools continue
+to load the preserved application. The timesheet separately renders its seven
+empty rows at build time using the shared `timesheet-view.js` module, then
+initializes dates and any locally saved data without inserting a large layout.
