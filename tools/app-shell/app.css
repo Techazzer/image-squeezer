@@ -28,6 +28,9 @@
 .aero-tool-symbol[data-kind=Files]{background:#fff5e5;color:#8a5600}
 .aero-library-link strong{display:block;font-size:.9rem;line-height:1.4}
 .aero-library-link small{display:block;color:#5f6368;font-size:.75rem;margin-top:3px}
+.aero-library-link .aero-result-context{color:#1557b0;font-weight:600}
+.aero-library-footer{flex-shrink:0;border-top:1px solid #edf0f5;padding:0 22px}
+.aero-library-footer a{display:flex;align-items:center;justify-content:space-between;min-height:44px;color:#5f6368;font-size:.75rem;text-decoration:none}
 .aero-results-note{margin:12px 0 0;font-size:.75rem;color:#5f6368;min-height:1em}
 .aero-empty{padding:28px 14px;line-height:1.7;color:#5f6368;text-align:center;font-size:.9rem}
 .aero-install-body{padding:0 24px 28px;overflow:auto;line-height:1.7;font-size:.9rem;color:#536175}

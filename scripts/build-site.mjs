@@ -6,6 +6,8 @@ import { addSearchContent, updateCopy, updateClientTitles, writeSitemap } from '
 import { optimizeHomepage } from './performance.mjs'
 import { addMobileApp } from './mobile-app.mjs'
 import { renderShiftRows } from '../tools/work-hours/timesheet-view.js'
+import { parseAppTarget } from '../tools/app-shell/search.js'
+import { categories, coreTools } from './tool-content.mjs'
 
 const root = fileURLToPath(new URL('../', import.meta.url))
 const baseline = path.join(root, 'legacy-site')
@@ -27,11 +29,18 @@ function replaceOnce(source, from, to, label) {
   return source.replace(from, to)
 }
 
-// Only catalog and navigation data are patched; all existing tool implementations stay intact.
+// Guard every integration point in the recovered application.
 const originalBundle = 'assets/index-Do-dAaN2.js'
 let bundle = await readFile(path.join(dist, originalBundle), 'utf8')
+// App presets retain the full navigation; embed=1 still belongs to iframes.
+bundle = replaceOnce(bundle, 'if(!t)return Vte();const r={...aT,isEmbed:t},i=Wte(e.get("target"))', `if(!t&&e.get("preset")!=="1")return Vte();const r={...aT,isEmbed:t},i=e.get("preset")==="1"?parseAppTarget(e.get("target"),e.get("unit")):Wte(e.get("target"))`, 'image app preset configuration')
+bundle = parseAppTarget.toString()+'\n'+bundle
 bundle = replaceOnce(bundle, '},{id:"finance",', '},{id:"work",label:"⏱️ Work & Productivity",desc:"Everyday tools for your workday. Free, private, and ready to use — no account needed.",tools:[{icon:"⏱️",title:"Work Hours & Timesheet",desc:"Track shifts, breaks, overtime and estimated pay. Export a CSV or print your weekly timesheet.",href:"/work-hours-calculator/",badge:"New",isExternal:!0}]},{id:"finance",', 'homepage category')
-bundle = replaceOnce(bundle, '{heading:"Finance Calculators",tools:[', '{heading:"Work & Productivity",tools:[{label:"Work Hours & Timesheet",href:"/work-hours-calculator/",icon:"HRS",color:"#1a73e8"}]},{heading:"Finance Calculators",tools:[', 'All Tools menu')
+const oldMenu=bundle.match(/const xL=\[\{heading:"Compress by Size"[\s\S]*?\];function Lte\(\)/)?.[0]
+if(!oldMenu)throw Error('Missing recovered navigation integration point')
+const toolMenu=categories.map(c=>({heading:c.label,tools:Object.entries(coreTools).filter(([,t])=>t.category===c.id).map(([href,t])=>({label:t.title,href,icon:c.id==='PDF'?'PDF':c.label.slice(0,1),color:'#1557b0'}))}))
+toolMenu.push({heading:'Resources',tools:[{label:'Guides & Presets',href:'/guides/',icon:'↗',color:'#5f6368'}]})
+bundle=replaceOnce(bundle,oldMenu,`const xL=${JSON.stringify(toolMenu)};function Lte()`,'distinct tools navigation')
 bundle = replaceOnce(bundle, 'p.jsx("a",{href:"/compress-image-to-50kb/",className:"nav-link",children:"50KB Tool"})', 'p.jsx("a",{href:"/work-hours-calculator/",className:"nav-link",children:"Work Hours"})', 'header shortcut')
 bundle = await updateClientTitles(root, bundle)
 bundle = updateCopy(bundle)
@@ -77,9 +86,9 @@ for (const item of manifest.files.filter(item => item.file.endsWith('.html'))) {
 const toolDir = path.join(dist, 'work-hours-calculator')
 await cp(path.join(root, 'tools/work-hours'), toolDir, { recursive: true })
 let header = shell.header
-  .replace(/<div class="nav-dropdown-trigger">.*?<\/div>/, '<a href="/#tools" class="nav-link">All Tools</a>')
+  .replace(/<div class="nav-dropdown-trigger">.*?<\/div>/, '<a href="/tools/" class="nav-link">All Tools</a>')
   .replace('<a href="/compress-image-to-50kb/" class="nav-link">50KB Tool</a>', '<a href="/work-hours-calculator/" class="nav-link" aria-current="page">Work Hours</a>')
-  .replace(/<button class="hamburger [^"]*"[^>]*>.*?<\/button>/, '<a href="/#tools" class="wh-mobile-tools">All tools</a>')
+  .replace(/<button class="hamburger [^"]*"[^>]*>.*?<\/button>/, '<a href="/tools/" class="wh-mobile-tools">All tools</a>')
   .replaceAll(' data-discover="true"', '')
 const footer = shell.footer.replaceAll('/privacy-policy-generator/', '/privacy/').replace('Free online image &amp; PDF tools', 'Free online image, PDF &amp; productivity tools')
 // Version the whole module graph together so a returning browser cannot mix

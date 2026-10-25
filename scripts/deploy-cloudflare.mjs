@@ -52,6 +52,9 @@ async function verify(origin) {
   if (!image.ok || !(await image.text()).includes(build.entryBundle)) throw new Error(`Image tool must resolve to its own page at ${origin}`)
   const directory = await fetch(`${origin}/tools/`, { signal: AbortSignal.timeout(20000) })
   if (!directory.ok || !(await directory.text()).includes('platform-directory')) throw new Error(`Full tool directory is missing at ${origin}`)
+  const guides = await fetch(`${origin}/guides/`, { signal: AbortSignal.timeout(20000) })
+  const guidesHtml = await guides.text()
+  if (!guides.ok || !guidesHtml.includes(build.mobileApp.script) || !guidesHtml.includes('platform-resource-list')) throw new Error(`Guides and presets are missing at ${origin}`)
   const calculator = await fetch(`${origin}/work-hours-calculator/`, { signal: AbortSignal.timeout(20000) })
   if (!calculator.ok || !(await calculator.text()).includes('id="calculator-ui"')) throw new Error(`Calculator is unavailable at ${origin}`)
   for (const [file, expected] of expectedHashes) {

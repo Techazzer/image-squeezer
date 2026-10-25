@@ -59,6 +59,14 @@
 .platform-presets summary{padding:14px 18px;cursor:pointer}
 .platform-presets ul{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 20px;list-style:none;margin:0;padding:0 18px 18px}
 .platform-presets li a{display:flex;align-items:center;min-height:44px;padding:7px 0;line-height:1.5}
+.platform-guide-callout{border:1px solid #e5e9ef;border-radius:18px;background:#f8faff;padding:22px;margin:0 0 36px}
+.platform-guide-callout h2{font-size:18px;font-weight:650}
+.platform-guide-callout p{font-size:14px;color:#5f6368;margin:6px 0 12px}
+.platform-guide-callout>a{display:inline-flex;align-items:center;min-height:44px;gap:8px;font-size:14px;font-weight:600}
+.platform-resource-list{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 24px}
+.platform-resource-list li{min-width:0;border-top:1px solid #edf0f4}
+.platform-resource-list a{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:52px;padding:12px 2px;font-size:14px;line-height:1.5}
+.platform-resource-list a span{color:#8290a3;flex-shrink:0}
 .platform-prose{max-width:700px;margin:0 auto;padding:54px 0 60px}
 .platform-prose .platform-lead{font-size:18px;color:#4b5563;margin-top:24px}
 .platform-prose h2{font-size:20px;margin:32px 0 10px;letter-spacing:-.3px;font-weight:650}
@@ -88,12 +96,13 @@
  .platform-about-summary{font-size:12px;margin-bottom:10px}
  .platform-footer{padding:20px;display:block}
  .platform-footer>div{display:none}
- .platform-footer nav{gap:0;justify-content:space-between;font-size:11px}
+ .platform-footer nav{gap:0 18px;justify-content:flex-start;font-size:11px}
  .platform-page-intro{padding:28px 0}
  .platform-page-intro h1,.platform-prose h1{font-size:32px;letter-spacing:-1.2px}
  .platform-page-intro>p:not(.platform-eyebrow){font-size:14px}
  .platform-directory{scroll-margin-top:80px}
  .platform-presets ul{grid-template-columns:1fr}
+ .platform-resource-list{grid-template-columns:1fr}
  .platform-prose{padding:28px 0 36px}
  .platform-prose .platform-lead{font-size:16px}
  .platform-prose h2{font-size:18px}

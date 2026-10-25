@@ -1,8 +1,9 @@
 import { readFile, writeFile, readdir, mkdir, cp } from 'node:fs/promises'
 import { createHash } from 'node:crypto'
 import path from 'node:path'
-import { categories, coreTools } from './tool-content.mjs'
+import { categories } from './tool-content.mjs'
 import { writePlatformPages } from './platform-pages.mjs'
+import { buildToolCatalog } from './tool-catalog.mjs'
 
 const hash = text => createHash('sha256').update(text).digest('hex').slice(0,12)
 const escape = text => String(text).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))
@@ -23,10 +24,9 @@ const glyphs = {
   folder:'<path d="M3 7V5a1 1 0 0 1 1-1h5l3 3h8a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/>'
 }
 const icon = name => `<svg class="aero-icon" aria-hidden="true"><use href="#aero-symbol-${name}"></use></svg>`
-const category = url => /work-hours/.test(url)?'Work':/calculator/.test(url)?'Finance':/pdf/.test(url)?'PDF':/handwriting/.test(url)?'Create':/drive/.test(url)?'Files':'Image'
 
 function shell(current, name) {
-  const isTool = !['/','/tools/','/about/','/privacy/','/offline/'].includes(current)&&!current.startsWith('/how-to-')
+  const isTool = !['/','/tools/','/guides/','/about/','/privacy/','/offline/'].includes(current)&&!current.startsWith('/how-to-')
   return `<svg width="0" height="0" aria-hidden="true" style="position:absolute;overflow:hidden">${Object.entries(glyphs).map(([name,paths])=>`<symbol id="aero-symbol-${name}" viewBox="0 0 24 24">${paths}</symbol>`).join('')}</svg>
 <header class="aero-app-header" aria-label="Aeroniqx app">
   <a href="/" id="aero-back" class="aero-icon-button" aria-label="Back to all tools"${isTool?'':' hidden'}>${icon('back')}</a>
@@ -51,6 +51,7 @@ function controls(isHome) {
  <div class="aero-chips" role="group" aria-label="Tool category">${[{id:'All',label:'All'},...categories].map(c=>`<button type="button" class="aero-chip" data-category="${c.id}" aria-pressed="${c.id==='All'}">${c.label}</button>`).join('')}</div>
  <p id="aero-result-count" class="aero-results-note" role="status" aria-live="polite"></p></div>
  <div id="aero-library-list" class="aero-library-list"></div>
+ <div class="aero-library-footer"><a href="/guides/">Guides &amp; Presets <span aria-hidden="true">↗</span></a></div>
 </dialog>
 <dialog id="aero-install" class="aero-dialog" aria-labelledby="aero-install-title">
  <div class="aero-dialog-head"><h2 id="aero-install-title">Your toolkit. One tap away.</h2><button type="button" class="aero-icon-button" data-close aria-label="Close installation help" autofocus>${icon('close')}</button></div>
@@ -67,23 +68,16 @@ export async function addMobileApp(root, dist, { calculatorAssets, updatesCss })
   const source=path.join(root,'tools/app-shell')
   await mkdir(path.join(dist,'assets/app-icons'),{recursive:true})
   for(const file of ['icon-192.png','icon-512.png','maskable-512.png','apple-touch-icon.png'])await cp(path.join(source,file),path.join(dist,'assets/app-icons',file))
-  const pages=(await readdir(dist,{recursive:true})).filter(f=>f.endsWith('.html')&&f!=='404.html')
-  const home=await readFile(path.join(dist,'index.html'),'utf8')
-  const preferred=new Map()
-  for(const [,attrs,body] of home.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/g)){
-    if(!attrs.includes('tool-card-link'))continue
-    const url=attrs.match(/href="([^"]+)"/)?.[1],title=body.match(/class="tool-card-title">([^<]+)/)?.[1]
-    if(url&&url!=='/'&&title)preferred.set(url,decode(title))
-  }
-  const catalog=[]
+  const pages=(await readdir(dist,{recursive:true})).map(f=>f.replaceAll('\\','/')).filter(f=>f.endsWith('.html')&&f!=='404.html').sort()
+  const toolPages=[]
   for(const file of pages){
     const url='/'+file.replaceAll('\\','/').replace(/index\.html$/,'')
-    if(['/','/about/','/privacy/'].includes(url)||url.startsWith('/how-to-'))continue
+    if(['/','/about/','/privacy/'].includes(url))continue
     const html=await readFile(path.join(dist,file),'utf8')
     const h1=html.match(/<h1\b[^>]*>([\s\S]*?)<\/h1>/)?.[1]
-    if(h1)catalog.push({path:url,title:preferred.get(url)||decode(h1).split(' — ')[0].replace(/\s+Online(?: Free)?$/,''),category:category(url),...coreTools[url]})
+    if(h1)toolPages.push({path:url,title:decode(h1).split(' — ')[0].replace(/\s+Online(?: Free)?$/,''),html})
   }
-  catalog.sort((a,b)=>(Boolean(coreTools[b.path])-Boolean(coreTools[a.path]))||(preferred.has(b.path)-preferred.has(a.path))||a.title.localeCompare(b.title))
+  const { catalog, resources }=buildToolCatalog(toolPages)
   const catalogText=JSON.stringify(catalog),catalogFile=`assets/app-catalog-${hash(catalogText)}.json`
   await writeFile(path.join(dist,catalogFile),catalogText)
   const css=(await readFile(path.join(source,'app.css'),'utf8'))+'\n'+await readFile(path.join(source,'platform.css'),'utf8'),cssFile=`assets/mobile-app-${hash(css)}.css`
@@ -92,12 +86,12 @@ export async function addMobileApp(root, dist, { calculatorAssets, updatesCss })
   await writeFile(path.join(dist,cssFile),css);await writeFile(path.join(dist,jsFile),js)
   const manifest={id:'/',name:'Aeroniqx — Everyday Tools',short_name:'Aeroniqx',description:'Useful tools for work, money, documents and creative tasks. Free to use, with no ads or Aeroniqx account.',start_url:'/',scope:'/',display:'standalone',background_color:'#ffffff',theme_color:'#ffffff',lang:'en',icons:[{src:'/assets/app-icons/icon-192.png',sizes:'192x192',type:'image/png'},{src:'/assets/app-icons/icon-512.png',sizes:'512x512',type:'image/png'},{src:'/assets/app-icons/maskable-512.png',sizes:'512x512',type:'image/png',purpose:'maskable'}],shortcuts:[{name:'All tools',url:'/tools/'},{name:'Work Hours & Timesheet',short_name:'Work Hours',url:'/work-hours-calculator/'},{name:'Handwriting Font',url:'/handwriting-font/'}]}
   await writeFile(path.join(dist,'manifest.webmanifest'),JSON.stringify(manifest,null,2)+'\n')
-  await writePlatformPages(dist,catalog)
-  pages.push('tools/index.html')
+  await writePlatformPages(dist,catalog,resources)
+  pages.push('tools/index.html','guides/index.html')
   for(const file of pages){
     const url='/'+file.replaceAll('\\','/').replace(/index\.html$/,'')
     let html=await readFile(path.join(dist,file),'utf8')
-    const title=catalog.find(t=>t.path===url)?.title||'Aeroniqx'
+    const title=catalog.find(t=>t.path===url)?.title||resources.find(t=>t.path===url)?.title||'Aeroniqx'
     html=html.replace(/<meta\b[^>]*name="(?:theme-color|apple-mobile-web-app-capable|apple-mobile-web-app-title)"[^>]*>/gi,'')
       .replace(/(<meta[^>]*name="viewport"[^>]*content=")([^"]*)"/,(_,prefix,value)=>`${prefix}${value.replace(/,?\s*viewport-fit=[^,]+/,'')}, viewport-fit=cover, interactive-widget=resizes-content"`)
       .replace('</head>',`<meta name="theme-color" content="#ffffff"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Aeroniqx"><link rel="manifest" href="/manifest.webmanifest"><link rel="apple-touch-icon" href="/assets/app-icons/apple-touch-icon.png"><link rel="stylesheet" href="/${cssFile}"><script src="/${jsFile}" defer></script>\n</head>`)
@@ -112,5 +106,5 @@ export async function addMobileApp(root, dist, { calculatorAssets, updatesCss })
   const workerTemplate=await readFile(path.join(source,'service-worker.js'),'utf8')
   const version=hash(workerTemplate+(await Promise.all(precache.map(url=>readFile(path.join(dist,url.endsWith('/')?url.slice(1)+'index.html':url.slice(1)))))).map(b=>hash(b)).join(''))
   await writeFile(path.join(dist,'service-worker.js'),workerTemplate.replace('__VERSION__',version).replace('__PRECACHE__',JSON.stringify(precache)))
-  return {assets:[...assets,'service-worker.js','offline/index.html'],script:jsFile,catalog:catalogFile,version,tools:catalog.length}
+  return {assets:[...assets,'service-worker.js','offline/index.html'],script:jsFile,catalog:catalogFile,version,tools:catalog.length,resources:resources.length}
 }
