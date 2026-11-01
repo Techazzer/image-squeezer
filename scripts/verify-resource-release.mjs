@@ -5,11 +5,22 @@ const origin=process.argv[2]
 if(!/^https:\/\/(?:aeroniqx\.in|[a-z0-9-]+\.image-resizer-66w\.pages\.dev)$/.test(origin||''))throw Error('Supply the verified Aeroniqx production or deployment origin.')
 const build=JSON.parse(await readFile('deployment/build.json','utf8'))
 const sha256=bytes=>createHash('sha256').update(bytes).digest('hex')
+// Cloudflare can rewrite public contact emails and inject its edge scripts.
+// Undo only those known transformations before comparing the source document.
+const decodeEmail=hex=>{
+  assert.match(hex,/^(?:[a-f0-9]{2}){2,}$/i)
+  const bytes=Buffer.from(hex,'hex'),key=bytes[0]
+  return Buffer.from(bytes.subarray(1).map(byte=>byte^key)).toString('utf8')
+}
+const sourceHtml=html=>html
+  .replace(/<script\b[^>]*src="(?:\/cdn-cgi\/scripts\/[^" ]+\/cloudflare-static\/email-decode\.min\.js|https:\/\/static\.cloudflareinsights\.com\/beacon\.min\.js[^" ]*)"[^>]*><\/script>/g,'')
+  .replace(/href="\/cdn-cgi\/l\/email-protection#([a-f0-9]+)"/gi,(_,hex)=>`href="mailto:${decodeEmail(hex)}"`)
+  .replace(/<span class="__cf_email__" data-cfemail="([a-f0-9]+)">[^<]*<\/span>/gi,(_,hex)=>decodeEmail(hex))
 const checks=[]
 const standaloneRoutes=(build.mobileApp.standaloneResourcePages||[]).map(file=>'/'+file.replace(/index\.html$/,''))
 for(const route of ['/','/tools/','/pdf-compress/','/bill-splitter/',...[...build.mobileApp.businessResourcePages,...build.mobileApp.standaloneResourcePages].map(file=>'/'+file.replace(/index\.html$/,''))]){
   const response=await fetch(origin+route,{signal:AbortSignal.timeout(25000)})
-  const html=await response.text()
+  const html=sourceHtml(await response.text())
   assert.equal(response.status,200,route)
   if(standaloneRoutes.includes(route)){
     assert.match(html,/resource-standalone/)
