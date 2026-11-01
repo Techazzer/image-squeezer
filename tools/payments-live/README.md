@@ -6,7 +6,7 @@ Prices are fixed server-side: supplier directory ₹99; export-registration guid
 
 `content/payment-release.json` enables the paid Pages release. `npm run build` builds the live Worker assets before replacing public storefront pages, removes the three free file copies from the current Pages deployment, updates the library/guide purchase links and publishes the live privacy/refund/terms pages. Run `npm test` and `node scripts/check-build.mjs` before deployment.
 
-Deploy the Worker with `..\cloudflare.cmd deploy --config tools/payments-live/wrangler.jsonc`. Main-branch pushes deploy the related Pages changes via the existing workflow. Cloudflare routes `aeroniqx.in/banana-leaf` and `aeroniqx.in/banana-leaf/*` must both point to this Worker, with fail-closed routing. Never return to free Pages as a failure fallback.
+Deploy the Worker with `..\cloudflare.cmd deploy --config tools/payments-live/wrangler.jsonc`. Main-branch pushes deploy the related Pages changes via the existing workflow. Cloudflare routes `aeroniqx.in/banana-leaf` and `aeroniqx.in/banana-leaf/*` must both point to this Worker, with fail-closed routing. Also route `aeroniqx.in/downloads/business/*` here: the allowlist rejects these old public download URLs with 404 even if old Pages assets remain cached. Never return to free Pages as a failure fallback.
 
 The owner enters `RAZORPAY_KEY_ID` and `RAZORPAY_KEY_SECRET` as encrypted Secrets directly in Cloudflare. The signing secret is initialized with `node scripts/init-payment-test-secret.mjs --live` and is never printed. Preserve all secrets on redeployment.
 

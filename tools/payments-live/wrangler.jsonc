@@ -7,7 +7,8 @@
   "preview_urls": false,
   "routes": [
     { "pattern": "aeroniqx.in/banana-leaf", "zone_name": "aeroniqx.in" },
-    { "pattern": "aeroniqx.in/banana-leaf/*", "zone_name": "aeroniqx.in" }
+    { "pattern": "aeroniqx.in/banana-leaf/*", "zone_name": "aeroniqx.in" },
+    { "pattern": "aeroniqx.in/downloads/business/*", "zone_name": "aeroniqx.in" }
   ],
   "keep_vars": true,
   "assets": { "directory": "dist", "binding": "ASSETS", "run_worker_first": true },
