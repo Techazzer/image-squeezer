@@ -1,4 +1,4 @@
-import { CheckoutError, SESSION_COOKIE, configured, requireConfigured, signClaim, readClaim, hmac, cookies, cookie, grantCookie, requireSession, requireSameOrigin, readBody, productFor, verifyCheckoutSignature, validateOrder, validatePayment } from './core.js'
+import { CheckoutError, SESSION_COOKIE, configured, configurationIssues, requireConfigured, signClaim, readClaim, hmac, cookies, cookie, grantCookie, requireSession, requireSameOrigin, readBody, productFor, verifyCheckoutSignature, validateOrder, validatePayment } from './core.js'
 
 const json = (body, status = 200, extra = {}) => new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json', ...extra } })
 const safeResponse = response => {
@@ -56,7 +56,7 @@ export function createHandler({ products, publicPaths, fetcher = fetch, clock = 
     const url = new URL(request.url), route = url.pathname
     if (request.method === 'GET' && route === '/api/config') {
       const ready = configured(env)
-      if (!ready) return json({ mode: 'test', ready: false, message: 'Test checkout is waiting for its secure API configuration.' })
+      if (!ready) return json({ mode: 'test', ready: false, message: `Check these Cloudflare fields: ${configurationIssues(env).join(', ')}. Test checkout is not active yet.` })
       let session
       try { session = await requireSession(request, env, clock()) }
       catch { session = { kind: 'session', sid: crypto.randomUUID(), exp: clock() + 604800 } }
@@ -130,6 +130,9 @@ export function createHandler({ products, publicPaths, fetcher = fetch, clock = 
     throw new CheckoutError('not_found', 404)
   }
   return async (request, env) => {
+    // Clipboard whitespace is not part of a Razorpay credential; never return its value in setup errors.
+    env = { ...env, RAZORPAY_KEY_ID: typeof env.RAZORPAY_KEY_ID === 'string' ? env.RAZORPAY_KEY_ID.trim() : env.RAZORPAY_KEY_ID,
+      RAZORPAY_KEY_SECRET: typeof env.RAZORPAY_KEY_SECRET === 'string' ? env.RAZORPAY_KEY_SECRET.trim() : env.RAZORPAY_KEY_SECRET }
     try { return safeResponse(await handle(request, env)) }
     catch (error) { return safeResponse(json({ error: error instanceof CheckoutError ? error.message : 'temporarily_unavailable' }, error instanceof CheckoutError ? error.status : 503)) }
   }

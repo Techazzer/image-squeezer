@@ -77,6 +77,19 @@ test('missing secrets, a live key, or a live mode cannot create an order', async
     assert.equal(s.calls.length, 0)
   }
 })
+
+test('credential paste whitespace is normalized and setup errors expose field names only', async () => {
+  const s = setup(), c = s.client()
+  s.env.RAZORPAY_KEY_ID = ` ${s.env.RAZORPAY_KEY_ID}\n`
+  s.env.RAZORPAY_KEY_SECRET = ` ${s.env.RAZORPAY_KEY_SECRET}\n`
+  assert.equal((await (await c.request('/api/config')).json()).ready, true)
+  await begin(s, c)
+  s.env.RAZORPAY_KEY_ID = 'incorrect-private-value'
+  const setupResult = await (await c.request('/api/config')).text()
+  assert.match(setupResult, /RAZORPAY_KEY_ID/)
+  assert.ok(!setupResult.includes(s.env.RAZORPAY_KEY_ID))
+  assert.ok(!setupResult.includes(s.env.RAZORPAY_KEY_SECRET))
+})
 test('captured and signed test payments unlock only their own full files', async () => {
   for (const product of products) {
     const s = setup(), c = s.client(), order = await begin(s, c, product.id), payment = s.authorize(order)

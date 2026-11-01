@@ -6,9 +6,16 @@ export class CheckoutError extends Error {
   constructor(code, status = 400) { super(code); this.status = status }
 }
 export function configured(env) {
-  return env.PAYMENT_MODE === 'test' && /^rzp_test_[A-Za-z0-9]+$/.test(env.RAZORPAY_KEY_ID || '') &&
-    typeof env.RAZORPAY_KEY_SECRET === 'string' && env.RAZORPAY_KEY_SECRET.length >= 16 &&
-    typeof env.ACCESS_TOKEN_SECRET === 'string' && env.ACCESS_TOKEN_SECRET.length >= 32 && !!env.PAYMENT_LIMITER
+  return configurationIssues(env).length === 0
+}
+export function configurationIssues(env) {
+  return [
+    ['PAYMENT_MODE', env.PAYMENT_MODE === 'test'],
+    ['RAZORPAY_KEY_ID', /^rzp_test_[A-Za-z0-9]+$/.test(env.RAZORPAY_KEY_ID || '')],
+    ['RAZORPAY_KEY_SECRET', typeof env.RAZORPAY_KEY_SECRET === 'string' && env.RAZORPAY_KEY_SECRET.length >= 16],
+    ['ACCESS_TOKEN_SECRET', typeof env.ACCESS_TOKEN_SECRET === 'string' && env.ACCESS_TOKEN_SECRET.length >= 32],
+    ['PAYMENT_LIMITER', !!env.PAYMENT_LIMITER]
+  ].filter(([, valid]) => !valid).map(([name]) => name)
 }
 export function requireConfigured(env) {
   if (!configured(env)) throw new CheckoutError('setup_required', 503)
