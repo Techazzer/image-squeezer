@@ -1,8 +1,8 @@
 {
   "baselineDeployment": "312c5019-ce54-4b5d-a127-ce84018f3a5a",
   "baselineFiles": 104,
-  "entryBundle": "assets/index-ba77f3a90efa.js",
-  "pdfChunk": "assets/index.es-ba77f3a90efa.js",
+  "entryBundle": "assets/index-b9f0883a2004.js",
+  "pdfChunk": "assets/index.es-b9f0883a2004.js",
   "updatesCss": "assets/aeroniqx-updates-454b44599fcb.css",
   "calculatorAssets": [
     "work-hours-calculator/timesheet-71807e7cb50f.js",
@@ -17,8 +17,8 @@
   ],
   "mobileApp": {
     "assets": [
-      "assets/mobile-app-500187af06ef.css",
-      "assets/mobile-app-c8adbbca5ec8.js",
+      "assets/mobile-app-5e1faea89ad5.css",
+      "assets/mobile-app-91d23d8b67ff.js",
       "assets/result-share-c231348e5f76.js",
       "assets/app-catalog-44d806c075f1.json",
       "manifest.webmanifest",
@@ -26,14 +26,46 @@
       "assets/app-icons/icon-512.png",
       "assets/app-icons/maskable-512.png",
       "assets/app-icons/apple-touch-icon.png",
+      "assets/resources/resources-4607a4400e19.js",
+      "assets/resources/resources-baa7df5592dd.css",
       "service-worker.js",
       "offline/index.html"
     ],
-    "script": "assets/mobile-app-c8adbbca5ec8.js",
+    "script": "assets/mobile-app-91d23d8b67ff.js",
     "catalog": "assets/app-catalog-44d806c075f1.json",
-    "version": "fcf792a233a8",
+    "version": "7ddb4c1886fe",
     "tools": 14,
-    "resources": 74
+    "resources": 74,
+    "businessResourcePages": [
+      "resources/index.html",
+      "resources/banana-leaf-business/index.html",
+      "resources/downloads/banana-leaf-suppliers/index.html",
+      "resources/downloads/export-registration-guide/index.html",
+      "resources/cart/index.html"
+    ],
+    "businessResourceDownloads": [
+      {
+        "file": "downloads/business/banana-leaf-supplier-pack-5799991f2099.pdf",
+        "source": "content/downloads/banana-leaf-supplier-pack.pdf",
+        "sha256": "5799991f20997e175db509b8fb633aa4d41dc4f11f75aab2042e3dbd84d8c80f",
+        "bytes": 114653,
+        "productId": "banana-leaf-suppliers"
+      },
+      {
+        "file": "downloads/business/banana-leaf-directory-and-tracker-ae47465c7903.xlsx",
+        "source": "content/downloads/banana-leaf-directory-and-tracker.xlsx",
+        "sha256": "ae47465c79034cea97f6f7487863d11f2ec21a79b26649ec503556e729ca00cd",
+        "bytes": 16584,
+        "productId": "banana-leaf-suppliers"
+      },
+      {
+        "file": "downloads/business/india-export-registration-guide-a425d6a0715e.pdf",
+        "source": "content/downloads/india-export-registration-guide.pdf",
+        "sha256": "a425d6a0715e6a74a19800bab21b808a4cae7105bc2252ffef126f6984be2aea",
+        "bytes": 113485,
+        "productId": "export-registration-guide"
+      }
+    ]
   },
   "calculator": "/work-hours-calculator/"
 }

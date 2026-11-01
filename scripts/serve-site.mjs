@@ -4,6 +4,8 @@ import { fileURLToPath } from 'node:url'
 import { readFile, stat } from 'node:fs/promises'
 
 const root = fileURLToPath(new URL('../dist/', import.meta.url))
+const port = Number(process.env.PORT || 4173)
+if (!Number.isInteger(port) || port < 1024 || port > 65535) throw Error('PORT must be an integer between 1024 and 65535')
 const types = { '.html':'text/html; charset=utf-8', '.js':'text/javascript; charset=utf-8', '.mjs':'text/javascript; charset=utf-8', '.css':'text/css; charset=utf-8', '.json':'application/json', '.webmanifest':'application/manifest+json', '.svg':'image/svg+xml', '.png':'image/png', '.xml':'application/xml', '.txt':'text/plain; charset=utf-8' }
 const server = http.createServer(async (req, res) => {
   try {
@@ -19,9 +21,11 @@ const server = http.createServer(async (req, res) => {
       file = path.join(file, 'index.html')
     }
     const content = await readFile(file)
-    res.writeHead(200, { 'Content-Type': types[path.extname(file)] || 'application/octet-stream', 'Cache-Control': 'no-store' }).end(content)
+    const extension=path.extname(file)
+    const type=extension==='.pdf'?'application/pdf':extension==='.xlsx'?'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':types[extension]||'application/octet-stream'
+    res.writeHead(200, { 'Content-Type': type, 'Cache-Control': 'no-store', ...(pathname.startsWith('/downloads/business/')?{'Content-Disposition':'attachment','X-Robots-Tag':'noindex, nofollow'}:{}) }).end(content)
   } catch {
     res.writeHead(404, { 'Content-Type':'text/html; charset=utf-8' }).end(await readFile(path.join(root,'404.html')))
   }
 })
-server.listen(4173, '127.0.0.1', () => console.log('Aeroniqx preview: http://127.0.0.1:4173'))
+server.listen(port, '127.0.0.1', () => console.log(`Aeroniqx preview: http://127.0.0.1:${port}`))

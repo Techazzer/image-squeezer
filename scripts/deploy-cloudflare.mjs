@@ -35,7 +35,7 @@ const deploymentUrl = result.stdout.match(/https:\/\/[a-f0-9]+\.image-resizer-66
 if (!deploymentUrl) throw new Error('Deployment completed but its immutable URL could not be read. Inspect Wrangler output before retrying.')
 
 const build = JSON.parse(await readFile('deployment/build.json', 'utf8'))
-const assetPaths = [build.entryBundle, build.pdfChunk, build.updatesCss, ...build.calculatorAssets, ...build.billSplitterAssets, ...build.mobileApp.assets]
+const assetPaths = [build.entryBundle, build.pdfChunk, build.updatesCss, ...build.calculatorAssets, ...build.billSplitterAssets, ...build.mobileApp.assets, ...(build.mobileApp.businessResourceDownloads || []).map(item=>item.file)]
 const expectedHashes = new Map(await Promise.all(assetPaths.map(async file => [file, sha256(await readFile(`dist/${file}`))])))
 const homeTitle = (await readFile('dist/index.html', 'utf8')).match(/<title>([^<]+)<\/title>/)[1]
 

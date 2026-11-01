@@ -7,6 +7,9 @@ export const categories = [
   {id:'Files',label:'Files & folders',icon:'folder',description:'Organize and copy files across accounts.'},
 ]
 
+// Content categories open their own library instead of filtering calculator tools.
+export const businessCategory = {id:'Business',label:'Business idea',icon:'book',href:'/resources/',description:'Explore business guides, sourcing resources and practical starting points.'}
+
 // Editorial descriptions, not usage rankings. Keep claims tied to shipped tools.
 export const coreTools = {
   '/bill-splitter/': {title:'Bill Splitter & Shared Expenses',category:'Finance',description:'Split bills and trip costs. See who pays whom and share the result.',keywords:'bill splitter shared expense group trip travel dinner restaurant roommates rent household unequal percentage exact amount settle settlement who owes whom money friends'},

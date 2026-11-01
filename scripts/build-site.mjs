@@ -42,7 +42,7 @@ bundle = replaceOnce(bundle, '},{id:"finance",', '},{id:"work",label:"⏱️ Wor
 const oldMenu=bundle.match(/const xL=\[\{heading:"Compress by Size"[\s\S]*?\];function Lte\(\)/)?.[0]
 if(!oldMenu)throw Error('Missing recovered navigation integration point')
 const toolMenu=categories.map(c=>({heading:c.label,tools:Object.entries(coreTools).filter(([,t])=>t.category===c.id).map(([href,t])=>({label:t.title,href,icon:c.id==='PDF'?'PDF':c.label.slice(0,1),color:'#1557b0'}))}))
-toolMenu.push({heading:'Resources',tools:[{label:'Guides & Presets',href:'/guides/',icon:'↗',color:'#5f6368'}]})
+toolMenu.push({heading:'Resources',tools:[{label:'Business idea',href:'/resources/',icon:'↗',color:'#1557b0'},{label:'Guides & Presets',href:'/guides/',icon:'↗',color:'#5f6368'}]})
 bundle=replaceOnce(bundle,oldMenu,`const xL=${JSON.stringify(toolMenu)};function Lte()`,'distinct tools navigation')
 bundle = replaceOnce(bundle, 'p.jsx("a",{href:"/compress-image-to-50kb/",className:"nav-link",children:"50KB Tool"})', 'p.jsx("a",{href:"/work-hours-calculator/",className:"nav-link",children:"Work Hours"})', 'header shortcut')
 bundle = await updateClientTitles(root, bundle)

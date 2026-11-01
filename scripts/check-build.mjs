@@ -163,5 +163,32 @@ for (const file of (await readdir('dist', { recursive: true })).filter(f => f.en
   }
 }
 assert.equal(listed.length, indexable, 'Sitemap includes exactly the indexable pages')
+for (const file of build.mobileApp.businessResourcePages || []) {
+  const html = await readFile(`dist/${file}`, 'utf8')
+  assert.match(html, /name="robots" content="(?:noindex|index), follow"/, 'Published guides and download pages declare search visibility')
+  assert.equal([...html.matchAll(/<h1\b/g)].length, 1, `One heading on resource page: ${file}`)
+  assert.match(html, /id="aero-nav-resources"/, 'Resources are integrated into app navigation')
+  assert.doesNotMatch(html, /Preview (?:data|supplier)|sample-download|data-paid-preview/i, 'Paid data is never previewed')
+  assert.doesNotMatch(html, /Layout sample|Sample guide|Sample product|Content pending|available after launch|Add to cart|data-add-product|data-open-download|WhatsApp number/i, 'Every published resource is available without placeholder controls')
+  assert.doesNotMatch(html, /<iframe|<embed|<object|Vamsavali|vamsavalitamil@|Yuvaraju Agro/i, 'Resource data is delivered as files, without a browser preview')
+  for (const [, asset] of html.matchAll(/(?:src|href)="(\/[^"#?]*)[^\"]*"/g)) {
+    if (asset.startsWith('//')) continue
+    assert.ok((await stat(`dist${asset.endsWith('/') ? asset + 'index.html' : asset}`)).isFile(), `Resource link exists: ${file} -> ${asset}`)
+  }
+  if (file === 'resources/banana-leaf-business/index.html' || file === 'resources/cart/index.html') {
+    assert.match(html, /<del[^>]*>₹99<\/del>/, 'Supplier list price is struck through')
+    assert.match(html, /<del[^>]*>₹49<\/del>/, 'Registration list price is struck through')
+    assert.equal([...html.matchAll(/>Buy Now /g)].length, 2, 'Both products have a Buy Now link')
+    assert.equal([...html.matchAll(/<strong>Free<\/strong>/g)].length, 2, 'Both products are free')
+  }
+  if (file.includes('/downloads/')) assert.match(html, /download="[a-z0-9-]+\.(pdf|xlsx)"/, 'Download pages provide a real file without JavaScript')
+}
+assert.equal(build.mobileApp.businessResourceDownloads.length, 3, 'Both complete PDFs and the Excel directory are published')
+for (const file of build.mobileApp.businessResourceDownloads) {
+  const bytes=await readFile(`dist/${file.file}`)
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), file.sha256, `Download matches the prepared file: ${file.file}`)
+  assert.deepEqual(bytes, await readFile(file.source), 'Published file is identical to the approved deliverable')
+}
+assert.match(await readFile('dist/_headers','utf8'), /\/downloads\/business\/\*[\s\S]*Content-Disposition: attachment/, 'Resource files download without inline previews')
 console.log(`SEO checks passed: ${indexable} pages with initial headings, unique titles, valid schema, sitemap coverage and internal links.`)
 console.log(`Build checks passed: ${baseline.files.length} original paths, original assets, linked assets, JavaScript syntax, no ad loaders, SEO and hosting rules.`)

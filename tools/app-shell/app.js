@@ -27,7 +27,7 @@
   }
   function currentTool() {
     const path = location.pathname.replace(/\/?$/, '/')
-    if (['/','/tools/','/guides/','/about/','/privacy/','/offline/'].includes(path)||path.startsWith('/how-to-')) return null
+    if (['/','/tools/','/guides/','/about/','/privacy/','/offline/'].includes(path)||path.startsWith('/how-to-')||path.startsWith('/resources/')) return null
     const core = catalog && canonicalTool(catalog,path)
     if (core) return {path:core.path,title:core.title,category:core.category}
     const title = document.querySelector('h1')?.textContent.trim().replace(/\s+/g,' ') || document.title.split(' | ')[0]
@@ -47,6 +47,9 @@
     if(desktopSave)desktopSave.hidden=!tool
     $('aero-nav-home').removeAttribute('aria-current')
     if (location.pathname==='/') $('aero-nav-home').setAttribute('aria-current','page')
+    const resourceNav = $('aero-nav-resources')
+    resourceNav?.removeAttribute('aria-current')
+    if (location.pathname.startsWith('/resources/')) resourceNav?.setAttribute('aria-current','page')
     $('aero-nav-splitter').removeAttribute('aria-current')
     if (location.pathname.replace(/\/?$/, '/')==='/bill-splitter/') $('aero-nav-splitter').setAttribute('aria-current','page')
     if (tool) {
@@ -185,7 +188,7 @@
     const link=event.target.closest('a[href]')
     if(!link||!root.contains(link)||event.defaultPrevented||event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey||link.target==='_blank')return
     const url=new URL(link.href,location.href)
-    if(url.origin===location.origin&&['/','/tools/','/guides/','/about/','/privacy/'].includes(url.pathname)){
+    if(url.origin===location.origin&&(['/','/tools/','/guides/','/about/','/privacy/'].includes(url.pathname)||url.pathname.startsWith('/resources/'))){
       event.preventDefault();event.stopImmediatePropagation();location.assign(url.href)
     }
   },true)

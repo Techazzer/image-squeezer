@@ -17,6 +17,7 @@
 .aero-chips{display:flex;gap:8px;overflow-x:auto;padding:14px 0 2px;scrollbar-width:none}
 .aero-chip{border:1px solid #d9e2ed;background:#fff;color:#405064;border-radius:24px;font:600 .8rem var(--font,system-ui);padding:10px 15px;min-height:44px;white-space:nowrap;cursor:pointer}
 .aero-chip[aria-pressed=true]{background:#1557b0;border-color:#1557b0;color:#fff}
+.aero-chips>a.aero-chip{display:inline-flex;align-items:center;text-decoration:none}
 .aero-library-list{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;padding:0 14px 16px;scroll-padding-bottom:20px}
 .aero-library-row{display:flex;gap:8px;align-items:center;border-top:1px solid #edf0f5;padding:8px}
 .aero-library-link{display:flex;align-items:center;gap:12px;flex:1;min-width:0;text-decoration:none;color:#202124;min-height:58px;border-radius:12px}
@@ -56,7 +57,7 @@ html[data-aero-embed=true] .aero-app-header,html[data-aero-embed=true] .aero-app
  .aero-app-brand img{width:32px;height:32px;border-radius:9px}
  .aero-app-page-name{flex:1;min-width:0;font-size:.92rem;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#172b47}
  .aero-app-header .aero-home-label{margin-left:auto;color:#536175;font-size:.7rem;white-space:nowrap;background:#f0f4fa;border-radius:20px;padding:6px 10px}
- .aero-app-nav{position:fixed;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));z-index:120;bottom:0;left:0;right:0;border-top:1px solid #e1e8f1;background:#fffffffa;backdrop-filter:blur(18px);padding:7px max(8px,env(safe-area-inset-right)) calc(7px + env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left));box-shadow:0 -4px 25px #17304e08}
+ .aero-app-nav{position:fixed;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));z-index:120;bottom:0;left:0;right:0;border-top:1px solid #e1e8f1;background:#fffffffa;backdrop-filter:blur(18px);padding:7px max(8px,env(safe-area-inset-right)) calc(7px + env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left));box-shadow:0 -4px 25px #17304e08}
  .aero-app-nav a,.aero-app-nav button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:54px;text-decoration:none;color:#536175;background:none;border:0;cursor:pointer;font:600 .68rem var(--font,system-ui);padding:5px 0;border-radius:15px}
  .aero-app-nav [aria-current=page]{color:#1557b0;background:#edf3ff}
  .aero-app-nav .aero-icon{width:22px;height:22px}

@@ -50,9 +50,9 @@ html[data-aero-embed=true] .aero-desktop-header{display:none!important}
  .platform-section h2{font-size:23px;letter-spacing:-.65px}
  .platform-section-head p{font-size:13px}
  .desktop-tool-filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
- .desktop-tool-filters button{display:flex;align-items:center;gap:10px;border:1px solid #dfe6ef;border-radius:8px;background:#fff;color:#536175;padding:10px 14px;min-height:42px;font:500 13px/1.4 var(--font,system-ui);cursor:pointer}
+ .desktop-tool-filters button,.desktop-tool-filters>a{display:flex;align-items:center;gap:10px;border:1px solid #dfe6ef;border-radius:8px;background:#fff;color:#536175;padding:10px 14px;min-height:42px;font:500 13px/1.4 var(--font,system-ui);cursor:pointer}
  .desktop-tool-filters button span{font-size:11px;opacity:.75}
- .desktop-tool-filters button:hover{border-color:#9db9e0}
+ .desktop-tool-filters button:hover,.desktop-tool-filters>a:hover{border-color:#9db9e0}
  .desktop-tool-filters [aria-pressed=true]{background:#1557b0;border-color:#1557b0;color:#fff}
  .desktop-tool-count{display:block;position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
  .platform-featured{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
@@ -128,3 +128,14 @@ html[data-aero-embed=true] .aero-desktop-header{display:none!important}
 }
 @media screen and (min-width:1320px){.platform-footer{margin-left:auto;margin-right:auto}}
 @media(prefers-reduced-motion:reduce){.platform-page .platform-tool{transition:none}}
+/* Leave room for the business resource portal in the existing navigation. */
+@media screen and (min-width:721px) and (max-width:1200px){
+ .aero-desktop-brand>span{display:none}
+ .aero-desktop-top{gap:20px}.aero-desktop-top nav{gap:20px}
+ .aero-desktop-top nav>a[href='/about/'],.aero-desktop-header kbd{display:none}
+ .aero-desktop-actions [data-aero-search]{min-width:0}
+}
+@media screen and (min-width:721px) and (max-width:980px){
+ .aero-desktop-top nav>a[href='/guides/']{display:none}
+ .aero-desktop-actions [data-aero-saved] span{display:none}
+}

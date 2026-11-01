@@ -1,9 +1,10 @@
 import { readFile, writeFile, readdir, mkdir, cp } from 'node:fs/promises'
 import { createHash } from 'node:crypto'
 import path from 'node:path'
-import { categories } from './tool-content.mjs'
+import { categories, businessCategory } from './tool-content.mjs'
 import { writePlatformPages } from './platform-pages.mjs'
 import { buildToolCatalog } from './tool-catalog.mjs'
+import { writeBusinessResourcePages } from './business-resources.mjs'
 
 const hash = text => createHash('sha256').update(text).digest('hex').slice(0,12)
 const escape = text => String(text).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))
@@ -23,18 +24,19 @@ const glyphs = {
   split:'<path d="M12 3v5m0 0L5 15v6m7-13 7 7v6M2 18l3 3 3-3m8 0 3 3 3-3"/>',
   pen:'<path d="m15 4 5 5M4 20l5-1L21 7l-4-4L5 15zM3 22h18"/>',
   folder:'<path d="M3 7V5a1 1 0 0 1 1-1h5l3 3h8a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/>'
+  ,book:'<path d="M12 5v15M3 4c4-1 6 0 9 2 3-2 5-3 9-2v15c-4-1-6 0-9 2-3-2-5-3-9-2z"/>'
 }
 const icon = name => `<svg class="aero-icon" aria-hidden="true"><use href="#aero-symbol-${name}"></use></svg>`
 
 function shell(current, name) {
-  const isTool = !['/','/tools/','/guides/','/about/','/privacy/','/offline/'].includes(current)&&!current.startsWith('/how-to-')
+  const isTool = !['/','/tools/','/guides/','/about/','/privacy/','/offline/'].includes(current)&&!current.startsWith('/how-to-')&&!current.startsWith('/resources/')
   return `<svg width="0" height="0" aria-hidden="true" style="position:absolute;overflow:hidden">${Object.entries(glyphs).map(([name,paths])=>`<symbol id="aero-symbol-${name}" viewBox="0 0 24 24">${paths}</symbol>`).join('')}</svg>
-<header class="aero-desktop-header"><div class="aero-desktop-top"><a class="aero-desktop-brand" href="/"><img src="/assets/app-icons/icon-192.png" alt="" width="32" height="32">Aeroniqx<span>Everyday tools</span></a><nav aria-label="Desktop navigation"><a href="/tools/"${current==='/tools/'?' aria-current="page"':''}>All tools</a><a href="/guides/"${current==='/guides/'?' aria-current="page"':''}>Guides &amp; Presets</a><a href="/about/"${current==='/about/'?' aria-current="page"':''}>About</a></nav><div class="aero-desktop-actions"><button type="button" data-aero-saved aria-label="Saved tools" disabled>${icon('bookmark')}<span>Saved</span></button><button type="button" data-aero-search aria-keyshortcuts="Control+k Meta+k">${icon('search')}<span>Search tools</span><kbd>Ctrl K</kbd></button></div></div><div class="aero-desktop-bar"><nav aria-label="Browse tool categories">${categories.map(c=>`<a href="/tools/#${c.id.toLowerCase()}">${icon(c.icon)}${c.label}</a>`).join('')}</nav><span>Free tools. No ads.</span><button type="button" id="aero-desktop-save" class="aero-desktop-save" aria-pressed="false"${isTool?'':' hidden'}>${icon('bookmark')}<span>Save this tool</span></button></div></header>
+<header class="aero-desktop-header"><div class="aero-desktop-top"><a class="aero-desktop-brand" href="/"><img src="/assets/app-icons/icon-192.png" alt="" width="32" height="32">Aeroniqx<span>Everyday tools</span></a><nav aria-label="Desktop navigation"><a href="/tools/"${current==='/tools/'?' aria-current="page"':''}>All tools</a><a href="/resources/"${current.startsWith('/resources/')?' aria-current="page"':''}>Business idea</a><a href="/guides/"${current==='/guides/'?' aria-current="page"':''}>Guides &amp; Presets</a><a href="/about/"${current==='/about/'?' aria-current="page"':''}>About</a></nav><div class="aero-desktop-actions"><button type="button" data-aero-saved aria-label="Saved tools" disabled>${icon('bookmark')}<span>Saved</span></button><button type="button" data-aero-search aria-keyshortcuts="Control+k Meta+k">${icon('search')}<span>Search tools</span><kbd>Ctrl K</kbd></button></div></div><div class="aero-desktop-bar"><nav aria-label="Browse tool categories">${[...categories,businessCategory].map(c=>`<a href="${c.href || `/tools/#${c.id.toLowerCase()}`}"${c.href && current.startsWith(c.href) ? ' aria-current="page"' : ''}>${icon(c.icon)}${c.label}</a>`).join('')}</nav><span>Free tools. No ads.</span><button type="button" id="aero-desktop-save" class="aero-desktop-save" aria-pressed="false"${isTool?'':' hidden'}>${icon('bookmark')}<span>Save this tool</span></button></div></header>
 <header class="aero-app-header" aria-label="Aeroniqx app">
   <a href="/" id="aero-back" class="aero-icon-button" aria-label="Back to all tools"${isTool?'':' hidden'}>${icon('back')}</a>
   <a href="/" id="aero-brand" class="aero-app-brand"${isTool?' hidden':''}><img src="/assets/app-icons/icon-192.png" width="32" height="32" alt="">Aeroniqx</a>
   <span id="aero-page-name" class="aero-app-page-name"${isTool?'':' hidden'}>${escape(name)}</span>
-  <span id="aero-home-label" class="aero-home-label"${isTool?' hidden':''}>Free · No ads</span>
+  <span id="aero-home-label" class="aero-home-label"${isTool?' hidden':''}>${current.startsWith('/resources/')?'Business idea':'Free · No ads'}</span>
   <button id="aero-save-page" class="aero-icon-button" type="button" aria-label="Save this tool" aria-pressed="false"${isTool?'':' hidden'}>${icon('bookmark')}</button>
 </header>
 <div id="aero-offline" class="aero-offline-note" role="status">You’re offline. Work Hours and Bill Splitter are available once their app files are saved.</div>`
@@ -45,6 +47,7 @@ function controls(current) {
   return `<nav class="aero-app-nav" aria-label="App navigation">
 <a href="/" id="aero-nav-home"${isHome?' aria-current="page"':''}>${icon('home')}<span>Home</span></a>
 <a href="/tools/" data-aero-tools>${icon('grid')}<span>Tools</span></a>
+<a href="/resources/" id="aero-nav-resources"${current.startsWith('/resources/')?' aria-current="page"':''}>${icon('book')}<span>${businessCategory.label}</span></a>
 <button type="button" id="aero-nav-saved" disabled>${icon('bookmark')}<span>Saved</span></button>
 <button type="button" id="aero-nav-install" disabled>${icon('download')}<span>Get app</span></button>
 <a href="/bill-splitter/" id="aero-nav-splitter" hidden${current==='/bill-splitter/'?' aria-current="page"':''}>${icon('split')}<span>Bill Splitter</span></a>
@@ -52,7 +55,7 @@ function controls(current) {
 <dialog id="aero-library" class="aero-dialog" aria-labelledby="aero-library-title">
  <div class="aero-dialog-head"><h2 id="aero-library-title">Find your tool</h2><button type="button" class="aero-icon-button" data-close aria-label="Close tool library" autofocus>${icon('close')}</button></div>
  <div class="aero-dialog-controls"><label class="aero-search">${icon('search')}<input id="aero-search" type="search" aria-label="Search tools" placeholder="Search a tool or task…" autocomplete="off" enterkeyhint="search" autocapitalize="none" spellcheck="false"></label>
- <div class="aero-chips" role="group" aria-label="Tool category">${[{id:'All',label:'All'},...categories].map(c=>`<button type="button" class="aero-chip" data-category="${c.id}" aria-pressed="${c.id==='All'}">${c.label}</button>`).join('')}</div>
+ <div class="aero-chips" role="group" aria-label="Tool category">${[{id:'All',label:'All'},...categories].map(c=>`<button type="button" class="aero-chip" data-category="${c.id}" aria-pressed="${c.id==='All'}">${c.label}</button>`).join('')}<a class="aero-chip" href="${businessCategory.href}">${businessCategory.label} ↗</a></div>
  <p id="aero-result-count" class="aero-results-note" role="status" aria-live="polite"></p></div>
  <div id="aero-library-list" class="aero-library-list"></div>
  <div class="aero-library-footer"><a href="/guides/">Guides &amp; Presets <span aria-hidden="true">↗</span></a></div>
@@ -99,7 +102,8 @@ export async function addMobileApp(root, dist, { calculatorAssets, billSplitterA
   const manifest={id:'/',name:'Aeroniqx — Everyday Tools',short_name:'Aeroniqx',description:'Useful tools for work, money, documents and creative tasks. Free to use, with no ads or Aeroniqx account.',start_url:'/',scope:'/',display:'standalone',background_color:'#ffffff',theme_color:'#ffffff',lang:'en',icons:[{src:'/assets/app-icons/icon-192.png',sizes:'192x192',type:'image/png'},{src:'/assets/app-icons/icon-512.png',sizes:'512x512',type:'image/png'},{src:'/assets/app-icons/maskable-512.png',sizes:'512x512',type:'image/png',purpose:'maskable'}],shortcuts:[{name:'All tools',url:'/tools/'},{name:'Work Hours & Timesheet',short_name:'Work Hours',url:'/work-hours-calculator/'},{name:'Handwriting Font',url:'/handwriting-font/'}]}
   await writeFile(path.join(dist,'manifest.webmanifest'),JSON.stringify(manifest,null,2)+'\n')
   await writePlatformPages(dist,catalog,resources)
-  pages.push('tools/index.html','guides/index.html')
+  const businessResources = await writeBusinessResourcePages(root,dist)
+  pages.push('tools/index.html','guides/index.html',...businessResources.pages)
   for(const file of pages){
     const url='/'+file.replaceAll('\\','/').replace(/index\.html$/,'')
     let html=await readFile(path.join(dist,file),'utf8')
@@ -118,5 +122,5 @@ export async function addMobileApp(root, dist, { calculatorAssets, billSplitterA
   const workerTemplate=await readFile(path.join(source,'service-worker.js'),'utf8')
   const version=hash(workerTemplate+(await Promise.all(precache.map(url=>readFile(path.join(dist,url.endsWith('/')?url.slice(1)+'index.html':url.slice(1)))))).map(b=>hash(b)).join(''))
   await writeFile(path.join(dist,'service-worker.js'),workerTemplate.replace('__VERSION__',version).replace('__PRECACHE__',JSON.stringify(precache)))
-  return {assets:[...assets,'service-worker.js','offline/index.html'],script:jsFile,catalog:catalogFile,version,tools:catalog.length,resources:resources.length}
+  return {assets:[...assets,...businessResources.assets,'service-worker.js','offline/index.html'],script:jsFile,catalog:catalogFile,version,tools:catalog.length,resources:resources.length,businessResourcePages:businessResources.pages,businessResourceDownloads:businessResources.downloads}
 }

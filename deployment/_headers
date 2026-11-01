@@ -22,3 +22,7 @@
 /service-worker.js
   Content-Type: text/javascript; charset=utf-8
   Service-Worker-Allowed: /
+
+/downloads/business/*
+  Content-Disposition: attachment
+  X-Robots-Tag: noindex, nofollow

@@ -1,0 +1,40 @@
+{
+  "mode": "free",
+  "resources": [
+    {
+      "slug": "banana-leaf-business",
+      "title": "Banana-leaf business",
+      "subtitle": "Explore sourcing, selling and the steps between.",
+      "category": "Exports",
+      "tags": ["Exports", "Sourcing"],
+      "status": "published",
+      "description": "A starting point for exploring banana-leaf sourcing and export. Read the guide, find useful tools and choose the resources you need.",
+      "videoUrl": null,
+      "updatedAt": "2026-11-01",
+      "products": ["banana-leaf-suppliers", "export-registration-guide"],
+      "sections": [
+        {"id": "overview", "title": "Understand the opportunity", "intro": "Start with the customer and work back to the supply. Choose a leaf format and a delivery route before approaching suppliers.", "points": [{"title": "Who would you sell to?", "text": "Define your buyer: a distributor, retailer, restaurant or another business. Record their product and delivery requirements."}, {"title": "What would you supply?", "text": "Specify fresh, frozen or dried leaves; whole or cut size; grade; packing; and order quantity. These details make supplier quotes easier to compare."}, {"title": "What needs checking?", "text": "Confirm demand, handling requirements, total delivered cost and destination rules before committing to an order. Rules for banana fruit should not be assumed to cover banana leaves."}]},
+        {"id": "sourcing", "title": "Build your sourcing shortlist", "intro": "Use the same questions with each supplier so you can compare the answers side by side.", "points": [{"title": "Product and location", "text": "Record the supplier’s business identity, sourcing location and the exact product offered."}, {"title": "Order and delivery", "text": "Ask about minimum quantities, samples, packing, lead times and transport arrangements."}, {"title": "Evidence and follow-up", "text": "Keep dated quotes and record what has been checked directly. A listed contact alone does not establish supplier reliability."}]},
+        {"id": "costs", "title": "Map the costs", "intro": "A useful costing sheet separates the purchase price from all the other costs of fulfilling the order.", "points": [{"title": "Purchase and preparation", "text": "Allow space for product cost, grading, packaging and local transport."}, {"title": "Delivery and other charges", "text": "Record freight, handling, applicable documentation costs and any other quoted charges."}, {"title": "Your selling price", "text": "Compare total costs with the proposed selling price. Keep assumptions visible and replace estimates with current quotes."}]},
+        {"id": "selling", "title": "Prepare for buyer conversations", "intro": "Before contacting a potential buyer, put the details they need in one place.", "points": [{"title": "A clear product specification", "text": "Describe the product, packaging, quantity and delivery terms you can actually offer."}, {"title": "An organised enquiry", "text": "Ask about the buyer’s requirements, purchasing process and sample expectations."}, {"title": "A record of next steps", "text": "Keep track of enquiries, replies, quotations and the next agreed action."}]},
+        {"id": "checklist", "title": "Your starting checklist", "checklist": ["Identify a target buyer and their requirements", "Write down the product specification", "Compare dated supplier quotes", "Check handling, transport and destination requirements", "Build a complete cost estimate", "Decide the next step using the evidence collected"]}
+      ]
+    }
+  ],
+  "products": [
+    {
+      "id": "banana-leaf-suppliers", "resourceSlug": "banana-leaf-business", "title": "Banana-leaf supplier directory", "type": "Supplier directory", "pricePaise": 0, "listPricePaise": 9900, "format": "PDF + Excel",
+      "description": "20 researched supplier leads: 17 in Tamil Nadu, 2 in Kerala and 1 in Karnataka. Organised to help you shortlist, enquire and compare quotes.",
+      "includes": ["16-page supplier pack with contacts and source links", "Filterable Excel directory and quote calculator", "Outreach template and sample-check checklist"],
+      "status": "published", "verificationStatus": "public-source-checked", "note": "Public sources checked 1 November 2026. Suppliers have not been called or sample-tested. Two leads use marketplace enquiry forms.",
+      "files": [{"file": "banana-leaf-supplier-pack.pdf", "label": "Download supplier PDF", "format": "PDF", "detail": "16 pages · Contacts, sources and enquiry tools"}, {"file": "banana-leaf-directory-and-tracker.xlsx", "label": "Download Excel directory", "format": "Excel", "detail": "20 leads · Filters, enquiry tracker and cost calculator"}]
+    },
+    {
+      "id": "export-registration-guide", "resourceSlug": "banana-leaf-business", "title": "Export registration, step by step", "type": "Practical guide", "pricePaise": 0, "listPricePaise": 4900, "format": "PDF guide",
+      "description": "A practical India export-registration guide using banana leaves as the example, from preparing your documents to checking destination requirements.",
+      "includes": ["13-page guide covering IEC, GST/LUT, APEDA and bank setup", "Document checklist, fee references and official links", "Plant-health checks and a Great Britain example"],
+      "status": "published", "verificationStatus": "official-source-checked", "note": "Official sources checked 1 November 2026. Confirm the requirements for your product and destination before shipping.",
+      "files": [{"file": "india-export-registration-guide.pdf", "label": "Download registration guide", "format": "PDF", "detail": "13 pages · Registration steps, documents and official sources"}]
+    }
+  ]
+}
