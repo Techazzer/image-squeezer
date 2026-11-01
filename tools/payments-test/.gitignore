@@ -1,0 +1,4 @@
+dist/
+manifest.generated.js
+.dev.vars*
+.wrangler/

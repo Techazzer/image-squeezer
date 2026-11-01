@@ -1,0 +1,12 @@
+.test-banner{padding:12px 20px;text-align:center;background:#fff1ce;color:#6b4d0b;border-bottom:1px solid #ead7a0;font-size:13px;line-height:1.6}
+.test-banner strong{margin-right:8px}.test-banner span{white-space:nowrap}
+.test-checkout{padding:28px;border:1px solid #c8d8ef;background:#edf3fc;border-radius:14px;margin:24px 0;scroll-margin-top:24px}
+.test-checkout h2{font-size:24px;letter-spacing:-.5px;margin-bottom:12px}
+.test-checkout p{font-size:14px;color:#526477;line-height:1.8}
+#checkout-message{margin-bottom:18px}.test-checkout .checkout-error{color:#8f3434}
+.checkout-actions{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}
+.checkout-files{padding:22px 0;border-top:1px solid #c8d8ef;margin-top:20px}
+.checkout-files h3{font-size:20px;margin-bottom:6px}.checkout-files p{margin-bottom:16px}
+.checkout-files .resource-button{margin:0 12px 10px 0}
+.resource-price strong{color:#1557b0}.resource-landing-assurance{max-width:560px}
+@media(max-width:720px){.test-checkout{padding:20px}.test-banner{font-size:12px}.test-banner strong{display:block}.checkout-files .resource-button{width:100%;margin-right:0}}
