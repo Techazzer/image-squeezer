@@ -12,6 +12,8 @@ function setup() {
   const env = { PAYMENT_MODE: 'test', RAZORPAY_KEY_ID: 'rzp_test_fixture', RAZORPAY_KEY_SECRET: 'test-secret-fixture-not-a-real-key', ACCESS_TOKEN_SECRET: 'signing-fixture-not-a-real-key-0123456789', PAYMENT_LIMITER: { limit: async () => ({ success: true }) },
     ASSETS: { fetch: async request => { assetReads.push(new URL(request.url).pathname); return new Response('%PDF-test-download', { headers: { 'Content-Type': 'application/pdf' } }) } } }
   const fetcher = async (url, init) => {
+    // Workers rejects redirect:error; manual also prevents forwarding credentials to another host.
+    assert.equal(init.redirect, 'manual')
     const route = new URL(url).pathname.replace('/v1/', '')
     calls.push({ route, method: init.method, body: init.body ? JSON.parse(init.body) : undefined })
     let body
@@ -157,4 +159,17 @@ test('cryptographic claims reject changed payloads, invalid encoding and expired
   for (const bad of ['', 'a.b.c', token + '.', token.replace(/^./, 'x')]) await assert.rejects(readClaim(s.env.ACCESS_TOKEN_SECRET, bad, 'session', s.time()))
   await assert.rejects(readClaim(s.env.ACCESS_TOKEN_SECRET, token, 'session', s.time() + 10))
   assert.match(SESSION_COOKIE, /^__Host-/)
+})
+
+test('Razorpay HTTP 400 authentication failures are distinguished without exposing provider error text', async () => {
+  const s = setup()
+  for (const [description, expected] of [['Authentication failed', 'credentials_invalid'], ['Private provider detail', 'payment_provider_rejected_request']]) {
+    const handle = createHandler({ products, publicPaths: [], fetcher: async () => new Response(JSON.stringify({ error: { description } }), { status: 400 }), clock: s.time })
+    const config = await handle(new Request(origin + '/api/config'), s.env)
+    const response = await handle(new Request(origin + '/api/orders', { method: 'POST', headers: { Origin: origin, Cookie: config.headers.get('set-cookie').split(';')[0], 'Content-Type': 'application/json' }, body: JSON.stringify({ productId: products[0].id }) }), s.env)
+    assert.equal(response.status, 502)
+    const result = await response.text()
+    assert.equal(JSON.parse(result).error, expected)
+    assert.ok(!result.includes(description))
+  }
 })

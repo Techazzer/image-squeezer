@@ -18,12 +18,17 @@ export function createHandler({ products, publicPaths, fetcher = fetch, clock = 
     let response
     try {
       response = await fetcher(`https://api.razorpay.com/v1/${route}`, {
-        method: body ? 'POST' : 'GET', redirect: 'error', signal: AbortSignal.timeout(12000),
+        method: body ? 'POST' : 'GET', redirect: 'manual', signal: AbortSignal.timeout(12000),
         headers: { Authorization: `Basic ${btoa(`${env.RAZORPAY_KEY_ID}:${env.RAZORPAY_KEY_SECRET}`)}`, 'Content-Type': 'application/json' },
         ...(body ? { body: JSON.stringify(body) } : {})
       })
     } catch { throw new CheckoutError('payment_provider_unavailable', 502) }
-    if (!response.ok) throw new CheckoutError(response.status === 401 ? 'credentials_invalid' : 'payment_provider_unavailable', 502)
+    if (!response.ok) {
+      // Razorpay can return authentication failures as HTTP 400. Never forward provider error text.
+      const detail = await response.json().catch(() => ({}))
+      const authenticationFailed = response.status === 401 || /authentication failed|invalid api key|invalid key secret/i.test(detail.error?.description || '')
+      throw new CheckoutError(authenticationFailed ? 'credentials_invalid' : response.status < 500 ? 'payment_provider_rejected_request' : 'payment_provider_unavailable', 502)
+    }
     return response.json()
   }
   async function validateClaim(env, token, session) {
