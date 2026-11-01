@@ -1,6 +1,8 @@
 # Razorpay test checkout
 
-This is a separate Cloudflare Worker, `aeroniqx-payments-test`. It does not change the free production storefront. Only `rzp_test_` keys and `PAYMENT_MODE=test` are accepted. Live payments require a separate implementation/release decision, not changing a flag here.
+This Cloudflare Worker, `aeroniqx-payments-test`, serves the sandbox on its workers.dev address. Only `rzp_test_` keys and `PAYMENT_MODE=test` are accepted. Real purchases use the separate `aeroniqx-payments-live` Worker, signing secret, cookies and order metadata.
+
+No custom-domain routes should point to the test Worker after live launch. Checkout APIs, assets and authenticated downloads are all under `/banana-leaf/`. The main Pages deploy workflow does not deploy this Worker. To rebuild sandbox assets after the paid release, generate the free source Pages build in a separate checkout with `content/payment-release.json` set to false; do not deploy that free build to production.
 
 ## Build and deploy
 

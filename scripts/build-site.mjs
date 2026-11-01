@@ -11,6 +11,7 @@ import { categories, coreTools } from './tool-content.mjs'
 import { buildBillSplitter } from './build-bill-splitter.mjs'
 import { compactHelpBundle } from './compact-tools.mjs'
 import { instrumentLegacyEvents } from './analytics-integration.mjs'
+import { preparePaidResourcePages } from './paid-resource-pages.mjs'
 
 const root = fileURLToPath(new URL('../', import.meta.url))
 const baseline = path.join(root, 'legacy-site')
@@ -120,6 +121,7 @@ const seo = await addSearchContent(root, dist)
 await optimizeHomepage(dist)
 const calculatorAssets = [...calculatorNames.values()].map(file => `work-hours-calculator/${file}`)
 const mobileApp = await addMobileApp(root, dist, { calculatorAssets, billSplitterAssets, updatesCss: updatesCssName })
+await preparePaidResourcePages(root, dist, mobileApp)
 seo.sitemapPages = await writeSitemap(dist)
 for (const file of ['_headers', '_redirects']) await cp(path.join(root, 'deployment', file), path.join(dist, file))
 await mkdir(path.join(root, 'deployment'), { recursive: true })

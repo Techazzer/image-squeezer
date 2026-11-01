@@ -1,24 +1,25 @@
 const encoder = new TextEncoder()
 const decoder = new TextDecoder()
 export const SESSION_COOKIE = '__Host-aero-test-session'
-export const grantCookie = productId => `__Host-aero-test-${productId}`
+export const sessionCookie = (mode = 'test') => `__Host-aero-${mode}-session`
+export const grantCookie = (productId, mode = 'test') => `__Host-aero-${mode}-${productId}`
 export class CheckoutError extends Error {
   constructor(code, status = 400) { super(code); this.status = status }
 }
-export function configured(env) {
-  return configurationIssues(env).length === 0
+export function configured(env, mode = 'test') {
+  return configurationIssues(env, mode).length === 0
 }
-export function configurationIssues(env) {
+export function configurationIssues(env, mode = 'test') {
   return [
-    ['PAYMENT_MODE', env.PAYMENT_MODE === 'test'],
-    ['RAZORPAY_KEY_ID', /^rzp_test_[A-Za-z0-9]+$/.test(env.RAZORPAY_KEY_ID || '')],
+    ['PAYMENT_MODE', ['test', 'live'].includes(mode) && env.PAYMENT_MODE === mode],
+    ['RAZORPAY_KEY_ID', new RegExp(`^rzp_${mode}_[A-Za-z0-9]+$`).test(env.RAZORPAY_KEY_ID || '')],
     ['RAZORPAY_KEY_SECRET', typeof env.RAZORPAY_KEY_SECRET === 'string' && env.RAZORPAY_KEY_SECRET.length >= 16],
     ['ACCESS_TOKEN_SECRET', typeof env.ACCESS_TOKEN_SECRET === 'string' && env.ACCESS_TOKEN_SECRET.length >= 32],
     ['PAYMENT_LIMITER', !!env.PAYMENT_LIMITER]
   ].filter(([, valid]) => !valid).map(([name]) => name)
 }
-export function requireConfigured(env) {
-  if (!configured(env)) throw new CheckoutError('setup_required', 503)
+export function requireConfigured(env, mode = 'test') {
+  if (!configured(env, mode)) throw new CheckoutError('setup_required', 503)
 }
 const base64url = bytes => btoa(String.fromCharCode(...bytes)).replaceAll('+', '-').replaceAll('/', '_').replace(/=+$/, '')
 function unbase64url(value) {
@@ -48,7 +49,7 @@ export function cookies(request) {
 }
 export const cookie = (name, value, seconds = 86400) => `${name}=${value}; Path=/; Max-Age=${seconds}; Secure; HttpOnly; SameSite=Lax`
 export async function requireSession(request, env, now) {
-  return readClaim(env.ACCESS_TOKEN_SECRET, cookies(request)[SESSION_COOKIE], 'session', now)
+  return readClaim(env.ACCESS_TOKEN_SECRET, cookies(request)[sessionCookie(env.PAYMENT_MODE)], 'session', now)
 }
 export async function readBody(request) {
   if (!/^application\/json\b/i.test(request.headers.get('Content-Type') || '')) throw new CheckoutError('json_required', 415)
@@ -83,9 +84,9 @@ export async function verifyCheckoutSignature(secret, orderId, paymentId, signat
   const bytes = Uint8Array.from(signature.match(/../g), value => parseInt(value, 16))
   if (!await crypto.subtle.verify('HMAC', await key(secret), bytes, encoder.encode(`${orderId}|${paymentId}`))) throw new CheckoutError('invalid_signature', 403)
 }
-export function validateOrder(order, claim, product) {
+export function validateOrder(order, claim, product, mode = 'test') {
   if (order.id !== claim.orderId || order.amount !== product.amount || order.currency !== 'INR' ||
-      order.notes?.product_id !== product.id || order.notes?.environment !== 'aeroniqx-test-v1') throw new CheckoutError('order_mismatch', 403)
+      order.notes?.product_id !== product.id || order.notes?.environment !== `aeroniqx-${mode}-v1`) throw new CheckoutError('order_mismatch', 403)
 }
 export function validatePayment(payment, claim, product, captured = true) {
   if (payment.order_id !== claim.orderId || payment.amount !== product.amount || payment.currency !== 'INR' ||

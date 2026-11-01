@@ -4,6 +4,7 @@ import assert from 'node:assert/strict'
 const origin=process.argv[2]
 if(!/^https:\/\/(?:aeroniqx\.in|[a-z0-9-]+\.image-resizer-66w\.pages\.dev)$/.test(origin||''))throw Error('Supply the verified Aeroniqx production or deployment origin.')
 const build=JSON.parse(await readFile('deployment/build.json','utf8'))
+const paidResources=build.mobileApp.businessResourcePaymentMode==='live'
 const sha256=bytes=>createHash('sha256').update(bytes).digest('hex')
 // Cloudflare can rewrite public contact emails and inject its edge scripts.
 // Undo only those known transformations before comparing the source document.
@@ -26,14 +27,14 @@ for(const route of ['/','/tools/','/pdf-compress/','/bill-splitter/',...[...buil
     assert.match(html,/resource-standalone/)
     assert.doesNotMatch(html,/rel="manifest"|mobile-app-|aero-nav-|App navigation|Desktop navigation|platform-header|platform-footer/)
     for(const [,href] of html.matchAll(/<a\b[^>]*href="([^"]+)"/g))assert.ok(href.startsWith('#')||href.startsWith('/banana-leaf/')||href.startsWith('/downloads/business/')||href==='mailto:techazzer@gmail.com',`Focused resource link: ${href}`)
-    assert.equal(sha256(html),sha256(await readFile(`dist${route}index.html`)),`Current standalone document: ${route}`)
+    if(!paidResources||!['/banana-leaf/banana-leaf-suppliers/','/banana-leaf/export-registration-guide/'].includes(route))assert.equal(sha256(html),sha256(await readFile(`dist${route}index.html`)),`Current standalone document: ${route}`)
   }else{
     assert.ok(html.includes(build.mobileApp.script),`Current app code at ${route}`)
     assert.ok(html.includes('id="aero-nav-resources"'),`Business idea navigation at ${route}`)
   }
   if(route.startsWith('/resources/'))assert.doesNotMatch(html,/Layout sample|Sample product|Content pending|available after launch|Add to cart/i)
   if(route==='/resources/banana-leaf-business/'||route==='/banana-leaf/'){
-    assert.match(html,/<del[^>]*>₹99<\/del>/);assert.match(html,/<del[^>]*>₹49<\/del>/)
+    assert.match(html,paidResources?/<strong>₹99<\/strong>/:/<del[^>]*>₹99<\/del>/);assert.match(html,paidResources?/<strong>₹49<\/strong>/:/<del[^>]*>₹49<\/del>/)
     assert.equal([...html.matchAll(/>Buy Now /g)].length,2)
   }
   checks.push({route,status:response.status,cacheControl:response.headers.get('cache-control'),sha256:sha256(html)})

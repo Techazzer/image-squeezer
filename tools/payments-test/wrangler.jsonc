@@ -5,6 +5,7 @@
   "compatibility_date": "2026-11-01",
   "workers_dev": true,
   "preview_urls": false,
+  "routes": [],
   "keep_vars": true,
   "assets": { "directory": "dist", "binding": "ASSETS", "run_worker_first": true },
   "ratelimits": [{ "name": "PAYMENT_LIMITER", "namespace_id": "19949", "simple": { "limit": 20, "period": 60 } }],

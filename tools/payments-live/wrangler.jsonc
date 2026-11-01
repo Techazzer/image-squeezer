@@ -1,0 +1,17 @@
+{
+  "name": "aeroniqx-payments-live",
+  "main": "worker.js",
+  "account_id": "c6dc45311b3f186087681b93e4f683c1",
+  "compatibility_date": "2026-11-01",
+  "workers_dev": true,
+  "preview_urls": false,
+  "routes": [
+    { "pattern": "aeroniqx.in/banana-leaf", "zone_name": "aeroniqx.in" },
+    { "pattern": "aeroniqx.in/banana-leaf/*", "zone_name": "aeroniqx.in" }
+  ],
+  "keep_vars": true,
+  "assets": { "directory": "dist", "binding": "ASSETS", "run_worker_first": true },
+  "ratelimits": [{ "name": "PAYMENT_LIMITER", "namespace_id": "19950", "simple": { "limit": 20, "period": 60 } }],
+  "observability": { "enabled": false },
+  "vars": { "PAYMENT_MODE": "live" }
+}

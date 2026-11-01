@@ -53,29 +53,8 @@
       "banana-leaf/terms/index.html",
       "banana-leaf/privacy/index.html"
     ],
-    "businessResourceDownloads": [
-      {
-        "file": "downloads/business/banana-leaf-supplier-pack-5799991f2099.pdf",
-        "source": "content/downloads/banana-leaf-supplier-pack.pdf",
-        "sha256": "5799991f20997e175db509b8fb633aa4d41dc4f11f75aab2042e3dbd84d8c80f",
-        "bytes": 114653,
-        "productId": "banana-leaf-suppliers"
-      },
-      {
-        "file": "downloads/business/banana-leaf-directory-and-tracker-ae47465c7903.xlsx",
-        "source": "content/downloads/banana-leaf-directory-and-tracker.xlsx",
-        "sha256": "ae47465c79034cea97f6f7487863d11f2ec21a79b26649ec503556e729ca00cd",
-        "bytes": 16584,
-        "productId": "banana-leaf-suppliers"
-      },
-      {
-        "file": "downloads/business/india-export-registration-guide-a425d6a0715e.pdf",
-        "source": "content/downloads/india-export-registration-guide.pdf",
-        "sha256": "a425d6a0715e6a74a19800bab21b808a4cae7105bc2252ffef126f6984be2aea",
-        "bytes": 113485,
-        "productId": "export-registration-guide"
-      }
-    ]
+    "businessResourceDownloads": [],
+    "businessResourcePaymentMode": "live"
   },
   "calculator": "/work-hours-calculator/"
 }

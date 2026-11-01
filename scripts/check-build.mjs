@@ -8,6 +8,7 @@ import { coreTools } from './tool-content.mjs'
 
 const baseline = JSON.parse(await readFile('deployment/production-baseline.json', 'utf8'))
 const build = JSON.parse(await readFile('deployment/build.json', 'utf8'))
+const paidResources = build.mobileApp.businessResourcePaymentMode === 'live'
 for (const item of baseline.files) {
   assert.ok((await stat(`dist/${item.file}`)).isFile(), `Preserved path: ${item.file}`)
   if (item.file.startsWith('assets/')) {
@@ -168,7 +169,7 @@ for (const file of (await readdir('dist', { recursive: true })).filter(f => f.en
 assert.equal(listed.length, indexable, 'Sitemap includes exactly the indexable pages')
 for (const file of [...build.mobileApp.businessResourcePages, ...standalonePages]) {
   const html = await readFile(`dist/${file}`, 'utf8')
-  assert.match(html, /name="robots" content="(?:noindex|index), follow"/, 'Published guides and download pages declare search visibility')
+  assert.match(html, /name="robots" content="(?:noindex|index), (?:nofollow|follow)"/, 'Published guides and download pages declare search visibility')
   assert.equal([...html.matchAll(/<h1\b/g)].length, 1, `One heading on resource page: ${file}`)
   if (standalonePages.has(file)) {
     assert.match(html, /class="[^"]*resource-standalone/, 'Standalone document has its own layout')
@@ -185,15 +186,19 @@ for (const file of [...build.mobileApp.businessResourcePages, ...standalonePages
     assert.ok((await stat(`dist${asset.endsWith('/') ? asset + 'index.html' : asset}`)).isFile(), `Resource link exists: ${file} -> ${asset}`)
   }
   if (file === 'resources/banana-leaf-business/index.html' || file === 'resources/cart/index.html' || file === 'banana-leaf/index.html') {
-    assert.match(html, /<del[^>]*>₹99<\/del>/, 'Supplier list price is struck through')
-    assert.match(html, /<del[^>]*>₹49<\/del>/, 'Registration list price is struck through')
+    assert.match(html, paidResources ? /<strong>₹99<\/strong>/ : /<del[^>]*>₹99<\/del>/, 'Supplier price is displayed')
+    assert.match(html, paidResources ? /<strong>₹49<\/strong>/ : /<del[^>]*>₹49<\/del>/, 'Registration price is displayed')
     assert.equal([...html.matchAll(/>Buy Now /g)].length, 2, 'Both products have a Buy Now link')
-    assert.equal([...html.matchAll(/<strong>Free<\/strong>/g)].length, 2, 'Both products are free')
+    assert.equal([...html.matchAll(/<strong>Free<\/strong>/g)].length, paidResources ? 0 : 2, 'Displayed prices match the payment release')
   }
-  if (file.includes('/downloads/') || (standalonePages.has(file) && ['banana-leaf/banana-leaf-suppliers/index.html', 'banana-leaf/export-registration-guide/index.html'].includes(file))) assert.match(html, /download="[a-z0-9-]+\.(pdf|xlsx)"/, 'Download pages provide a real file without JavaScript')
+  if (file.includes('/downloads/') || (standalonePages.has(file) && ['banana-leaf/banana-leaf-suppliers/index.html', 'banana-leaf/export-registration-guide/index.html'].includes(file))) {
+    if (paidResources) { assert.doesNotMatch(html, /\/downloads\/business\//); assert.match(html, /href="\/banana-leaf\/#resources"/) }
+    else assert.match(html, /download="[a-z0-9-]+\.(pdf|xlsx)"/, 'Download pages provide a real file without JavaScript')
+  }
 }
 assert.equal(standalonePages.size, 8, 'Standalone landing, delivery and information pages exist')
-assert.equal(build.mobileApp.businessResourceDownloads.length, 3, 'Both complete PDFs and the Excel directory are published')
+assert.equal(build.mobileApp.businessResourceDownloads.length, paidResources ? 0 : 3, 'Paid files are never published as public Pages assets')
+if (paidResources) assert.equal((await readdir('dist/downloads/business')).length, 0, 'Old free download copies are removed')
 for (const file of build.mobileApp.businessResourceDownloads) {
   const bytes=await readFile(`dist/${file.file}`)
   assert.equal(createHash('sha256').update(bytes).digest('hex'), file.sha256, `Download matches the prepared file: ${file.file}`)

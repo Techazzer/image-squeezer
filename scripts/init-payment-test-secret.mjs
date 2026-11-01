@@ -5,7 +5,8 @@ import path from 'node:path'
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const wrangler = path.resolve(root, '../node_modules/wrangler/bin/wrangler.js')
-const config = path.join(root, 'tools/payments-test/wrangler.jsonc')
+const mode = process.argv.includes('--live') ? 'live' : 'test'
+const config = path.join(root, `tools/payments-${mode}/wrangler.jsonc`)
 function run(args, input) {
   return new Promise((resolve, reject) => {
     const child = spawn(process.execPath, [wrangler, ...args, '--config', config], { cwd: root, windowsHide: true, env: { ...process.env, WRANGLER_SEND_METRICS: 'false' }, stdio: ['pipe', 'pipe', 'pipe'] })
