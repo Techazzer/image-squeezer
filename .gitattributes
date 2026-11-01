@@ -6,3 +6,9 @@ scripts/** text eol=lf
 deployment/** text eol=lf
 src/test/timesheet.test.js text eol=lf
 .github/** text eol=lf
+
+# Downloadable resources must retain the exact prepared bytes on every platform.
+content/downloads/*.pdf binary
+content/downloads/*.xlsx binary
+content/*.json text eol=lf
+content/*.md text eol=lf
