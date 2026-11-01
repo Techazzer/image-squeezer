@@ -22,6 +22,8 @@ Build and view with the project's normal commands. Routes:
 
 - `/banana-leaf/`: standalone landing link for DMs. Only the banana-leaf guide and its offers appear.
 - `/banana-leaf/banana-leaf-suppliers/` and `/banana-leaf/export-registration-guide/`: standalone delivery pages. Every topic link stays within this journey; there is no app shell, tools menu, library navigation or install prompt.
+- `/banana-leaf/refund-policy/`: digital-resource cancellation/refund terms, linked beside the offers and in the standalone footer. Copy and the existing public support email are maintained in `resource-refund-policy.json`. Change-of-mind refunds are excluded; payment/delivery problems and statutory rights are preserved. Payments remain disabled.
+- `/banana-leaf/about/`, `/banana-leaf/contact/`, `/banana-leaf/terms/`, `/banana-leaf/privacy/`: focused information pages for the resource storefront. Seller details are in `resource-seller.json`. On 1 November 2026 the user confirmed Sarvaa Technologies and techazzer@gmail.com, and explicitly asked not to add an address, phone or grievance-contact name. Respect those omissions; do not invent details or claim that merchant review is complete. No payment credentials belong in these files.
 - `/resources/`: library and category/search controls.
 - `/resources/banana-leaf-business/`: business guide and free product cards.
 - `/resources/downloads/banana-leaf-suppliers/`: supplier PDF and Excel directory.

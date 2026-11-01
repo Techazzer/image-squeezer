@@ -14,7 +14,7 @@ for(const route of ['/','/tools/','/pdf-compress/','/bill-splitter/',...[...buil
   if(standaloneRoutes.includes(route)){
     assert.match(html,/resource-standalone/)
     assert.doesNotMatch(html,/rel="manifest"|mobile-app-|aero-nav-|App navigation|Desktop navigation|platform-header|platform-footer/)
-    for(const [,href] of html.matchAll(/<a\b[^>]*href="([^"]+)"/g))assert.ok(href.startsWith('#')||href.startsWith('/banana-leaf/')||href.startsWith('/downloads/business/'),`Focused resource link: ${href}`)
+    for(const [,href] of html.matchAll(/<a\b[^>]*href="([^"]+)"/g))assert.ok(href.startsWith('#')||href.startsWith('/banana-leaf/')||href.startsWith('/downloads/business/')||href==='mailto:techazzer@gmail.com',`Focused resource link: ${href}`)
     assert.equal(sha256(html),sha256(await readFile(`dist${route}index.html`)),`Current standalone document: ${route}`)
   }else{
     assert.ok(html.includes(build.mobileApp.script),`Current app code at ${route}`)

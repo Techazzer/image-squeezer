@@ -174,7 +174,7 @@ for (const file of [...build.mobileApp.businessResourcePages, ...standalonePages
     assert.match(html, /class="[^"]*resource-standalone/, 'Standalone document has its own layout')
     assert.doesNotMatch(html, /rel="manifest"|mobile-app-|aero-nav-|App navigation|Desktop navigation|platform-header|platform-footer|<title>[^<]*Aeroniqx/i, 'Standalone flow never loads or shows the platform shell')
     for (const [, href] of html.matchAll(/<a\b[^>]*href="([^"]+)"/g)) {
-      assert.ok(href.startsWith('#') || href.startsWith('/banana-leaf/') || href.startsWith('/downloads/business/'), `Standalone journey remains within this resource: ${href}`)
+      assert.ok(href.startsWith('#') || href.startsWith('/banana-leaf/') || href.startsWith('/downloads/business/') || href === 'mailto:techazzer@gmail.com', `Standalone journey remains within this resource: ${href}`)
     }
   } else assert.match(html, /id="aero-nav-resources"/, 'Resources are integrated into app navigation')
   assert.doesNotMatch(html, /Preview (?:data|supplier)|sample-download|data-paid-preview/i, 'Paid data is never previewed')
@@ -190,9 +190,9 @@ for (const file of [...build.mobileApp.businessResourcePages, ...standalonePages
     assert.equal([...html.matchAll(/>Buy Now /g)].length, 2, 'Both products have a Buy Now link')
     assert.equal([...html.matchAll(/<strong>Free<\/strong>/g)].length, 2, 'Both products are free')
   }
-  if (file.includes('/downloads/') || (standalonePages.has(file) && file !== 'banana-leaf/index.html')) assert.match(html, /download="[a-z0-9-]+\.(pdf|xlsx)"/, 'Download pages provide a real file without JavaScript')
+  if (file.includes('/downloads/') || (standalonePages.has(file) && ['banana-leaf/banana-leaf-suppliers/index.html', 'banana-leaf/export-registration-guide/index.html'].includes(file))) assert.match(html, /download="[a-z0-9-]+\.(pdf|xlsx)"/, 'Download pages provide a real file without JavaScript')
 }
-assert.equal(standalonePages.size, 3, 'Standalone landing page and both delivery pages exist')
+assert.equal(standalonePages.size, 8, 'Standalone landing, delivery and information pages exist')
 assert.equal(build.mobileApp.businessResourceDownloads.length, 3, 'Both complete PDFs and the Excel directory are published')
 for (const file of build.mobileApp.businessResourceDownloads) {
   const bytes=await readFile(`dist/${file.file}`)

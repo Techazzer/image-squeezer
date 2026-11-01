@@ -254,6 +254,19 @@
 .resource-standalone .resource-delivery-intro{margin-top:28px}
 .resource-landing-footer{max-width:1076px;margin:0 auto;padding:24px 0 32px;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;gap:12px;color:#647185;font-size:12px}
 .resource-landing-footer>p{font-weight:600}
+.resource-landing-footer>div>p{font-weight:600;margin-bottom:4px}
+.resource-landing-footer nav{display:flex;gap:10px 18px;flex-wrap:wrap;align-items:center}
+.resource-landing-footer nav a{display:inline-flex;align-items:center;min-height:44px}
+.resource-offer-policy{margin-top:20px!important;font-size:12px;line-height:1.8;color:#526477}
+.resource-offer-policy a,.resource-policy a:not(.resource-text-link){text-decoration:underline;text-underline-offset:3px}
+.resource-policy{max-width:790px;margin:auto;padding:10px 0 20px}
+.resource-policy>.resource-eyebrow{margin-top:30px}
+.resource-policy h1{font-size:clamp(30px,4vw,45px);line-height:1.15;margin-bottom:22px}
+.resource-policy-summary{font-size:17px;line-height:1.8;color:#34475f;margin-bottom:24px!important}
+.resource-policy section,.resource-policy-contact{padding:24px 0;border-bottom:1px solid #e2e8f0}
+.resource-policy h2{font-size:20px;line-height:1.4;margin-bottom:10px}
+.resource-policy section p{font-size:14px;line-height:1.9;color:#526477}
+.resource-policy-contact a{overflow-wrap:anywhere}
 @media(max-width:720px){
  .resource-standalone .resource-main{padding-top:8px}
  .resource-landing-header>div{padding:10px 18px;min-height:68px;gap:12px}
