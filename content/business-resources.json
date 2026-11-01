@@ -3,6 +3,7 @@
   "resources": [
     {
       "slug": "banana-leaf-business",
+      "landingSlug": "banana-leaf",
       "title": "Banana-leaf business",
       "subtitle": "Explore sourcing, selling and the steps between.",
       "category": "Exports",

@@ -122,5 +122,5 @@ export async function addMobileApp(root, dist, { calculatorAssets, billSplitterA
   const workerTemplate=await readFile(path.join(source,'service-worker.js'),'utf8')
   const version=hash(workerTemplate+(await Promise.all(precache.map(url=>readFile(path.join(dist,url.endsWith('/')?url.slice(1)+'index.html':url.slice(1)))))).map(b=>hash(b)).join(''))
   await writeFile(path.join(dist,'service-worker.js'),workerTemplate.replace('__VERSION__',version).replace('__PRECACHE__',JSON.stringify(precache)))
-  return {assets:[...assets,...businessResources.assets,'service-worker.js','offline/index.html'],script:jsFile,catalog:catalogFile,version,tools:catalog.length,resources:resources.length,businessResourcePages:businessResources.pages,businessResourceDownloads:businessResources.downloads}
+  return {assets:[...assets,...businessResources.assets,'service-worker.js','offline/index.html'],script:jsFile,catalog:catalogFile,version,tools:catalog.length,resources:resources.length,businessResourcePages:businessResources.pages,standaloneResourcePages:businessResources.standalonePages,businessResourceDownloads:businessResources.downloads}
 }

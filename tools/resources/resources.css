@@ -1,4 +1,11 @@
 .resource-page{background:#f6f8fc!important;color:#202124}
+.resource-standalone{--font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;margin:0;font:16px/1.6 var(--font);-webkit-font-smoothing:antialiased}
+.resource-standalone *,.resource-standalone *::before,.resource-standalone *::after{box-sizing:border-box}
+.resource-standalone a{color:#1557b0;text-decoration:none}
+.resource-standalone h1,.resource-standalone h2,.resource-standalone h3,.resource-standalone p{margin:0}
+.resource-standalone button,.resource-standalone input{font-family:inherit}
+.resource-landing-skip{position:fixed;top:-80px;left:16px;z-index:10;padding:12px 18px;background:#fff;border:1px solid #1557b0;border-radius:8px}
+.resource-landing-skip:focus{top:8px}
 .platform-page .resource-main{max-width:1240px;padding:0 32px 64px}
 .resource-page [hidden]{display:none!important}
 .resource-icon{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
@@ -228,7 +235,39 @@
 .resource-download-help h2{font-size:17px;margin:0 0 8px}
 .resource-download-help p{font-size:13px;color:#526477;line-height:1.8;margin:0;max-width:760px}
 .resource-page a:focus-visible,.resource-page button:focus-visible{outline:3px solid #1557b0;outline-offset:4px}
+.resource-standalone .resource-main{max-width:1140px;margin:0 auto;padding-top:28px}
+.resource-landing-header{border-bottom:1px solid #e2e8f0;background:#fff}
+.resource-landing-header>div{max-width:1140px;min-height:76px;padding:16px 32px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:24px}
+.resource-landing-name{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600;letter-spacing:-.2px;color:#263b56}
+.resource-landing-header nav{display:flex;gap:24px}
+.resource-landing-header a{display:inline-flex;align-items:center;gap:8px;min-height:44px;font-size:13px;font-weight:600}
+.resource-standalone .resource-landing-assurance{font-size:11px;color:#526477;margin-top:16px}
+.resource-landing-offers{padding:28px 0 48px;border-top:1px solid #e2e8f0;scroll-margin-top:24px}
+.resource-landing-offers .resource-section-head{margin-bottom:10px}
+.resource-landing-offers .resource-product-card{padding:28px}
+.resource-landing-offers .resource-product-card h3{font-size:23px}
+.resource-landing-offers .resource-product-card>p:not(.resource-product-status){font-size:14px}
+.resource-landing-offers .resource-includes li{font-size:13px}
+.resource-landing-offers .resource-product-status{font-size:11px}
+.resource-landing-guide .resource-guide-sidebar{top:24px}
+.resource-landing-return{padding-top:28px}
+.resource-standalone .resource-delivery-intro{margin-top:28px}
+.resource-landing-footer{max-width:1076px;margin:0 auto;padding:24px 0 32px;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;gap:12px;color:#647185;font-size:12px}
+.resource-landing-footer>p{font-weight:600}
 @media(max-width:720px){
+ .resource-standalone .resource-main{padding-top:8px}
+ .resource-landing-header>div{padding:10px 18px;min-height:68px;gap:12px}
+ .resource-landing-name{font-size:12px;gap:8px;max-width:185px;line-height:1.45}
+ .resource-landing-name>.resource-icon{width:19px;height:19px}
+ .resource-landing-header nav{gap:14px}.resource-landing-header a{font-size:11px}
+ .resource-landing-header>a .resource-icon{width:14px}
+ .resource-standalone .resource-hero-actions{flex-wrap:wrap;gap:16px}
+ .resource-landing-offers{padding:24px 0 32px}
+ .resource-landing-offers .resource-product-card{padding:22px}
+ .resource-landing-offers .resource-product-card h3{font-size:22px}
+ .resource-landing-offers .resource-product-card>p:not(.resource-product-status){font-size:13px}
+ .resource-landing-offers .resource-includes li{font-size:12px}
+ .resource-landing-footer{margin:0 18px;padding:22px 0;flex-direction:column;gap:4px;font-size:11px}
  .resource-nav{gap:10px}.resource-nav>div{gap:14px}.resource-nav-brand{font-size:13px}
  .resource-price del{font-size:16px}.resource-product-buy{gap:8px}
  .resource-product-buy>.resource-price>span{white-space:normal}

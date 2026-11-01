@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto'
 import path from 'node:path'
 import { header, footer } from './platform-pages.mjs'
 import { formatPrice } from '../tools/resources/cart-core.js'
+import { writeResourceLandingPages } from './business-resource-landing.mjs'
 
 const escape = value => String(value).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]))
 const hash = value => createHash('sha256').update(value).digest('hex')
@@ -11,10 +12,14 @@ export const productPath = product => `/resources/downloads/${product.id}/`
 export function validateFreeCatalog(data) {
   if (data.mode !== 'free') throw Error('This release supports free access only; a payment integration is required before charging.')
   if (!data.resources?.length || !data.products?.length) throw Error('A published resource and product are required.')
-  const ids = new Set(), slugs = new Set()
+  const ids = new Set(), slugs = new Set(), landingSlugs = new Set()
   for (const resource of data.resources) {
     if (resource.status !== 'published' || !/^[a-z0-9-]+$/.test(resource.slug) || slugs.has(resource.slug) || !resource.sections?.length) throw Error('Only complete, unique published guides can be listed.')
     slugs.add(resource.slug)
+    if (resource.landingSlug) {
+      if (!/^[a-z0-9-]+$/.test(resource.landingSlug) || landingSlugs.has(resource.landingSlug)) throw Error('Standalone landing paths must be safe and unique.')
+      landingSlugs.add(resource.landingSlug)
+    }
   }
   for (const product of data.products) {
     if (!/^[a-z0-9-]+$/.test(product.id) || ids.has(product.id) || product.status !== 'published') throw Error('Invalid or unpublished product.')
@@ -55,7 +60,7 @@ export async function writeLiveBusinessResourcePages(root, dist, { art, icon, se
   }
 
   const price = product => `<div class="resource-price"><del aria-label="List price ${formatPrice(product.listPricePaise)}">${formatPrice(product.listPricePaise)}</del><strong>Free</strong><span>No payment required</span></div>`
-  const productCard = product => `<article class="resource-product-card"><div class="resource-product-top"><span class="resource-product-icon">${icon(product.files.length > 1 ? 'sheet' : 'file')}</span><span class="resource-tag">${escape(product.format)}</span></div><span class="resource-overline">${escape(product.type)}</span><h3>${escape(product.title)}</h3><p>${escape(product.description)}</p><ul class="resource-includes">${product.includes.map(item => `<li>${icon('check')}<span>${escape(item)}</span></li>`).join('')}</ul><p class="resource-product-status">${escape(product.note)}</p><div class="resource-product-buy">${price(product)}<a class="resource-button" href="${productPath(product)}" aria-label="Buy Now: ${escape(product.title)}, free">Buy Now ${icon('arrow')}</a></div></article>`
+  const productCard = (product, options) => `<article class="resource-product-card"><div class="resource-product-top"><span class="resource-product-icon">${icon(product.files.length > 1 ? 'sheet' : 'file')}</span><span class="resource-tag">${escape(product.format)}</span></div><span class="resource-overline">${escape(product.type)}</span><h3>${escape(product.title)}</h3><p>${escape(product.description)}</p><ul class="resource-includes">${product.includes.map(item => `<li>${icon('check')}<span>${escape(item)}</span></li>`).join('')}</ul><p class="resource-product-status">${escape(product.note)}</p><div class="resource-product-buy">${price(product)}<a class="resource-button" href="${options?.href || productPath(product)}" aria-label="Buy Now: ${escape(product.title)}, free">Buy Now ${icon('arrow')}</a></div></article>`
   const resourceCard = resource => `<article class="resource-library-card" data-resource-card data-category="${escape(resource.category)}" data-search="${escape([resource.title,resource.category,...resource.tags].join(' ').toLowerCase())}"><a href="/resources/${resource.slug}/" tabindex="-1" aria-hidden="true">${art()}</a><div class="resource-card-body"><div class="resource-card-meta"><span>${escape(resource.category)}</span><span class="resource-status resource-status-live">Free guide</span></div><h2><a href="/resources/${resource.slug}/">${escape(resource.title)}</a></h2><p>${escape(resource.description)}</p><div class="resource-card-bottom"><a class="resource-text-link" href="/resources/${resource.slug}/">Explore guide ${icon('arrow')}</a><span>${resource.products.length} free resources</span></div></div></article>`
   const pages = []
   async function write(slug,title,description,content,section,{indexable=true}={}) {
@@ -82,5 +87,6 @@ export async function writeLiveBusinessResourcePages(root, dist, { art, icon, se
   }
   // Existing cart bookmarks remain useful while the launch offer needs no checkout.
   await write('resources/cart','Get Your Business Resources','Access the complete Aeroniqx business resources for free.',`<section class="resource-cart-hero"><a class="resource-text-link" href="/resources/">← Back to the library</a><h1>Your next step starts here.</h1><p>All resources are free right now. Choose Buy Now to download the files directly.</p></section><div class="resource-products-grid">${data.products.map(productCard).join('')}</div>`,'downloads',{indexable:false})
-  return { pages, assets:[scriptFile,cssFile], downloads }
+  const standalonePages = await writeResourceLandingPages(dist, data, { art, icon, sectionMarkup, price, productCard, scriptFile, cssFile })
+  return { pages, standalonePages, assets:[scriptFile,cssFile], downloads }
 }

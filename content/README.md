@@ -20,10 +20,14 @@ There is no payment gateway or order creation. Nonzero selling prices fail valid
 
 Build and view with the project's normal commands. Routes:
 
+- `/banana-leaf/`: standalone landing link for DMs. Only the banana-leaf guide and its offers appear.
+- `/banana-leaf/banana-leaf-suppliers/` and `/banana-leaf/export-registration-guide/`: standalone delivery pages. Every topic link stays within this journey; there is no app shell, tools menu, library navigation or install prompt.
 - `/resources/`: library and category/search controls.
 - `/resources/banana-leaf-business/`: business guide and free product cards.
 - `/resources/downloads/banana-leaf-suppliers/`: supplier PDF and Excel directory.
 - `/resources/downloads/export-registration-guide/`: registration PDF.
 - `/resources/cart/`: compatible access page for old cart bookmarks; no payment flow.
+
+Set a resource's optional `landingSlug` to generate a standalone journey from the same content and files. Paths must be unique and cannot overwrite existing routes. The app-shell build intentionally excludes `standaloneResourcePages`; keep future payment confirmation/delivery routes inside the corresponding standalone path too. Razorpay is not connected in this release.
 
 Build using `npm run build`, then `node scripts/check-build.mjs`. Run `npm test`. After deployment, run `node scripts/verify-resource-release.mjs https://aeroniqx.in` to check the current pages, app assets and exact download bytes. The service worker does not precache these resource files; online navigation receives the current app shell.

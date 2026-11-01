@@ -26,8 +26,8 @@
       "assets/app-icons/icon-512.png",
       "assets/app-icons/maskable-512.png",
       "assets/app-icons/apple-touch-icon.png",
-      "assets/resources/resources-4607a4400e19.js",
-      "assets/resources/resources-baa7df5592dd.css",
+      "assets/resources/resources-47e6310954bd.js",
+      "assets/resources/resources-f62af9beac2c.css",
       "service-worker.js",
       "offline/index.html"
     ],
@@ -42,6 +42,11 @@
       "resources/downloads/banana-leaf-suppliers/index.html",
       "resources/downloads/export-registration-guide/index.html",
       "resources/cart/index.html"
+    ],
+    "standaloneResourcePages": [
+      "banana-leaf/index.html",
+      "banana-leaf/banana-leaf-suppliers/index.html",
+      "banana-leaf/export-registration-guide/index.html"
     ],
     "businessResourceDownloads": [
       {

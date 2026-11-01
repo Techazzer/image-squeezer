@@ -137,6 +137,7 @@ const sitemap = await readFile('dist/sitemap.xml', 'utf8')
 const listed = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1])
 assert.equal(new Set(listed).size, listed.length, 'No duplicate sitemap URLs')
 const titles = new Set()
+const standalonePages = new Set(build.mobileApp.standaloneResourcePages || [])
 let indexable = 0
 for (const file of (await readdir('dist', { recursive: true })).filter(f => f.endsWith('.html') && f !== '404.html')) {
   const html = await readFile(`dist/${file}`, 'utf8')
@@ -147,9 +148,11 @@ for (const file of (await readdir('dist', { recursive: true })).filter(f => f.en
   assert.ok(title && !titles.has(title), `Unique title: ${file}`)
   titles.add(title)
   assert.equal([...html.matchAll(/<h1\b/g)].length, 1, `One initial-HTML H1: ${file}`)
-  assert.match(html, /rel="manifest"/, `App manifest: ${file}`)
-  assert.match(html, /aria-label="App navigation"/, `App navigation: ${file}`)
-  assert.match(html, /aria-label="Desktop navigation"/, `Desktop navigation: ${file}`)
+  if (!standalonePages.has(file.replaceAll('\\', '/'))) {
+    assert.match(html, /rel="manifest"/, `App manifest: ${file}`)
+    assert.match(html, /aria-label="App navigation"/, `App navigation: ${file}`)
+    assert.match(html, /aria-label="Desktop navigation"/, `Desktop navigation: ${file}`)
+  }
   const appIds = [...html.matchAll(/id="(aero-[^"]+)"/g)].map(m=>m[1])
   assert.equal(appIds.length,new Set(appIds).size,`Unique app control and icon IDs: ${file}`)
   assert.ok(listed.includes(url), `Indexable page in sitemap: ${file}`)
@@ -163,11 +166,17 @@ for (const file of (await readdir('dist', { recursive: true })).filter(f => f.en
   }
 }
 assert.equal(listed.length, indexable, 'Sitemap includes exactly the indexable pages')
-for (const file of build.mobileApp.businessResourcePages || []) {
+for (const file of [...build.mobileApp.businessResourcePages, ...standalonePages]) {
   const html = await readFile(`dist/${file}`, 'utf8')
   assert.match(html, /name="robots" content="(?:noindex|index), follow"/, 'Published guides and download pages declare search visibility')
   assert.equal([...html.matchAll(/<h1\b/g)].length, 1, `One heading on resource page: ${file}`)
-  assert.match(html, /id="aero-nav-resources"/, 'Resources are integrated into app navigation')
+  if (standalonePages.has(file)) {
+    assert.match(html, /class="[^"]*resource-standalone/, 'Standalone document has its own layout')
+    assert.doesNotMatch(html, /rel="manifest"|mobile-app-|aero-nav-|App navigation|Desktop navigation|platform-header|platform-footer|<title>[^<]*Aeroniqx/i, 'Standalone flow never loads or shows the platform shell')
+    for (const [, href] of html.matchAll(/<a\b[^>]*href="([^"]+)"/g)) {
+      assert.ok(href.startsWith('#') || href.startsWith('/banana-leaf/') || href.startsWith('/downloads/business/'), `Standalone journey remains within this resource: ${href}`)
+    }
+  } else assert.match(html, /id="aero-nav-resources"/, 'Resources are integrated into app navigation')
   assert.doesNotMatch(html, /Preview (?:data|supplier)|sample-download|data-paid-preview/i, 'Paid data is never previewed')
   assert.doesNotMatch(html, /Layout sample|Sample guide|Sample product|Content pending|available after launch|Add to cart|data-add-product|data-open-download|WhatsApp number/i, 'Every published resource is available without placeholder controls')
   assert.doesNotMatch(html, /<iframe|<embed|<object|Vamsavali|vamsavalitamil@|Yuvaraju Agro/i, 'Resource data is delivered as files, without a browser preview')
@@ -175,14 +184,15 @@ for (const file of build.mobileApp.businessResourcePages || []) {
     if (asset.startsWith('//')) continue
     assert.ok((await stat(`dist${asset.endsWith('/') ? asset + 'index.html' : asset}`)).isFile(), `Resource link exists: ${file} -> ${asset}`)
   }
-  if (file === 'resources/banana-leaf-business/index.html' || file === 'resources/cart/index.html') {
+  if (file === 'resources/banana-leaf-business/index.html' || file === 'resources/cart/index.html' || file === 'banana-leaf/index.html') {
     assert.match(html, /<del[^>]*>₹99<\/del>/, 'Supplier list price is struck through')
     assert.match(html, /<del[^>]*>₹49<\/del>/, 'Registration list price is struck through')
     assert.equal([...html.matchAll(/>Buy Now /g)].length, 2, 'Both products have a Buy Now link')
     assert.equal([...html.matchAll(/<strong>Free<\/strong>/g)].length, 2, 'Both products are free')
   }
-  if (file.includes('/downloads/')) assert.match(html, /download="[a-z0-9-]+\.(pdf|xlsx)"/, 'Download pages provide a real file without JavaScript')
+  if (file.includes('/downloads/') || (standalonePages.has(file) && file !== 'banana-leaf/index.html')) assert.match(html, /download="[a-z0-9-]+\.(pdf|xlsx)"/, 'Download pages provide a real file without JavaScript')
 }
+assert.equal(standalonePages.size, 3, 'Standalone landing page and both delivery pages exist')
 assert.equal(build.mobileApp.businessResourceDownloads.length, 3, 'Both complete PDFs and the Excel directory are published')
 for (const file of build.mobileApp.businessResourceDownloads) {
   const bytes=await readFile(`dist/${file.file}`)
